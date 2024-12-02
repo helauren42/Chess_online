@@ -269,7 +269,7 @@ std::string toUpperCase(const std::string& str) {
  * @return std::string The input string with leading characters removed.
  */
 std::string lstrip(const std::string& str, const std::string& remove = WHITE_SPACES) {
-	int i = 0;
+	unsigned int i = 0;
 
 	while(i < str.length()) {
 

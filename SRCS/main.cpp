@@ -1,3 +1,4 @@
+#include "../INC/main.hpp"
 #include <SDL2/SDL.h>
 
 int main(int ac, char** av) {
@@ -31,7 +32,8 @@ int main(int ac, char** av) {
     bool quit = false;
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
+            printf("event type: %d\n", e.type);
+			if (e.type == SDL_QUIT) {
                 quit = true;
             }
         }

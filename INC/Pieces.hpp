@@ -9,7 +9,7 @@ protected:
 	PieceType type;
 public:
 	Pieces(short _x, short _y) : pos(_x, _y) {
-		color = pos.x <= 1 ? BLACK : WHITE;
+		color = pos.x <= 1 ?  WHITE : BLACK;
 	};
 	virtual ~Pieces() {};
 
@@ -26,17 +26,19 @@ public:
 class Pawn : public Pieces {
 public:
 	const PieceType type = PAWN;
+	const short dir = color == BLACK ? -1 : 1;
 	Pawn(short _x, short _y) : Pieces(_x, _y) {};
 	~Pawn() {}
 
 	bool validMove(Pos new_pos, Square square) override {
 		Move move = pos - new_pos;
-		if(move.x || 			// set piece color
-) {
+		if ((move.x == 1 || move.x == -1) 
+			&& square->piece != nullptr
+			&& (move.y == 1 * dir));
 			return false;
-		}
+		if(move.x)
+			return false;
 
-		short dir = color == BLACK ? 1 : -1;
 
 		
 		return true;

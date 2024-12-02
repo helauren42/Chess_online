@@ -41,10 +41,10 @@ class Board {
 			else if(x == 4) {
 				piece = make_unique<King>(x, y);
 			}
-			if(y == 1)
-				piece->setColor(BLACK);
-			else
+			if(y <= 1)
 				piece->setColor(WHITE);
+			else
+				piece->setColor(BLACK);
 			return piece;
 		}
 		void init() {
@@ -58,3 +58,4 @@ class Board {
 		};
 
 };
+

@@ -1,8 +1,9 @@
 NAME = chess
 
-SRCS = *.cpp
+SRCS = $(wildcard ./SRCS/*.cpp)
 
-FLAGS = -lSDL2 -Wall -Werror -Wextra -Wno-unused
+FLAGS = -Wall -Werror -Wextra -Wno-unused
+LDFLAGS = -lSDL2
 
 OBJS = $(SRCS:.cpp=.o)
 
@@ -11,10 +12,10 @@ CC = c++
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	c++ $(FLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
 
 %.o: %.cpp
-	c++ $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
