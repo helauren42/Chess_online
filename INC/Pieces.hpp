@@ -1,13 +1,26 @@
 #include "main.hpp"
 
+enum Num {
+    Zero = 0,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight
+};
+
 class Pieces
 {
 protected:
 	Pos pos;
 	bool color;
 	PieceType type;
-public:	
+public:
 	Pieces(short _x, short _y) : pos(_x, _y) {
+		color = pos.x <= 1 ? BLACK : WHITE;
 	};
 	virtual ~Pieces() {};
 
@@ -23,16 +36,15 @@ public:
 
 class Pawn : public Pieces {
 public:
+	const PieceType type = PAWN;
 	Pawn(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~Pawn() {}
 
 	bool validMove(Pos new_pos) override {
-		// Check if the move is valid for a pawn
 		return true;
 	}
 
 	bool makeMove(Pos new_pos) override {
-		// Move the pawn
 		return true;
 	}
 };
@@ -43,12 +55,10 @@ public:
 	virtual ~Rook() {}
 
 	bool validMove(Pos new_pos) override {
-		// Check if the move is valid for a rook
 		return true;
 	}
 
 	bool makeMove(Pos new_pos) override {
-		// Move the rook
 		return true;
 	}
 };
@@ -59,12 +69,10 @@ public:
 	virtual ~Knight() {}
 
 	bool validMove(Pos new_pos) override {
-		// Check if the move is valid for a knight
 		return true;
 	}
 
 	bool makeMove(Pos new_pos) override {
-		// Move the knight
 		return true;
 	}
 };
@@ -75,12 +83,10 @@ public:
 	virtual ~Bishop() {}
 
 	bool validMove(Pos new_pos) override {
-		// Check if the move is valid for a bishop
 		return true;
 	}
 
 	bool makeMove(Pos new_pos) override {
-		// Move the bishop
 		return true;
 	}
 };
@@ -91,12 +97,10 @@ public:
 	virtual ~Queen() {}
 
 	bool validMove(Pos new_pos) override {
-		// Check if the move is valid for a queen
 		return true;
 	}
 
 	bool makeMove(Pos new_pos) override {
-		// Move the queen
 		return true;
 	}
 };
@@ -107,12 +111,10 @@ public:
 	virtual ~King() {}
 
 	bool validMove(Pos new_pos) override {
-		// Check if the move is valid for a king
 		return true;
 	}
 
 	bool makeMove(Pos new_pos) override {
-		// Move the king
 		return true;
 	}
 };

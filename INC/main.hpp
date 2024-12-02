@@ -15,40 +15,93 @@ enum PieceType
 	KING
 };
 
-struct Move {
+enum
+{
+	BLACK,
+	WHITE
+};
+
+struct Move
+{
 	short x;
 	short y;
 };
 
 struct Pos
 {
-	Pos(short _x, short _y) { x = _x; y = _y; xyToFr();};
+public:
+	Pos()
+	{
+		x = 0;
+		y = 0;
+		xyToFr();
+	};
+	Pos(short _x, short _y)
+	{
+		x = _x;
+		y = _y;
+		xyToFr();
+	};
 	short x;
 	short y;
 	string file_rank;
 
-	void setPos(short _x, short _y) { x = _x; y = _y; xyToFr();};
-	void setPos(string _fr) { file_rank = _fr; frToXy();};
+	void setPos(short _x, short _y)
+	{
+		x = _x;
+		y = _y;
+		if(!validPos())
+			throw (std::invalid_argument("Position not valid"));
+		xyToFr();
+	};
 
-	void frToXy() {
+
+	void setPos(string _fr)
+	{
+		file_rank = _fr;
+		frToXy();
+	};
+
+	bool validPos() { return x >= 0 && x <= 7 && y >= 0 && y <= 7; }
+
+private:
+	void frToXy()
+	{
 		x = file_rank[0] - 97;
 		y = file_rank[1] - 49;
 	}
-	void xyToFr() {
+	void xyToFr()
+	{
 		file_rank[0] = x + 97;
 		file_rank[1] = y + 49;
 	}
 };
 
-Move getMove(Pos old_pos, Pos new_pos) {
+Move getMove(Pos new_pos, Pos old_pos)
+{
 	Move move;
 	move.x = new_pos.x - old_pos.x;
 	move.y = new_pos.y - old_pos.y;
 	return move;
 }
 
-enum
+Move operator-(Pos new_pos, Pos old_pos)
 {
-	BLACK,
-	WHITE
-};
+	Move move;
+	move.x = new_pos.x - old_pos.x;
+	move.y = new_pos.y - old_pos.y;
+	return move;
+}
+
+Pos operator+(Pos pos, Move move)
+{
+	pos.setPos(pos.x + move.x, pos.y + move.y);
+	return pos;
+}
+
+std::ostream& operator<<(std::ostream& os, const Pos& pos) {
+	os << pos.file_rank << endl;
+	os << "x: " << pos.x << endl;
+	os << "y: " << pos.y << endl;
+	return os;
+}
