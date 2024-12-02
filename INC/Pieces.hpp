@@ -1,4 +1,4 @@
-#include "Board.hpp"
+#include "main.hpp"
 
 class Pieces
 {
@@ -6,39 +6,25 @@ protected:
 	Pos pos;
 	bool color;
 	PieceType type;
-public:
-	
-	Pieces() {};
+public:	
+	Pieces(short _x, short _y) : pos(_x, _y) {
+	};
 	virtual ~Pieces() {};
 
-	virtual void	init() = 0;
-	virtual void	setPosition(Pos new_pos) = 0;
 	virtual bool	validMove(Pos new_pos) = 0;
-	virtual bool	makeMove(Pos new_pos) = 0;
+	virtual bool	makeMove(Pos new_pos) {
+		pos = new_pos;
+	};
 
 	Pos getPosition() const { return pos; }
 	bool getColor() const { return color; }
 	void setColor(bool c) { color = c; }
 };
 
-class NoPiece : public Pieces {
-public:
-	NoPiece();
-	~NoPiece();	
-}
-
 class Pawn : public Pieces {
 public:
-	Pawn() {}
+	Pawn(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~Pawn() {}
-
-	void init() override {
-		// Initialize the pawn's position based on color
-	}
-
-	void setPosition(Pos new_pos) override {
-		// Set the pawn's position
-	}
 
 	bool validMove(Pos new_pos) override {
 		// Check if the move is valid for a pawn
@@ -53,16 +39,8 @@ public:
 
 class Rook : public Pieces {
 public:
-	Rook() {}
+	Rook(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~Rook() {}
-
-	void init() override {
-		// Initialize the rook's position
-	}
-
-	void setPosition(Pos new_pos) override {
-		// Set the rook's position
-	}
 
 	bool validMove(Pos new_pos) override {
 		// Check if the move is valid for a rook
@@ -77,16 +55,8 @@ public:
 
 class Knight : public Pieces {
 public:
-	Knight() {}
+	Knight(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~Knight() {}
-
-	void init() override {
-		// Initialize the knight's position
-	}
-
-	void setPosition(Pos new_pos) override {
-		// Set the knight's position
-	}
 
 	bool validMove(Pos new_pos) override {
 		// Check if the move is valid for a knight
@@ -101,16 +71,8 @@ public:
 
 class Bishop : public Pieces {
 public:
-	Bishop() {}
+	Bishop(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~Bishop() {}
-
-	void init() override {
-		// Initialize the bishop's position
-	}
-
-	void setPosition(Pos new_pos) override {
-		// Set the bishop's position
-	}
 
 	bool validMove(Pos new_pos) override {
 		// Check if the move is valid for a bishop
@@ -125,16 +87,8 @@ public:
 
 class Queen : public Pieces {
 public:
-	Queen() {}
+	Queen(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~Queen() {}
-
-	void init() override {
-		// Initialize the queen's position
-	}
-
-	void setPosition(Pos new_pos) override {
-		// Set the queen's position
-	}
 
 	bool validMove(Pos new_pos) override {
 		// Check if the move is valid for a queen
@@ -149,16 +103,8 @@ public:
 
 class King : public Pieces {
 public:
-	King() {}
+	King(short _x, short _y) : Pieces(_x, _y) {};
 	virtual ~King() {}
-
-	void init() override {
-		// Initialize the king's position
-	}
-
-	void setPosition(Pos new_pos) override {
-		// Set the king's position
-	}
 
 	bool validMove(Pos new_pos) override {
 		// Check if the move is valid for a king

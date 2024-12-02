@@ -7,7 +7,6 @@ using namespace std;
 
 enum PieceType
 {
-	NOPIECE,
 	PAWN,
 	ROOK,
 	KNIGHT,
@@ -16,33 +15,36 @@ enum PieceType
 	KING
 };
 
-typedef struct Pos
+struct Move {
+	short x;
+	short y;
+};
+
+struct Pos
 {
-	int x;
-	int y;
+	Pos(short _x, short _y) { x = _x; y = _y; xyToFr();};
+	short x;
+	short y;
 	string file_rank;
+
+	void setPos(short _x, short _y) { x = _x; y = _y; xyToFr();};
+	void setPos(string _fr) { file_rank = _fr; frToXy();};
+
+	void frToXy() {
+		x = file_rank[0] - 97;
+		y = file_rank[1] - 49;
+	}
+	void xyToFr() {
+		file_rank[0] = x + 97;
+		file_rank[1] = y + 49;
+	}
 };
 
-typedef struct Xy
-{
-	int x;
-	int y;
-};
-
-Xy frToXy(const string &s)
-{
-	Xy xy;
-	xy.x = s[0] - 97;
-	xy.y = s[1] - 49;
-	return xy;
-}
-
-string frToXy(const Xy &xy)
-{
-	string s;
-	s[0] = xy.x + 97;
-	s[1] = xy.y + 49;
-	return s;
+Move getMove(Pos old_pos, Pos new_pos) {
+	Move move;
+	move.x = new_pos.x - old_pos.x;
+	move.y = new_pos.y - old_pos.y;
+	return move;
 }
 
 enum
