@@ -5,8 +5,16 @@
 
 using namespace std;
 
-enum PieceType
-{
+typedef struct s_dim {
+	int window_width;
+	int window_height;
+	int board_width;
+	int board_height;
+	int square_width;
+	int square_height;
+} t_dim;
+
+enum PieceType {
 	PAWN,
 	ROOK,
 	KNIGHT,
@@ -15,8 +23,7 @@ enum PieceType
 	KING
 };
 
-enum
-{
+enum {
 	BLACK,
 	WHITE
 };

@@ -41,7 +41,6 @@ class Board {
 			else if(x == 4) {
 				piece = make_unique<King>(x, y);
 			}
-			// set piece color
 			if(y == 1)
 				piece->setColor(BLACK);
 			else
@@ -57,4 +56,5 @@ class Board {
 				}
 			}
 		};
+
 };
