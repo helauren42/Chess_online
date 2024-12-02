@@ -5,7 +5,7 @@ SRCS = $(wildcard ./SRCS/*.cpp)
 FLAGS = -Wall -Werror -Wextra -Wno-unused
 LDFLAGS = -lSDL2
 
-OBJS = $(SRCS:.cpp=.o)
+OBJS = $(SRCS:./SRCS/%.cpp=./obj/%.o)
 
 CC = c++
 
@@ -13,12 +13,14 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
+	$(MAKE) clean
 
-%.o: %.cpp
+./obj/%.o: ./SRCS/%.cpp
+	mkdir -p ./obj 
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -rf ./obj
 
 fclean: clean
 	rm -f $(NAME)
