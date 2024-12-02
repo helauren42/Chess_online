@@ -1,17 +1,5 @@
 #include "main.hpp"
 
-enum Num {
-    Zero = 0,
-    One,
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight
-};
-
 class Pieces
 {
 protected:
@@ -38,9 +26,10 @@ class Pawn : public Pieces {
 public:
 	const PieceType type = PAWN;
 	Pawn(short _x, short _y) : Pieces(_x, _y) {};
-	virtual ~Pawn() {}
+	~Pawn() {}
 
 	bool validMove(Pos new_pos) override {
+		Move move = pos - new_pos;
 		return true;
 	}
 
@@ -52,7 +41,7 @@ public:
 class Rook : public Pieces {
 public:
 	Rook(short _x, short _y) : Pieces(_x, _y) {};
-	virtual ~Rook() {}
+	~Rook() {}
 
 	bool validMove(Pos new_pos) override {
 		return true;
@@ -66,9 +55,10 @@ public:
 class Knight : public Pieces {
 public:
 	Knight(short _x, short _y) : Pieces(_x, _y) {};
-	virtual ~Knight() {}
+	~Knight() {}
 
 	bool validMove(Pos new_pos) override {
+		Move move = pos - new_pos;
 		return true;
 	}
 
@@ -80,7 +70,7 @@ public:
 class Bishop : public Pieces {
 public:
 	Bishop(short _x, short _y) : Pieces(_x, _y) {};
-	virtual ~Bishop() {}
+	~Bishop() {}
 
 	bool validMove(Pos new_pos) override {
 		return true;
@@ -94,7 +84,7 @@ public:
 class Queen : public Pieces {
 public:
 	Queen(short _x, short _y) : Pieces(_x, _y) {};
-	virtual ~Queen() {}
+	~Queen() {}
 
 	bool validMove(Pos new_pos) override {
 		return true;
@@ -108,7 +98,7 @@ public:
 class King : public Pieces {
 public:
 	King(short _x, short _y) : Pieces(_x, _y) {};
-	virtual ~King() {}
+	~King() {}
 
 	bool validMove(Pos new_pos) override {
 		return true;

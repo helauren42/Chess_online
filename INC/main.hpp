@@ -77,14 +77,6 @@ private:
 	}
 };
 
-Move getMove(Pos new_pos, Pos old_pos)
-{
-	Move move;
-	move.x = new_pos.x - old_pos.x;
-	move.y = new_pos.y - old_pos.y;
-	return move;
-}
-
 Move operator-(Pos new_pos, Pos old_pos)
 {
 	Move move;
