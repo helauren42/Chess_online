@@ -5,9 +5,12 @@
 #include <SDL2/SDL_image.h>
 
 #include "events.hpp"
+#include "Board.hpp"
+#include "Pieces.hpp"
 
 // The x-coordinate corresponds to the file (columns), labeled a to h from left to right.
 // The y-coordinate corresponds to the rank (rows), numbered 1 to 8 from bottom to top.
+// 0,0 is bottom left
 
 using namespace std;
 
@@ -18,24 +21,24 @@ typedef struct s_dim {
 } t_dim;
 
 struct t_textures {
-	SDL_Texture*	b_pawn;
-	SDL_Texture*	b_rook;
-	SDL_Texture*	b_knight;
-	SDL_Texture*	b_bishop;
-	SDL_Texture*	b_queen;
-	SDL_Texture*	b_king;
+	SDL_Texture*	b_pawn = nullptr;
+	SDL_Texture*	b_rook = nullptr;
+	SDL_Texture*	b_knight = nullptr;
+	SDL_Texture*	b_bishop = nullptr;
+	SDL_Texture*	b_queen = nullptr;
+	SDL_Texture*	b_king = nullptr;
 	
-	SDL_Texture*	w_pawn;
-	SDL_Texture*	w_rook;
-	SDL_Texture*	w_knight;
-	SDL_Texture*	w_bishop;
-	SDL_Texture*	w_queen;
-	SDL_Texture*	w_king;
+	SDL_Texture*	w_pawn = nullptr;
+	SDL_Texture*	w_rook = nullptr;
+	SDL_Texture*	w_knight = nullptr;
+	SDL_Texture*	w_bishop = nullptr;
+	SDL_Texture*	w_queen = nullptr;
+	SDL_Texture*	w_king = nullptr;
 
-	SDL_Texture*	darkSquare;
-	SDL_Texture*	lightSquare;
+	SDL_Texture*	darkSquare = nullptr;
+	SDL_Texture*	lightSquare = nullptr;
 
-	SDL_Texture*	board;
+	SDL_Texture*	board = nullptr;
 
 	t_textures() {}
 	~t_textures() {}
@@ -57,10 +60,6 @@ struct t_textures {
 			return -1;
 		}
 		SDL_SetRenderTarget(renderer, board);
-
-		// Clear the board texture to transparent (or black if you prefer)
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Transparent background
-		SDL_RenderClear(renderer);
 
 		for (int row = 0; row < 8; ++row) {
 			for (int col = 0; col < 8; ++col) {
@@ -121,7 +120,6 @@ public:
 			throw (std::invalid_argument("Position not valid"));
 		xyToFr();
 	};
-
 
 	void setPos(string _fr)
 	{

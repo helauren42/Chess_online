@@ -25,8 +25,9 @@ public:
 
 class Pawn : public Pieces {
 public:
-	const PieceType type = PAWN;
-	const short dir = color == BLACK ? -1 : 1;
+	bool		firstMove = true;
+	const		PieceType type = PAWN;
+	const short	dir = color == BLACK ? -1 : 1;
 	Pawn(short _x, short _y) : Pieces(_x, _y) {};
 	~Pawn() {}
 

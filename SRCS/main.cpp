@@ -1,7 +1,28 @@
 #include "../INC/main.hpp"
 
-void	Freeing(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Window* window) {
-	SDL_DestroyTexture(texture);
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
+
+
+
+void	Freeing(SDL_Renderer* renderer, t_textures textures, SDL_Window* window) {
+	
+	SDL_DestroyTexture(textures.b_pawn);
+	SDL_DestroyTexture(textures.b_rook);
+	SDL_DestroyTexture(textures.b_knight);
+	SDL_DestroyTexture(textures.b_bishop);
+	SDL_DestroyTexture(textures.b_queen);
+	SDL_DestroyTexture(textures.b_king);
+	SDL_DestroyTexture(textures.w_pawn);
+	SDL_DestroyTexture(textures.w_rook);
+	SDL_DestroyTexture(textures.w_knight);
+	SDL_DestroyTexture(textures.w_bishop);
+	SDL_DestroyTexture(textures.w_queen);
+	SDL_DestroyTexture(textures.w_king);
+	SDL_DestroyTexture(textures.darkSquare);
+	SDL_DestroyTexture(textures.lightSquare);
+	SDL_DestroyTexture(textures.board);
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	IMG_Quit();
@@ -45,23 +66,21 @@ SDL_Window*	initWindow(t_dim &dim) {
 
 int main(int argc, char* argv[]) {
 	Events events;
+	t_dim dim;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return -1;
 	}
 
-	t_dim dim;
-
-	SDL_Window* window = initWindow(dim);
+	window = initWindow(dim);
 	if (!window) {
 		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_Quit();
 		return -1;
 	}
-	
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (!renderer) {
 		printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_DestroyWindow(window); SDL_Quit();
@@ -82,6 +101,7 @@ int main(int argc, char* argv[]) {
 	if(textures.createChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim) == -1)
 		return printf("Failed to load texture! SDL_image Error: %s\n", IMG_GetError()), -1;
 
+	
 	SDL_Event e;
 	bool quit = false;
 	while (!quit) {
@@ -94,6 +114,6 @@ int main(int argc, char* argv[]) {
 		SDL_Delay(16);
 	}
 
-	Freeing(renderer, textures.board, window);
+	Freeing(renderer, textures, window);
 	return 0;
 }
