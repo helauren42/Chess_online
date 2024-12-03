@@ -1,5 +1,7 @@
-#include "main.hpp"
+#pragma once
+
 #include "Board.hpp"
+#include "main.hpp"
 
 class Pieces
 {
@@ -13,7 +15,7 @@ public:
 	};
 	virtual ~Pieces() {};
 
-	virtual bool	validMove(Pos new_pos) = 0;
+	virtual bool	validMove(Squares square) = 0;
 	bool	makeMove(Pos new_pos) {
 		pos = new_pos;
 	};
@@ -31,12 +33,12 @@ public:
 	Pawn(short _x, short _y) : Pieces(_x, _y) {};
 	~Pawn() {}
 
-	bool validMove(Square square) override {
-		Move move = pos - square->pos;
+	bool validMove(Squares square) override {
+		Move move = pos - square.pos;
 
 		// first handle special cases
 		if ((move.x == 1 || move.x == -1)
-			&& square->piece == nullptr
+			&& square.piece == nullptr
 			&& (move.y == 1 * dir));
 			return true;
 		if(firstMove && move.y == 2 * dir)
@@ -56,7 +58,7 @@ public:
 	Rook(short _x, short _y) : Pieces(_x, _y) {};
 	~Rook() {}
 
-	bool validMove(Pos new_pos) override {
+	bool validMove(Squares square) override {
 		return true;
 	}
 };
@@ -66,8 +68,7 @@ public:
 	Knight(short _x, short _y) : Pieces(_x, _y) {};
 	~Knight() {}
 
-	bool validMove(Pos new_pos) override {
-		Move move = pos - new_pos;
+	bool validMove(Squares square) override {
 		return true;
 	}
 };
@@ -77,7 +78,7 @@ public:
 	Bishop(short _x, short _y) : Pieces(_x, _y) {};
 	~Bishop() {}
 
-	bool validMove(Pos new_pos) override {
+	bool validMove(Squares square) override {
 		return true;
 	}
 };
@@ -87,7 +88,7 @@ public:
 	Queen(short _x, short _y) : Pieces(_x, _y) {};
 	~Queen() {}
 
-	bool validMove(Pos new_pos) override {
+	bool validMove(Squares square) override {
 		return true;
 	}
 };
@@ -97,7 +98,7 @@ public:
 	King(short _x, short _y) : Pieces(_x, _y) {};
 	~King() {}
 
-	bool validMove(Pos new_pos) override {
+	bool validMove(Squares square) override {
 		return true;
 	}
 };

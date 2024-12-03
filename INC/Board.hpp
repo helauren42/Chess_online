@@ -1,14 +1,14 @@
+#pragma once
+
 #include "Pieces.hpp"
 #include "main.hpp"
 #include "memory"
 
 struct Squares {
-	private:
-		Pos pos;
-		unique_ptr<Pieces> piece;
-	public:
-		Squares(short x, short y) : pos(x, y) { piece = nullptr;};
-		~Squares() {};
+	Pos pos;
+	unique_ptr<Pieces> piece;
+	Squares(short x, short y) : pos(x, y) { piece = nullptr;};
+	~Squares() {};
 };
 
 class Board {
