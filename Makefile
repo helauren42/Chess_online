@@ -2,8 +2,8 @@ NAME = chess
 
 SRCS = $(wildcard ./SRCS/*.cpp)
 
-FLAGS = -Wall -Werror -Wextra -Wno-unused
-LDFLAGS = -lSDL2
+CFLAGS = -Wall -Werror -Wextra -Wno-unused
+LDFLAGS = -lSDL2 -lSDL2_image
 
 OBJS = $(SRCS:./SRCS/%.cpp=./obj/%.o)
 
@@ -17,7 +17,7 @@ $(NAME): $(OBJS)
 
 ./obj/%.o: ./SRCS/%.cpp
 	mkdir -p ./obj 
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -g3 -c $< -o $@
 
 clean:
 	rm -rf ./obj

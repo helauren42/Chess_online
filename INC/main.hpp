@@ -1,17 +1,24 @@
+#pragma once
+
 #include "MyCppLib/MyCppLib.hpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
+#include "events.hpp"
 
 // The x-coordinate corresponds to the file (columns), labeled a to h from left to right.
 // The y-coordinate corresponds to the rank (rows), numbered 1 to 8 from bottom to top.
 
 using namespace std;
 
+typedef struct s_imgs {
+	
+}	t_imgs;
+
 typedef struct s_dim {
-	int window_width;
-	int window_height;
-	int board_width;
-	int board_height;
-	int square_width;
-	int square_height;
+	int window;
+	int board;
+	int square;
 } t_dim;
 
 enum PieceType {
@@ -103,4 +110,8 @@ std::ostream& operator<<(std::ostream& os, const Pos& pos) {
 	os << "x: " << pos.x << endl;
 	os << "y: " << pos.y << endl;
 	return os;
+}
+
+bool operator==(Pos pos1, Pos pos2) {
+	return pos1.x == pos2.x && pos1.y == pos2.y;
 }

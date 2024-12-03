@@ -38,9 +38,6 @@ public:
 			return false;
 		if(move.x)
 			return false;
-
-
-		
 		return true;
 	}
 };
