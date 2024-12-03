@@ -95,10 +95,7 @@ int main(int argc, char* argv[]) {
 
 	// making textures
 	t_textures textures;
-	if(textures.initSquares(renderer) == -1)
-		return printf("Failed to load texture! SDL_image Error: %s\n", IMG_GetError()), -1;
-
-	if(textures.createChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim) == -1)
+	if(textures.initFoundationTextures(renderer, dim) == -1)
 		return printf("Failed to load texture! SDL_image Error: %s\n", IMG_GetError()), -1;
 
 	SDL_Event e;

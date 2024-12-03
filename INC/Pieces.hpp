@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Board.hpp"
 #include "main.hpp"
 
 class Pieces

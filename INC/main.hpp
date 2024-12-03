@@ -50,7 +50,22 @@ struct t_textures {
 		return 0;
 	}
 
-	int createChessBoard(SDL_Renderer* renderer, SDL_Texture* darkSquare, SDL_Texture* lightSquare, t_dim dim) {
+	int initPieces(SDL_Renderer* renderer) {
+		b_pawn = IMG_LoadTexture(renderer, "./IMG/USE/b_pawn.png");
+		b_rook = IMG_LoadTexture(renderer, "./IMG/USE/b_rook.png");
+		b_knight = IMG_LoadTexture(renderer, "./IMG/USE/b_knight.png");
+		b_bishop = IMG_LoadTexture(renderer, "./IMG/USE/b_bishop.png");
+		b_queen = IMG_LoadTexture(renderer, "./IMG/USE/b_queen.png");
+		b_king = IMG_LoadTexture(renderer, "./IMG/USE/b_king.png");
+		w_pawn = IMG_LoadTexture(renderer, "./IMG/USE/w_pawn.png");
+		w_rook = IMG_LoadTexture(renderer, "./IMG/USE/w_rook.png");
+		w_knight = IMG_LoadTexture(renderer, "./IMG/USE/w_knight.png");
+		w_bishop = IMG_LoadTexture(renderer, "./IMG/USE/w_bishop.png");
+		w_queen = IMG_LoadTexture(renderer, "./IMG/USE/w_queen.png");
+		w_king = IMG_LoadTexture(renderer, "./IMG/USE/w_king.png");
+	}
+
+	int initChessBoard(SDL_Renderer* renderer, SDL_Texture* darkSquare, SDL_Texture* lightSquare, t_dim dim) {
 		board = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
 			dim.board, dim.board);
@@ -71,6 +86,12 @@ struct t_textures {
 		SDL_SetRenderTarget(renderer, NULL);
 		return 0;
 	}
+
+	int initFoundationTextures(SDL_Renderer* renderer, t_dim dim) {
+		if(initSquares(renderer) || initPieces(renderer) || initChessBoard(renderer, darkSquare, lightSquare, dim))
+			return -1;
+	}
+
 };
 
 enum PieceType {
