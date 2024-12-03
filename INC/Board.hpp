@@ -1,14 +1,23 @@
-#pragma once
+#ifndef BOARD_HPP
+#define BOARD_HPP
 
 #include "Pieces.hpp"
 #include "main.hpp"
-#include "memory"
+#include <memory>
+#include <vector>
+
+template <typename T>
+using unique_ptr = std::unique_ptr<T>;
+
+template <typename T>
+using vector = std::vector<T>;
 
 struct Squares {
-	Pos pos;
-	unique_ptr<Pieces> piece;
-	Squares(short x, short y) : pos(x, y) { piece = nullptr;};
-	~Squares() {};
+	public:
+		Pos pos;
+		unique_ptr<Pieces> piece;
+		Squares(short x, short y) : pos(x, y) { piece = nullptr;};
+		~Squares() {};
 };
 
 class Board {
@@ -24,22 +33,22 @@ class Board {
 			// make piece
 			unique_ptr<Pieces> piece;
 			if(y == 1 || y == 6) {
-				piece = make_unique<Pawn>(x, y);
+				piece = std::make_unique<Pawn>(x, y);
 			}
 			else if(x == 0 || x == 7) {
-				piece = make_unique<Rook>(x, y);
+				piece = std::make_unique<Rook>(x, y);
 			}
 			else if(x == 1 || x == 6) {
-				piece = make_unique<Knight>(x, y);
+				piece = std::make_unique<Knight>(x, y);
 			}
 			else if(x == 2 || x == 5) {
-				piece = make_unique<Bishop>(x, y);
+				piece = std::make_unique<Bishop>(x, y);
 			}
 			else if(x == 3) {
-				piece = make_unique<Queen>(x, y);
+				piece = std::make_unique<Queen>(x, y);
 			}
 			else if(x == 4) {
-				piece = make_unique<King>(x, y);
+				piece = std::make_unique<King>(x, y);
 			}
 			if(y <= 1)
 				piece->setColor(WHITE);
@@ -59,3 +68,4 @@ class Board {
 
 };
 
+#endif
