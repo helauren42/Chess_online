@@ -11,15 +11,68 @@
 
 using namespace std;
 
-typedef struct s_imgs {
-	
-}	t_imgs;
-
 typedef struct s_dim {
 	int window;
 	int board;
 	int square;
 } t_dim;
+
+struct t_textures {
+	SDL_Texture*	b_pawn;
+	SDL_Texture*	b_rook;
+	SDL_Texture*	b_knight;
+	SDL_Texture*	b_bishop;
+	SDL_Texture*	b_queen;
+	SDL_Texture*	b_king;
+	
+	SDL_Texture*	w_pawn;
+	SDL_Texture*	w_rook;
+	SDL_Texture*	w_knight;
+	SDL_Texture*	w_bishop;
+	SDL_Texture*	w_queen;
+	SDL_Texture*	w_king;
+
+	SDL_Texture*	darkSquare;
+	SDL_Texture*	lightSquare;
+
+	SDL_Texture*	board;
+
+	t_textures() {}
+	~t_textures() {}
+	int initSquares(SDL_Renderer* renderer) {
+		darkSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_dark.png");
+		lightSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_light.png");
+		if(!darkSquare || !lightSquare)
+			return -1;
+		return 0;
+	}
+
+	int createChessBoard(SDL_Renderer* renderer, SDL_Texture* darkSquare, SDL_Texture* lightSquare, t_dim dim) {
+		board = SDL_CreateTexture(
+			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+			dim.board, dim.board);
+
+		if (!board) {
+			SDL_Log("Failed to create board texture: %s", SDL_GetError());
+			return -1;
+		}
+		SDL_SetRenderTarget(renderer, board);
+
+		// Clear the board texture to transparent (or black if you prefer)
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // Transparent background
+		SDL_RenderClear(renderer);
+
+		for (int row = 0; row < 8; ++row) {
+			for (int col = 0; col < 8; ++col) {
+				SDL_Texture* currentSquare = (row + col) % 2 == 0 ? lightSquare : darkSquare;
+				SDL_Rect dstRect = { col * dim.square, row * dim.square, dim.square, dim.square };
+				SDL_RenderCopy(renderer, currentSquare, NULL, &dstRect);
+			}
+		}
+		SDL_SetRenderTarget(renderer, NULL);
+		return 0;
+	}
+};
 
 enum PieceType {
 	PAWN,

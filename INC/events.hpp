@@ -39,7 +39,6 @@ void	Events::keyEvents(const int key, bool& quit, const bool type) {
 	if(keys.find(key) == keys.end())
 		return;
 	keys[key] = type;
-	out(keys[SDLK_LCTRL], " ", keys[SDLK_w]);
 	if(keys[SDLK_LCTRL] == true && keys[SDLK_w] == true)
 		quit = true;
 }

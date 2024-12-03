@@ -33,10 +33,9 @@ SDL_Window*	initWindow(t_dim &dim) {
 		return NULL;
 	
 	int top = 0, left = 0, bottom = 0, right = 0;
-	
 	if (SDL_GetWindowBordersSize(window, &top, &left, &bottom, &right) != 0) {
-    	SDL_Log("Failed to get window borders: %s", SDL_GetError());
-    	top = left = bottom = right = 0; // Fallback to zero if the function fails
+		SDL_Log("Failed to get window borders: %s", SDL_GetError());
+		top = left = bottom = right = 0; // Fallback to zero if the function fails
 	}
 
 	dim.board = dim.window - top - bottom;
@@ -62,37 +61,32 @@ int main(int argc, char* argv[]) {
 	}
 	
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer) {
-        printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return -1;
-    }
-
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return -1;
-    }
-
-	SDL_Texture* texture = IMG_LoadTexture(renderer, "IMG/home.png");
-	if (!texture) {
-		printf("Unable to load texture! SDL_image Error: %s\n", IMG_GetError());
-		IMG_Quit();
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		SDL_Quit();
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if (!renderer) {
+		printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+		SDL_DestroyWindow(window); SDL_Quit();
 		return -1;
 	}
+
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+		SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window); SDL_Quit();
+		return -1;
+	}
+
+	// making textures
+	t_textures textures;
+	if(textures.initSquares(renderer) == -1)
+		return printf("Failed to load texture! SDL_image Error: %s\n", IMG_GetError()), -1;
+
+	if(textures.createChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim) == -1)
+		return printf("Failed to load texture! SDL_image Error: %s\n", IMG_GetError()), -1;
 
 	SDL_Event e;
 	bool quit = false;
 	while (!quit) {
 		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
+		SDL_RenderCopy(renderer, textures.board, NULL, NULL);
 		SDL_RenderPresent(renderer);
 		while (SDL_PollEvent(&e) != 0) { // if there is an event do stuff
 			events.eventHandler(e, quit);
@@ -100,6 +94,6 @@ int main(int argc, char* argv[]) {
 		SDL_Delay(16);
 	}
 
-	Freeing(renderer, texture, window);
+	Freeing(renderer, textures.board, window);
 	return 0;
 }
