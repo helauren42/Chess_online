@@ -33,7 +33,7 @@ SDL_Window*	initWindow(t_dim &dim) {
 	SDL_DisplayMode display_mode;
 	int screen_width = 0;
 	int screen_height = 0;
-	
+
 	SDL_Window* window = NULL;
 
 	if (SDL_GetCurrentDisplayMode(0, &display_mode) == 0) {
@@ -101,7 +101,6 @@ int main(int argc, char* argv[]) {
 	if(textures.createChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim) == -1)
 		return printf("Failed to load texture! SDL_image Error: %s\n", IMG_GetError()), -1;
 
-	
 	SDL_Event e;
 	bool quit = false;
 	while (!quit) {

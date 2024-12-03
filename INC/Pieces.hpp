@@ -31,14 +31,22 @@ public:
 	Pawn(short _x, short _y) : Pieces(_x, _y) {};
 	~Pawn() {}
 
-	bool validMove(Pos new_pos, Square square) override {
-		Move move = pos - new_pos;
-		if ((move.x == 1 || move.x == -1) 
-			&& square->piece != nullptr
+	bool validMove(Square square) override {
+		Move move = pos - square->pos;
+
+		// first handle special cases
+		if ((move.x == 1 || move.x == -1)
+			&& square->piece == nullptr
 			&& (move.y == 1 * dir));
+			return true;
+		if(firstMove && move.y == 2 * dir)
+			return true;
+
+		// then error cases
+		if(move.x != 0 || move.y != dir)
 			return false;
-		if(move.x)
-			return false;
+
+		// then it should be true
 		return true;
 	}
 };
