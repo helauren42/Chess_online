@@ -122,6 +122,8 @@ class Game {
 			while(!quit) {
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, textures.board, NULL, NULL);
+				textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
+				SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 				SDL_RenderPresent(renderer);
 				while (SDL_PollEvent(&e) != 0) { // if there is an event do stuff
 					events.eventHandler(e, quit);

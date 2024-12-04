@@ -5,24 +5,19 @@
 #include <memory>
 #include <vector>
 
-template <typename T>
-using unique_ptr = std::unique_ptr<T>;
-
-template <typename T>
-using vector = std::vector<T>;
-
 class Board {
 	private:
-		vector<unique_ptr<Pieces>> active_pieces;
-		vector<unique_ptr<Pieces>> dead_white_pieces;
-		vector<unique_ptr<Pieces>> dead_black_pieces;
+		std::vector<std::unique_ptr<Pieces>> active_pieces;
+		std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
+		std::vector<std::unique_ptr<Pieces>> dead_black_pieces;
 	public:
 		Board() { init();};
 		~Board() {};
 
-		unique_ptr<Pieces>	initPiece(const short& x, const short& y) {
+		const std::vector<std::unique_ptr<Pieces>>& getActivePieces() const { return active_pieces; }
+		std::unique_ptr<Pieces>	initPiece(const short& x, const short& y) {
 			// make piece
-			unique_ptr<Pieces> piece;
+			std::unique_ptr<Pieces> piece;
 			if(y == 1 || y == 6) {
 				piece = std::make_unique<Pawn>(x, y);
 			}

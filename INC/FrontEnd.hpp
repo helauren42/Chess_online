@@ -33,6 +33,8 @@ struct t_textures {
 
 	SDL_Texture*	board = nullptr;
 
+	SDL_Texture*	pieces = nullptr;
+
 	t_textures() {}
 	~t_textures() {}
 	int initSquares(SDL_Renderer* renderer) {
@@ -62,6 +64,30 @@ struct t_textures {
 		return 0;
 	}
 
+	SDL_Texture* getPieceTexture(const PieceType type, const bool color) {
+		if(color == BLACK) {
+			switch(type) {
+				case PAWN: return b_pawn;
+				case ROOK: return b_rook;
+				case KNIGHT: return b_knight;
+				case BISHOP: return b_bishop;
+				case QUEEN: return b_queen;
+				case KING: return b_king;
+			}
+		}
+		else
+			switch(type) {
+				case PAWN: return w_pawn;
+				case ROOK: return w_rook;
+				case KNIGHT: return w_knight;
+				case BISHOP: return w_bishop;
+				case QUEEN: return w_queen;
+				case KING: return w_king;
+			}
+		return NULL;
+	}
+
+
 	int initChessBoard(SDL_Renderer* renderer, SDL_Texture* darkSquare, SDL_Texture* lightSquare, t_dim dim) {
 		board = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -83,11 +109,31 @@ struct t_textures {
 		SDL_SetRenderTarget(renderer, NULL);
 		return 0;
 	}
-	bool	makePiecesTextures(SDL_Renderer* renderer, const std::vector<std::unique_ptr<Pieces>>& active_pieces) {
-		for(int i = 0; i < active_pieces.size(); i++) {
-			if(active_pieces[i]->getType() == PAWN)
-			
+
+	bool	makePiecesTextures(SDL_Renderer* renderer, const std::vector<std::unique_ptr<Pieces>>& active_pieces, int square_dim) {
+		if(pieces)
+			SDL_DestroyTexture(pieces);
+		pieces = SDL_CreateTexture(
+			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+			square_dim * 8, square_dim * 8
+		);
+
+		if (!pieces) {
+			SDL_Log("Failed to create pieces texture: %s", SDL_GetError());
+			return false;
 		}
+		SDL_SetTextureBlendMode(pieces, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(pieces, 128); // Adjust transparency (0-255)
+		SDL_SetRenderTarget(renderer, pieces);
+
+		for(size_t i = 0; i < active_pieces.size(); i++) {
+			SDL_Texture* curr = getPieceTexture(active_pieces[i]->getType(), active_pieces[i]->getColor());
+			Pos pos = active_pieces[i]->getPosition();
+			SDL_Rect dstRect = { pos.x * square_dim, pos.reverseY() * square_dim, square_dim, square_dim };
+			SDL_RenderCopy(renderer, curr, NULL, &dstRect);
+		}
+		SDL_SetRenderTarget(renderer, NULL);
+		return true;
 	}
 };
 
