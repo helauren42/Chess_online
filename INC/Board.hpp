@@ -11,14 +11,6 @@ using unique_ptr = std::unique_ptr<T>;
 template <typename T>
 using vector = std::vector<T>;
 
-struct Squares {
-	public:
-		Pos pos;
-		unique_ptr<Pieces> piece;
-		Squares(short x, short y) : pos(x, y) { piece = nullptr;};
-		~Squares() {};
-};
-
 class Board {
 	private:
 		vector<unique_ptr<Pieces>> active_pieces;

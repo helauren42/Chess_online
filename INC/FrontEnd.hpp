@@ -4,9 +4,9 @@
 #include "SDL2/SDL_image.h"
 
 typedef struct s_dim {
-	int window;
-	int board;
-	int square;
+	int window = 0;
+	int board = 0;
+	int square = 0;
 } t_dim;
 
 struct t_textures {

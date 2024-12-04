@@ -1,10 +1,14 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "Board.hpp"
 #include "FrontEnd.hpp"
 #include "Pieces.hpp"
 // #include "Player.hpp"
+
+#include "../INC/MyCppLib/MyCppLib.hpp"
 
 SDL_Window*	initWindow(t_dim &dim) {
 	SDL_DisplayMode display_mode;
@@ -54,11 +58,12 @@ class Game {
 		Game() {};
 		~Game() {};
 		bool	initSDL() {
+			printf("somehow\n");
 			if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 				printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 				return 1;
 			}
-
+			printf("somehow\n");
 			window = initWindow(dim);
 			if (!window) {
 				printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
