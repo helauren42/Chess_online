@@ -8,12 +8,25 @@
 
 class Board {
 	private:
+		std::unique_ptr<Pieces> selected_piece = nullptr;
 		std::vector<std::unique_ptr<Pieces>> active_pieces;
 		std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
 		std::vector<std::unique_ptr<Pieces>> dead_black_pieces;
 	public:
 		Board() { init();};
 		~Board() {};
+
+		std::unique_ptr<Pieces> click_piece(const int x, const int y, const t_dim& dim) {
+			const int square_x = x * 8 / dim.board;
+			const int square_y = y * 8 / dim.board;
+			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
+				const std::unique_ptr<Pieces>::pointer piece =  it->get();
+				Pos pos = piece->getPosition(); pos.y = pos.reverseY();
+				if(pos.x == square_x && pos.y == square_y)
+					return std::make_unique<Pieces>(*piece);
+			}
+			return nullptr;
+		}
 
 		const std::vector<std::unique_ptr<Pieces>>& getActivePieces() const { return active_pieces; }
 		std::unique_ptr<Pieces>	initPiece(const short& x, const short& y) {
