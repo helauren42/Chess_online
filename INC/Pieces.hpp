@@ -120,7 +120,7 @@ protected:
 	const PieceType type;
 public:
 	Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type) {
-		color = pos.x <= 1 ?  WHITE : BLACK;
+		color = pos.y <= 1 ?  WHITE : BLACK;
 	};
 	virtual ~Pieces() {};
 

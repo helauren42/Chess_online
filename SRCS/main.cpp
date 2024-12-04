@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 
 	if(game.initFoundationTextures())
 		return 1;
-	
+
 	game.run();
 
 	game.close();

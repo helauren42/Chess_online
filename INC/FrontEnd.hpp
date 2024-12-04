@@ -87,7 +87,6 @@ struct t_textures {
 		return NULL;
 	}
 
-
 	int initChessBoard(SDL_Renderer* renderer, SDL_Texture* darkSquare, SDL_Texture* lightSquare, t_dim dim) {
 		board = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -99,8 +98,8 @@ struct t_textures {
 		}
 		SDL_SetRenderTarget(renderer, board);
 
-		for (int row = 0; row < 8; ++row) {
-			for (int col = 0; col < 8; ++col) {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
 				SDL_Texture* currentSquare = (row + col) % 2 == 0 ? lightSquare : darkSquare;
 				SDL_Rect dstRect = { col * dim.square, row * dim.square, dim.square, dim.square };
 				SDL_RenderCopy(renderer, currentSquare, NULL, &dstRect);

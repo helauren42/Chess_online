@@ -33,7 +33,7 @@ SDL_Window*	initWindow(t_dim &dim) {
 
 	if (!window)
 		return NULL;
-	
+
 	int top = 0, left = 0, bottom = 0, right = 0;
 	if (SDL_GetWindowBordersSize(window, &top, &left, &bottom, &right) != 0) {
 		printf("Failed to get window borders: %s", SDL_GetError());
