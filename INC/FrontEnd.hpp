@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <memory>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 
@@ -65,7 +66,7 @@ struct t_textures {
 
 		if (!board) {
 			SDL_Log("Failed to create board texture: %s", SDL_GetError());
-			return -1;
+			return 1;
 		}
 		SDL_SetRenderTarget(renderer, board);
 
@@ -78,6 +79,11 @@ struct t_textures {
 		}
 		SDL_SetRenderTarget(renderer, NULL);
 		return 0;
+	}
+	bool	makePiecesTextures(SDL_Renderer* renderer, const vector<unique_ptr<Pieces>>& active_pieces) {
+		for(int i = 0; i < active_pieces.size(); i++) {
+			if(active_pieces[i]->getType() == "pawn")
+		}
 	}
 };
 

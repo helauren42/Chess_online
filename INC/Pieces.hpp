@@ -119,7 +119,7 @@ public:
 	virtual void	makeMove(const Pos& new_pos) {
 		pos = new_pos;
 	};
-
+	PieceType	getType() const { return type; }
 	Pos getPosition() const { return pos; }
 	bool getColor() const { return color; }
 	void setColor(bool c) { color = c; }
@@ -159,6 +159,7 @@ public:
 
 class Rook : public Pieces {
 public:
+	const		PieceType type = ROOK;
 	Rook(short _x, short _y) : Pieces(_x, _y) {};
 	~Rook() {}
 
@@ -169,6 +170,7 @@ public:
 
 class Knight : public Pieces {
 public:
+	const		PieceType type = KNIGHT;
 	Knight(short _x, short _y) : Pieces(_x, _y) {};
 	~Knight() {}
 
@@ -179,6 +181,7 @@ public:
 
 class Bishop : public Pieces {
 public:
+	const		PieceType type = BISHOP;
 	Bishop(short _x, short _y) : Pieces(_x, _y) {};
 	~Bishop() {}
 
@@ -189,6 +192,7 @@ public:
 
 class Queen : public Pieces {
 public:
+	const		PieceType type = QUEEN;
 	Queen(short _x, short _y) : Pieces(_x, _y) {};
 	~Queen() {}
 
@@ -199,6 +203,7 @@ public:
 
 class King : public Pieces {
 public:
+	const		PieceType type = KING;
 	King(short _x, short _y) : Pieces(_x, _y) {};
 	~King() {}
 
