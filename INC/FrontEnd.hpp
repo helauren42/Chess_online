@@ -123,13 +123,15 @@ struct t_textures {
 			return false;
 		}
 		SDL_SetTextureBlendMode(pieces, SDL_BLENDMODE_BLEND);
-		SDL_SetTextureAlphaMod(pieces, 128); // Adjust transparency (0-255)
+		SDL_SetTextureBlendMode(pieces, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(pieces, 120);
 		SDL_SetRenderTarget(renderer, pieces);
 
+		int m = square_dim / 10;
 		for(size_t i = 0; i < active_pieces.size(); i++) {
 			SDL_Texture* curr = getPieceTexture(active_pieces[i]->getType(), active_pieces[i]->getColor());
 			Pos pos = active_pieces[i]->getPosition();
-			SDL_Rect dstRect = { pos.x * square_dim, pos.reverseY() * square_dim, square_dim, square_dim };
+			SDL_Rect dstRect = { pos.x * square_dim + m, pos.reverseY() * square_dim + m, square_dim - m * 2, square_dim - m * 2 };
 			SDL_RenderCopy(renderer, curr, NULL, &dstRect);
 		}
 		SDL_SetRenderTarget(renderer, NULL);

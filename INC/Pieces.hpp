@@ -117,9 +117,9 @@ class Pieces
 protected:
 	Pos pos;
 	bool color;
-	PieceType type;
+	const PieceType type;
 public:
-	Pieces(short _x, short _y) : pos(_x, _y) {
+	Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type) {
 		color = pos.x <= 1 ?  WHITE : BLACK;
 	};
 	virtual ~Pieces() {};
@@ -131,16 +131,14 @@ public:
 	PieceType	getType() const { return type; }
 	Pos getPosition() const { return pos; }
 	bool getColor() const { return color; }
-	void setColor(bool c) { color = c; }
 };
 
 class Pawn : public Pieces {
 public:
 	bool		firstMove = true;
-	const		PieceType type = PAWN;
 	const short	dir = color == BLACK ? -1 : 1;
 	
-	Pawn(short _x, short _y) : Pieces(_x, _y) {};
+	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
 	~Pawn() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -169,8 +167,7 @@ public:
 
 class Rook : public Pieces {
 public:
-	const		PieceType type = ROOK;
-	Rook(short _x, short _y) : Pieces(_x, _y) {};
+	Rook(short _x, short _y) : Pieces(_x, _y, ROOK) {};
 	~Rook() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -180,8 +177,7 @@ public:
 
 class Knight : public Pieces {
 public:
-	const		PieceType type = KNIGHT;
-	Knight(short _x, short _y) : Pieces(_x, _y) {};
+	Knight(short _x, short _y) : Pieces(_x, _y, KNIGHT) {};
 	~Knight() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -191,8 +187,7 @@ public:
 
 class Bishop : public Pieces {
 public:
-	const		PieceType type = BISHOP;
-	Bishop(short _x, short _y) : Pieces(_x, _y) {};
+	Bishop(short _x, short _y) : Pieces(_x, _y, BISHOP) {};
 	~Bishop() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -202,8 +197,7 @@ public:
 
 class Queen : public Pieces {
 public:
-	const		PieceType type = QUEEN;
-	Queen(short _x, short _y) : Pieces(_x, _y) {};
+	Queen(short _x, short _y) : Pieces(_x, _y, QUEEN) {};
 	~Queen() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -213,8 +207,7 @@ public:
 
 class King : public Pieces {
 public:
-	const		PieceType type = KING;
-	King(short _x, short _y) : Pieces(_x, _y) {};
+	King(short _x, short _y) : Pieces(_x, _y, KING) {};
 	~King() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
