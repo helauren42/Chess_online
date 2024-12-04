@@ -2,7 +2,6 @@
 #define BOARD_HPP
 
 #include "Pieces.hpp"
-#include "main.hpp"
 #include <memory>
 #include <vector>
 

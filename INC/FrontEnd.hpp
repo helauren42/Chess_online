@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 
@@ -78,16 +79,7 @@ struct t_textures {
 		SDL_SetRenderTarget(renderer, NULL);
 		return 0;
 	}
-
-	int initFoundationTextures(SDL_Renderer* renderer, t_dim dim) {
-		if(initSquares(renderer) || initPieces(renderer) || initChessBoard(renderer, darkSquare, lightSquare, dim))
-			return -1;
-		return 0;
-	}
-
 };
-
-
 
 class Events
 {
