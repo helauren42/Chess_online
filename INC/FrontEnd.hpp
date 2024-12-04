@@ -1,8 +1,11 @@
 #include <iostream>
 #include <map>
+#include <vector>
 #include <memory>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+
+#include "Pieces.hpp"
 
 typedef struct s_dim {
 	int window = 0;
@@ -80,9 +83,10 @@ struct t_textures {
 		SDL_SetRenderTarget(renderer, NULL);
 		return 0;
 	}
-	bool	makePiecesTextures(SDL_Renderer* renderer, const vector<unique_ptr<Pieces>>& active_pieces) {
+	bool	makePiecesTextures(SDL_Renderer* renderer, const std::vector<std::unique_ptr<Pieces>>& active_pieces) {
 		for(int i = 0; i < active_pieces.size(); i++) {
-			if(active_pieces[i]->getType() == "pawn")
+			if(active_pieces[i]->getType() == PAWN)
+			
 		}
 	}
 };

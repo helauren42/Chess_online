@@ -109,8 +109,9 @@ protected:
 	Pos pos;
 	bool color;
 	PieceType type;
+	const std::string file;
 public:
-	Pieces(short _x, short _y) : pos(_x, _y) {
+	Pieces(short _x, short _y, std::string _file) : pos(_x, _y), file(_file) {
 		color = pos.x <= 1 ?  WHITE : BLACK;
 	};
 	virtual ~Pieces() {};
@@ -120,6 +121,7 @@ public:
 		pos = new_pos;
 	};
 	PieceType	getType() const { return type; }
+	std::string	getImgDir() const { return file; }
 	Pos getPosition() const { return pos; }
 	bool getColor() const { return color; }
 	void setColor(bool c) { color = c; }
@@ -130,7 +132,8 @@ public:
 	bool		firstMove = true;
 	const		PieceType type = PAWN;
 	const short	dir = color == BLACK ? -1 : 1;
-	Pawn(short _x, short _y) : Pieces(_x, _y) {};
+	
+	Pawn(short _x, short _y) : Pieces(_x, _y, color == BLACK ? "../IMG/USE/b_pawn.png" : "../IMG/USE/w_pawn.png") {};
 	~Pawn() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -160,7 +163,7 @@ public:
 class Rook : public Pieces {
 public:
 	const		PieceType type = ROOK;
-	Rook(short _x, short _y) : Pieces(_x, _y) {};
+	Rook(short _x, short _y) : Pieces(_x, _y, color == BLACK ? "../IMG/USE/b_rook.png" : "../IMG/USE/w_rook.png") {};
 	~Rook() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -171,7 +174,7 @@ public:
 class Knight : public Pieces {
 public:
 	const		PieceType type = KNIGHT;
-	Knight(short _x, short _y) : Pieces(_x, _y) {};
+	Knight(short _x, short _y) : Pieces(_x, _y, color == BLACK ? "../IMG/USE/b_knight.png" : "../IMG/USE/w_knight.png") {};
 	~Knight() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -182,7 +185,7 @@ public:
 class Bishop : public Pieces {
 public:
 	const		PieceType type = BISHOP;
-	Bishop(short _x, short _y) : Pieces(_x, _y) {};
+	Bishop(short _x, short _y) : Pieces(_x, _y, color == BLACK ? "../IMG/USE/b_bishop.png" : "../IMG/USE/w_bishop.png") {};
 	~Bishop() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -193,7 +196,7 @@ public:
 class Queen : public Pieces {
 public:
 	const		PieceType type = QUEEN;
-	Queen(short _x, short _y) : Pieces(_x, _y) {};
+	Queen(short _x, short _y) : Pieces(_x, _y, color == BLACK ? "../IMG/USE/b_queen.png" : "../IMG/USE/w_queen.png") {};
 	~Queen() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
@@ -204,7 +207,7 @@ public:
 class King : public Pieces {
 public:
 	const		PieceType type = KING;
-	King(short _x, short _y) : Pieces(_x, _y) {};
+	King(short _x, short _y) : Pieces(_x, _y, color == BLACK ? "../IMG/USE/b_king.png" : "../IMG/USE/w_king.png") {};
 	~King() {}
 
 	bool validMove(const Pos& new_pos, const unique_ptr<Pieces>& piece) override {
