@@ -7,8 +7,14 @@
 #include <vector>
 #include "MyCppLib/Printer/Printer.hpp"
 
+struct cell {
+	PieceType 	type = NONE;
+	bool		color = false;
+};
+
 class Board {
 	private:
+		std::array<std::array<cell, 8>, 8> board;
 		std::unique_ptr<Pieces> selected_piece = nullptr;
 		std::vector<std::unique_ptr<Pieces>> active_pieces;
 		std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
@@ -42,25 +48,69 @@ class Board {
 			}
 		}
 
+		bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type) {
+			Move move = new_pos - old_pos;
+			switch (type)
+			{
+				case PAWN:
+					if(abs(move.y) == 1)
+						return false;
+					if(board[old_pos.y + move.y / 2][old_pos.x].type != NONE)
+						return true;
+					return false;
+				case ROOK:
+					return false;
+				case KNIGHT:
+					return false;
+				case BISHOP:
+					return false;
+				case QUEEN:
+					return false;
+				case KING:
+					return false;
+				default:
+					break;
+			}
+			return false;
+		}
+
+		// there is a valid move per piece, where every individual piece checks if the move is valid from their perspective
+		// meaning they can move in such a way
+		// then the board needs to validate the move by checking that there aren't any obstructions in the way stopping the piece from making the move
+		// so a validMove() per piece and a validMove() for the board
+		bool validMove(Pos new_pos, const Pieces* piece, const Pieces* target_piece) {
+			if(target_piece && piece->getColor() == target_piece->getColor())
+				return false;
+			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
+				Pos pos = it->get()->getPosition();
+				PieceType type = it->get()->getType();
+				bool color = it->get()->getColor();
+				board[pos.y][pos.x].type = type;
+				board[pos.y][pos.x].color = color;
+			}
+			if(!piece->validMove(new_pos, target_piece))
+				return false;
+			if(foundObstacle(piece->getPosition(), new_pos, piece->getType()))
+				return false;
+			return true;
+		}
+
 		void	moveSelectedPiece(const short& x, const short& y) {
 			Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
-			Pieces* targetPiece = nullptr;
-			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
-				if(it->get()->getPosition() == new_pos)
-					targetPiece = it->get();
-			}
+			Pieces* target_piece = nullptr;
 
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
+				if(it->get()->getPosition() == new_pos)
+					target_piece = it->get();
+			}
+			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
 				if(selected_piece == *it) {
-					if(targetPiece)
-						out("target: ", targetPiece);
-					out("Past: ", *it);
-					if(it->get()->validMove(new_pos, targetPiece)) {
-						if(targetPiece)
-							removePiece(new_pos);						
+					if(validMove(new_pos, it->get(), target_piece)) {
+						if(target_piece)
+							removePiece(new_pos);
+						
 						it->get()->makeMove(new_pos);
 					}
-					// out("Future: ", *it);
 					selected_piece = nullptr;
 					break;
 				}

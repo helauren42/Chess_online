@@ -20,7 +20,7 @@ public:
 	};
 	virtual ~Pieces() {};
 
-	virtual bool	validMove(const Pos& new_pos, const Pieces* piece) = 0;
+	virtual bool	validMove(const Pos& new_pos, const Pieces* target) const = 0;
 	virtual void	makeMove(const Pos& new_pos) {
 		pos = new_pos;
 	};
@@ -37,20 +37,16 @@ public:
 	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
 	~Pawn() {}
 
-	bool validMove(const Pos& new_pos, const Pieces* piece) override {
+	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		Move move = pos - new_pos;
 
-		if(piece && color == piece->getColor()) {
-			out("pawn1\n");
-			return false;
-		}
 		// first handle special cases
 		if ((move.x == 1 || move.x == -1)
-		&& piece != nullptr
+		&& target != nullptr
 		&& (move.y == 1 * dir)) {
 				return  true;
 		}
-		if(piece)
+		if(target)
 			return false;
 		if(firstMove && move.y == 2 * dir)
 			return true;
@@ -77,7 +73,8 @@ public:
 	Rook(short _x, short _y) : Pieces(_x, _y, ROOK) {};
 	~Rook() {}
 
-	bool validMove(const Pos& new_pos, const Pieces* piece) override {
+	bool validMove(const Pos& new_pos, const Pieces* target) const override {
+
 		return true;
 	}
 };
@@ -87,7 +84,7 @@ public:
 	Knight(short _x, short _y) : Pieces(_x, _y, KNIGHT) {};
 	~Knight() {}
 
-	bool validMove(const Pos& new_pos, const Pieces* piece) override {
+	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		return true;
 	}
 };
@@ -97,7 +94,7 @@ public:
 	Bishop(short _x, short _y) : Pieces(_x, _y, BISHOP) {};
 	~Bishop() {}
 
-	bool validMove(const Pos& new_pos, const Pieces* piece) override {
+	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		return true;
 	}
 };
@@ -107,7 +104,7 @@ public:
 	Queen(short _x, short _y) : Pieces(_x, _y, QUEEN) {};
 	~Queen() {}
 
-	bool validMove(const Pos& new_pos, const Pieces* piece) override {
+	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		return true;
 	}
 };
@@ -117,7 +114,7 @@ public:
 	King(short _x, short _y) : Pieces(_x, _y, KING) {};
 	~King() {}
 
-	bool validMove(const Pos& new_pos, const Pieces* piece) override {
+	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		return true;
 	}
 };

@@ -8,7 +8,8 @@ enum PieceType {
 	KNIGHT,
 	BISHOP,
 	QUEEN,
-	KING
+	KING,
+	NONE
 };
 
 enum {
@@ -86,7 +87,6 @@ private:
 };
 
 Pos	coordinatesToPos(const short x, const short y, const short win_width, const short win_height) {
-	out("coordinate x: ", x, "coordinate y: ", y);
 	Pos pos(x * 8 / win_width, y * 8 / win_height);
 	pos.setPos(pos.x, pos.reverseY());
 	return pos;

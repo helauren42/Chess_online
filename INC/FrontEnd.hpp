@@ -87,6 +87,8 @@ struct t_textures
 				return b_queen;
 			case KING:
 				return b_king;
+			default:
+				nullptr;
 			}
 		}
 		else
@@ -104,8 +106,10 @@ struct t_textures
 				return w_queen;
 			case KING:
 				return w_king;
+			default:
+				nullptr;
 			}
-		return NULL;
+		return nullptr;
 	}
 
 	short initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, const t_dim& dim)
@@ -240,7 +244,6 @@ void Events::clickPiece(const short x, const short y)
 
 	for (auto it = active_pieces.cbegin(); it != active_pieces.cend(); it++)
 	{
-
 		const std::unique_ptr<Pieces>::pointer piece = it->get();
 
 		Pos pos = piece->getPosition();
