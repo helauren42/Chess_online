@@ -9,7 +9,7 @@
 
 struct cell {
 	PieceType 	type = NONE;
-	bool		color = false;
+	bool		*color = nullptr;
 };
 
 class Board {
@@ -86,7 +86,7 @@ class Board {
 				PieceType type = it->get()->getType();
 				bool color = it->get()->getColor();
 				board[pos.y][pos.x].type = type;
-				board[pos.y][pos.x].color = color;
+				board[pos.y][pos.x].color = &color;
 			}
 			if(!piece->validMove(new_pos, target_piece))
 				return false;
@@ -96,19 +96,15 @@ class Board {
 		}
 
 		void	moveSelectedPiece(const short& x, const short& y) {
-			out("here\n");
+			fout("move selected piece: ", selected_piece);
 			Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 			Pieces* target_piece = nullptr;
 
-			out("here1\n");
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
 				if(it->get()->getPosition() == new_pos)
 					target_piece = it->get();
 			}
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
-				fout("here3\n");
-				fout("selected piece: ", selected_piece);
-				fout(*it);
 				if(selected_piece == it->get()) {
 					if(validMove(new_pos, it->get(), target_piece)) {
 						it->get()->makeMove(new_pos);
@@ -118,7 +114,6 @@ class Board {
 					selected_piece = nullptr;
 					break;
 				}
-				fout("here4\n");
 			}
 		}
 

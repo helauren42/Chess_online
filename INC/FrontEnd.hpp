@@ -253,26 +253,27 @@ void Events::clickPiece(const short x, const short y)
 			switch (piece->getType())
 			{
 			case PAWN:
-				board->setSelectedPiece(std::make_unique<Pawn>(pos.x, pos.y));
+				board->setSelectedPiece(std::make_unique<Pawn>(pos.x, pos.y, piece->getColor()));
 				break;
 			case ROOK:
-				board->setSelectedPiece(std::make_unique<Rook>(pos.x, pos.y));
+				board->setSelectedPiece(std::make_unique<Rook>(pos.x, pos.y, piece->getColor()));
 				break;
 			case KNIGHT:
-				board->setSelectedPiece(std::make_unique<Knight>(pos.x, pos.y));
+				board->setSelectedPiece(std::make_unique<Knight>(pos.x, pos.y, piece->getColor()));
 				break;
 			case BISHOP:
-				board->setSelectedPiece(std::make_unique<Bishop>(pos.x, pos.y));
+				board->setSelectedPiece(std::make_unique<Bishop>(pos.x, pos.y, piece->getColor()));
 				break;
 			case QUEEN:
-				board->setSelectedPiece(std::make_unique<Queen>(pos.x, pos.y));
+				board->setSelectedPiece(std::make_unique<Queen>(pos.x, pos.y, piece->getColor()));
 				break;
 			case KING:
-				board->setSelectedPiece(std::make_unique<King>(pos.x, pos.y));
+				board->setSelectedPiece(std::make_unique<King>(pos.x, pos.y, piece->getColor()));
 				break;
 			default:
 				break;
 			}
+			fout("click piece selected piece: ", board->getSelectedPiece());
 			return;
 		}
 	}

@@ -18,6 +18,8 @@ public:
 	Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type) {
 		color = pos.y <= 1 ?  WHITE : BLACK;
 	};
+	Pieces(short _x, short _y, PieceType _type, bool _color) : pos(_x, _y), color(_color), type(_type) {
+	};
 	virtual ~Pieces() {};
 
 	virtual bool	validMove(const Pos& new_pos, const Pieces* target) const = 0;
@@ -35,6 +37,7 @@ public:
 	const short	dir = color == BLACK ? 1 : -1;
 	
 	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
+	Pawn(short _x, short _y, bool _color) : Pieces(_x, _y, PAWN, _color) {};
 	~Pawn() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
@@ -71,6 +74,8 @@ public:
 class Rook : public Pieces {
 public:
 	Rook(short _x, short _y) : Pieces(_x, _y, ROOK) {};
+	Rook(short _x, short _y, bool _color) : Pieces(_x, _y, ROOK, _color) {};
+
 	~Rook() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
@@ -82,6 +87,7 @@ public:
 class Knight : public Pieces {
 public:
 	Knight(short _x, short _y) : Pieces(_x, _y, KNIGHT) {};
+	Knight(short _x, short _y, bool _color) : Pieces(_x, _y, KNIGHT, _color) {};
 	~Knight() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
@@ -92,6 +98,7 @@ public:
 class Bishop : public Pieces {
 public:
 	Bishop(short _x, short _y) : Pieces(_x, _y, BISHOP) {};
+	Bishop(short _x, short _y, bool _color) : Pieces(_x, _y, BISHOP, _color) {};
 	~Bishop() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
@@ -102,6 +109,7 @@ public:
 class Queen : public Pieces {
 public:
 	Queen(short _x, short _y) : Pieces(_x, _y, QUEEN) {};
+	Queen(short _x, short _y, bool _color) : Pieces(_x, _y, QUEEN, _color) {};
 	~Queen() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
@@ -112,6 +120,7 @@ public:
 class King : public Pieces {
 public:
 	King(short _x, short _y) : Pieces(_x, _y, KING) {};
+	King(short _x, short _y, bool _color) : Pieces(_x, _y, KING, _color) {};
 	~King() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
