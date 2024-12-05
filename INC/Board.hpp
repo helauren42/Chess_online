@@ -1,6 +1,7 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
+#include "Utils.hpp"
 #include "Pieces.hpp"
 #include <memory>
 #include <vector>
@@ -12,14 +13,58 @@ class Board {
 		std::vector<std::unique_ptr<Pieces>> active_pieces;
 		std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
 		std::vector<std::unique_ptr<Pieces>> dead_black_pieces;
+		t_dim *dim;
 	public:
 		Board() { init();};
 		~Board() {};
+
+		void setDim(t_dim &_dim) {
+			dim = &_dim;
+		}
 
 		const std::vector<std::unique_ptr<Pieces>>& getActivePieces() const { return active_pieces; }
 		const std::unique_ptr<Pieces>& getSelectedPiece() const { return selected_piece; }
 		void	setSelectedPiece(std::unique_ptr<Pieces> piece) {
 			selected_piece = std::move(piece);
+		}
+
+		void	removePiece(Pos new_pos) {
+			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
+				if(it->get()->getPosition() == new_pos) {
+					if(it->get()->getColor() == BLACK) {
+						dead_black_pieces.push_back(std::move(*it));
+					}
+					else
+						dead_white_pieces.push_back(std::move(*it));
+					active_pieces.erase(it);
+					break;
+				}
+			}
+		}
+
+		void	moveSelectedPiece(const short& x, const short& y) {
+			Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
+			Pieces* targetPiece = nullptr;
+			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
+				if(it->get()->getPosition() == new_pos)
+					targetPiece = it->get();
+			}
+
+			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
+				if(selected_piece == *it) {
+					if(targetPiece)
+						out("target: ", targetPiece);
+					out("Past: ", *it);
+					if(it->get()->validMove(new_pos, targetPiece)) {
+						it->get()->makeMove(new_pos);
+						if(targetPiece)
+							removePiece(new_pos);						
+					}
+					// out("Future: ", *it);
+					selected_piece = nullptr;
+					break;
+				}
+			}
 		}
 
 		std::unique_ptr<Pieces>	initPiece(const short& x, const short& y) {

@@ -22,12 +22,13 @@ SDL_Window*	initWindow(t_dim &dim) {
 		screen_height = display_mode.h;
 	}
 
-	dim.window = screen_height * 0.9;
+	dim.window_height = screen_height * 0.9;
+	dim.window_width = dim.window_height;
 
 	window = SDL_CreateWindow(
 		"SDL Example", 
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		dim.window, dim.window,
+		dim.window_width, dim.window_height,
 		SDL_WINDOW_SHOWN
 	);
 
@@ -40,7 +41,7 @@ SDL_Window*	initWindow(t_dim &dim) {
 		return NULL;
 	}
 
-	dim.board = dim.window - top - bottom;
+	dim.board = dim.window_height - top - bottom;
 	dim.square = dim.board / 8;
 	return window;
 }
@@ -58,12 +59,10 @@ class Game {
 		Game() {};
 		~Game() {};
 		bool	initSDL() {
-			printf("somehow\n");
-			if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+			if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 				printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 				return 1;
 			}
-			printf("somehow\n");
 			window = initWindow(dim);
 			if (!window) {
 				printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -95,10 +94,10 @@ class Game {
 		void	initData() {
 			events.setBoard(board);
 			events.setDim(dim);
+			board.setDim(dim);
 		}
 
 		void	freeing(SDL_Renderer* renderer, SDL_Window* window) {
-
 			SDL_DestroyTexture(textures.b_pawn);
 			SDL_DestroyTexture(textures.b_rook);
 			SDL_DestroyTexture(textures.b_knight);
@@ -128,7 +127,6 @@ class Game {
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, textures.board, NULL, NULL);
 				if(board.getSelectedPiece()) {
-					out("selected\n");
 					textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
 					SDL_RenderCopy(renderer, textures.selected, NULL, NULL);
 				}
@@ -139,10 +137,10 @@ class Game {
 				textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
 				SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 				SDL_RenderPresent(renderer);
-				while (SDL_PollEvent(&e) != 0) { // if there is an event do stuff
+				while (SDL_PollEvent(&e) != 0) {
 					events.eventHandler(e, quit);
 				}
-				SDL_Delay(16);
+				SDL_Delay(64);
 			}
 		}
 

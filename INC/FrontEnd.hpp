@@ -8,12 +8,7 @@
 #include "Pieces.hpp"
 #include "Board.hpp"
 
-typedef struct s_dim
-{
-	int window = 0;
-	int board = 0;
-	int square = 0;
-} t_dim;
+#define KEY_MY_CTRL 224
 
 struct t_textures
 {
@@ -44,7 +39,7 @@ struct t_textures
 
 	t_textures() {}
 	~t_textures() {}
-	int initSquares(SDL_Renderer *renderer)
+	short initSquares(SDL_Renderer *renderer)
 	{
 		darkSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_dark.png");
 		lightSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_light.png");
@@ -54,7 +49,7 @@ struct t_textures
 		return 0;
 	}
 
-	int initPieces(SDL_Renderer *renderer)
+	short initPieces(SDL_Renderer *renderer)
 	{
 		b_pawn = IMG_LoadTexture(renderer, "./IMG/USE/b_pawn.png");
 		b_rook = IMG_LoadTexture(renderer, "./IMG/USE/b_rook.png");
@@ -113,7 +108,7 @@ struct t_textures
 		return NULL;
 	}
 
-	int initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, const t_dim& dim)
+	short initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, const t_dim& dim)
 	{
 		board = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -128,9 +123,9 @@ struct t_textures
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		SDL_RenderClear(renderer);
 
-		for (int row = 0; row < 8; row++)
+		for (short row = 0; row < 8; row++)
 		{
-			for (int col = 0; col < 8; col++)
+			for (short col = 0; col < 8; col++)
 			{
 				SDL_Texture *currentSquare = (row + col) % 2 == 0 ? lightSquare : darkSquare;
 				SDL_Rect dstRect = {col * dim.square, row * dim.square, dim.square, dim.square};
@@ -141,7 +136,7 @@ struct t_textures
 		return 0;
 	}
 
-	bool makePiecesTextures(SDL_Renderer *renderer, const std::vector<std::unique_ptr<Pieces>> &active_pieces, int square_dim)
+	bool makePiecesTextures(SDL_Renderer *renderer, const std::vector<std::unique_ptr<Pieces>> &active_pieces, short square_dim)
 	{
 		if (pieces)
 			SDL_DestroyTexture(pieces);
@@ -160,7 +155,7 @@ struct t_textures
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		SDL_RenderClear(renderer);
 
-		int m = square_dim / 10;
+		short m = square_dim / 10;
 		for (size_t i = 0; i < active_pieces.size(); i++)
 		{
 			SDL_Texture *curr = getPieceTexture(active_pieces[i]->getType(), active_pieces[i]->getColor());
@@ -204,7 +199,7 @@ private:
 	Board *board;
 	t_dim *dim;
 	std::map<int, bool> keys;
-	void keyEvents(const int key, bool &quit, const bool type);
+	void keyEvents(const short key, bool &quit, const bool type);
 
 public:
 	Events();
@@ -214,13 +209,13 @@ public:
 	std::map<int, bool> getKeys() const { return keys; };
 
 	void eventHandler(const SDL_Event &event, bool &quit);
-	void click_piece(const int x, const int y);
+	void clickPiece(const short x, const short y);
 };
 
 Events::Events()
 {
 	keys[SDLK_w] = false;
-	keys[SDLK_LCTRL] = false;
+	keys[KEY_MY_CTRL] = false;
 }
 
 Events::~Events()
@@ -237,10 +232,10 @@ void Events::setDim(t_dim &_dim)
 	dim = &_dim;
 }
 
-void Events::click_piece(const int x, const int y)
+void Events::clickPiece(const short x, const short y)
 {
-	const int square_x = x * 8 / dim->board;
-	const int square_y = y * 8 / dim->board;
+	const short square_x = x * 8 / dim->board;
+	const short square_y = y * 8 / dim->board;
 	const std::vector<std::unique_ptr<Pieces>> &active_pieces = board->getActivePieces();
 
 	for (auto it = active_pieces.cbegin(); it != active_pieces.cend(); it++)
@@ -249,7 +244,7 @@ void Events::click_piece(const int x, const int y)
 		const std::unique_ptr<Pieces>::pointer piece = it->get();
 
 		Pos pos = piece->getPosition();
-		int pos_rev_y = pos.reverseY();
+		short pos_rev_y = pos.reverseY();
 		if (pos.x == square_x && pos_rev_y == square_y)
 		{
 			switch (piece->getType())
@@ -288,31 +283,31 @@ void Events::eventHandler(const SDL_Event &e, bool &quit)
 		bool type = e.type == 768 ? true : false;
 		keyEvents(e.key.keysym.sym, quit, type);
 	}
-	else if (e.type == SDL_QUIT)
-	{
+	else if (e.type == SDL_QUIT) {
 		quit = true;
 	}
 	else if (e.type == SDL_MOUSEBUTTONDOWN)
 	{
-		// if (board->getSelectedPiece() == nullptr)
-			click_piece(e.button.x, e.button.y);
+		if (board->getSelectedPiece() == nullptr)
+			clickPiece(e.button.x, e.button.y);
+		else
+			board->moveSelectedPiece(e.button.x, e.button.y);
 	}
 }
 
-void Events::keyEvents(const int key, bool &quit, const bool type)
+void Events::keyEvents(const short key, bool &quit, const bool type)
 {
 	if (keys.find(key) == keys.end())
 		return;
 	keys[key] = type;
-	if (keys[SDLK_LCTRL] == true && keys[SDLK_w] == true)
+	if (keys[KEY_MY_CTRL] == true && keys[SDLK_w] == true)
 		quit = true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Events &events)
 {
 	std::map<int, bool> temp = events.getKeys();
-	for (auto it = temp.begin(); it != temp.end(); it++)
-	{
+	for (auto it = temp.begin(); it != temp.end(); it++) {
 		os << it->first << ": " << it->second << std::endl;
 	}
 	return os;
