@@ -32,7 +32,7 @@ public:
 class Pawn : public Pieces {
 public:
 	bool		firstMove = true;
-	const short	dir = color == BLACK ? -1 : 1;
+	const short	dir = color == BLACK ? 1 : -1;
 	
 	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
 	~Pawn() {}
@@ -40,19 +40,26 @@ public:
 	bool validMove(const Pos& new_pos, const Pieces* piece) override {
 		Move move = pos - new_pos;
 
-		if(color == piece->getColor())
+		if(piece && color == piece->getColor()) {
+			out("pawn1\n");
 			return false;
+		}
 		// first handle special cases
 		if ((move.x == 1 || move.x == -1)
-			&& piece != nullptr
-			&& (move.y == 1 * dir))
-			return true;
+		&& piece != nullptr
+		&& (move.y == 1 * dir)) {
+				return  true;
+		}
 		if(firstMove && move.y == 2 * dir)
 			return true;
 
 		// then error cases
-		if(move.x != 0 || move.y != dir)
+		if(move.x != 0 || move.y != dir) {
+			out("pawn1\n");
+			out("dir: ", dir);
+			out(move.y != dir);
 			return false;
+		}
 
 		// then it should be true
 		return true;

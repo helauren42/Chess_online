@@ -57,8 +57,8 @@ class Board {
 					out("Past: ", *it);
 					if(it->get()->validMove(new_pos, targetPiece)) {
 						it->get()->makeMove(new_pos);
-						if(targetPiece)
-							removePiece(new_pos);						
+						// if(targetPiece)
+						// 	removePiece(new_pos);						
 					}
 					// out("Future: ", *it);
 					selected_piece = nullptr;
