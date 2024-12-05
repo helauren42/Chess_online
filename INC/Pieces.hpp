@@ -120,14 +120,35 @@ public:
 };
 
 bool operator==(const std::unique_ptr<Pieces>& piece1, const std::unique_ptr<Pieces>& piece2) {
-	if(piece1->getPosition() == piece2->getPosition() && piece1->getType() == piece2->getType()) {
-		return true;
-	}
+	if(piece1->getPosition() == piece2->getPosition()
+		&& piece1->getType() == piece2->getType()
+		&& piece1->getColor() == piece2->getColor()) {
+			return true;
+		}
+	return false;
+}
+
+bool operator==(const std::unique_ptr<Pieces>& piece1, const Pieces* piece2) {
+	if(piece1->getPosition() == piece2->getPosition()
+		&& piece1->getType() == piece2->getType()
+		&& piece1->getColor() == piece2->getColor()) {
+			return true;
+		}
+	return false;
+}
+
+bool operator==(const Pieces* piece1, const std::unique_ptr<Pieces>& piece2) {
+	if(piece1->getPosition() == piece2->getPosition()
+		&& piece1->getType() == piece2->getType()
+		&& piece1->getColor() == piece2->getColor()) {
+			return true;
+		}
 	return false;
 }
 
 std::ostream& operator<<(std::ostream&os, const std::unique_ptr<Pieces>& _piece) {
-	os << "color: " << _piece->getColor() << std::endl;
+	std::string s = _piece->getColor() == BLACK ? "black" : "white";
+	os << "color: " << s << std::endl;
 	os << "type: " << _piece->getType() << std::endl;
 	os << _piece->getPosition() << std::endl;
 	return os;

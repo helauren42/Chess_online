@@ -34,9 +34,9 @@ class Board {
 			selected_piece = std::move(piece);
 		}
 
-		void	removePiece(Pos new_pos) {
+		void	removePiece(Pieces* piece) {
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
-				if(it->get()->getPosition() == new_pos) {
+				if(*it == piece) {
 					if(it->get()->getColor() == BLACK) {
 						dead_black_pieces.push_back(std::move(*it));
 					}
@@ -96,24 +96,29 @@ class Board {
 		}
 
 		void	moveSelectedPiece(const short& x, const short& y) {
+			out("here\n");
 			Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 			Pieces* target_piece = nullptr;
 
+			out("here1\n");
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
 				if(it->get()->getPosition() == new_pos)
 					target_piece = it->get();
 			}
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
-				if(selected_piece == *it) {
+				fout("here3\n");
+				fout("selected piece: ", selected_piece);
+				fout(*it);
+				if(selected_piece == it->get()) {
 					if(validMove(new_pos, it->get(), target_piece)) {
-						if(target_piece)
-							removePiece(new_pos);
-						
 						it->get()->makeMove(new_pos);
+						if(target_piece)
+							removePiece(target_piece);
 					}
 					selected_piece = nullptr;
 					break;
 				}
+				fout("here4\n");
 			}
 		}
 
