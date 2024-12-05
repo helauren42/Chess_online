@@ -215,6 +215,25 @@ public:
 	}
 };
 
+bool operator==(const std::unique_ptr<Pieces>& piece1, const std::unique_ptr<Pieces>& piece2) {
+	if(piece1->getPosition() == piece2->getPosition() && piece1->getType() == piece2->getType()) {
+		return true;
+	}
+	return false;
+}
 
+std::ostream& operator<<(std::ostream&os, const std::unique_ptr<Pieces>& _piece) {
+	os << "color: " << _piece->getColor() << std::endl;
+	os << "type: " << _piece->getType() << std::endl;
+	os << _piece->getPosition() << std::endl;
+	return os;
+}
+
+std::ostream& operator<<(std::ostream&os, const Pieces* _piece) {
+	os << "color: " << _piece->getColor() << std::endl;
+	os << "type: " << _piece->getType() << std::endl;
+	os << _piece->getPosition() << std::endl;
+	return os;
+}
 
 #endif

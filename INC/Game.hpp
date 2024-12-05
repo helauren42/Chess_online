@@ -3,9 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Board.hpp"
 #include "FrontEnd.hpp"
 #include "Pieces.hpp"
+#include "Board.hpp"
 // #include "Player.hpp"
 
 #include "../INC/MyCppLib/MyCppLib.hpp"
@@ -92,6 +92,11 @@ class Game {
 			return 0;
 		}
 
+		void	initData() {
+			events.setBoard(board);
+			events.setDim(dim);
+		}
+
 		void	freeing(SDL_Renderer* renderer, t_textures textures, SDL_Window* window) {
 
 			SDL_DestroyTexture(textures.b_pawn);
@@ -117,6 +122,7 @@ class Game {
 		}
 
 		void	run() {
+			out("run getFout: ", xxfileDes.getFout());
 			SDL_Event e;
 			bool quit = false;
 			while(!quit) {
