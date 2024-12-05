@@ -50,6 +50,8 @@ public:
 		&& (move.y == 1 * dir)) {
 				return  true;
 		}
+		if(piece)
+			return false;
 		if(firstMove && move.y == 2 * dir)
 			return true;
 
