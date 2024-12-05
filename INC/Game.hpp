@@ -97,7 +97,7 @@ class Game {
 			events.setDim(dim);
 		}
 
-		void	freeing(SDL_Renderer* renderer, t_textures textures, SDL_Window* window) {
+		void	freeing(SDL_Renderer* renderer, SDL_Window* window) {
 
 			SDL_DestroyTexture(textures.b_pawn);
 			SDL_DestroyTexture(textures.b_rook);
@@ -122,12 +122,20 @@ class Game {
 		}
 
 		void	run() {
-			out("run getFout: ", xxfileDes.getFout());
 			SDL_Event e;
 			bool quit = false;
 			while(!quit) {
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, textures.board, NULL, NULL);
+				if(board.getSelectedPiece()) {
+					out("selected\n");
+					textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
+					SDL_RenderCopy(renderer, textures.selected, NULL, NULL);
+				}
+				else if (textures.selected) {
+ 				   SDL_DestroyTexture(textures.selected);
+    				textures.selected = nullptr;
+				}
 				textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
 				SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 				SDL_RenderPresent(renderer);
@@ -139,7 +147,7 @@ class Game {
 		}
 
 		void	close() {
-			freeing(renderer, textures, window);
+			freeing(renderer, window);
 		}
 };
 

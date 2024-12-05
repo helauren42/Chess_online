@@ -17,6 +17,7 @@ typedef struct s_dim
 
 struct t_textures
 {
+	// static textures
 	SDL_Texture *b_pawn = nullptr;
 	SDL_Texture *b_rook = nullptr;
 	SDL_Texture *b_knight = nullptr;
@@ -33,10 +34,13 @@ struct t_textures
 
 	SDL_Texture *darkSquare = nullptr;
 	SDL_Texture *lightSquare = nullptr;
+	SDL_Texture	*redSquare = nullptr;
 
 	SDL_Texture *board = nullptr;
 
+	// dynamic textures
 	SDL_Texture *pieces = nullptr;
+	SDL_Texture *selected = nullptr;
 
 	t_textures() {}
 	~t_textures() {}
@@ -44,7 +48,8 @@ struct t_textures
 	{
 		darkSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_dark.png");
 		lightSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_light.png");
-		if (!darkSquare || !lightSquare)
+		redSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_red.png");
+		if (!darkSquare || !lightSquare || !redSquare)
 			return -1;
 		return 0;
 	}
@@ -108,7 +113,7 @@ struct t_textures
 		return NULL;
 	}
 
-	int initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, t_dim dim)
+	int initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, const t_dim& dim)
 	{
 		board = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -120,6 +125,8 @@ struct t_textures
 			return 1;
 		}
 		SDL_SetRenderTarget(renderer, board);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
 
 		for (int row = 0; row < 8; row++)
 		{
@@ -148,9 +155,10 @@ struct t_textures
 			return false;
 		}
 		SDL_SetTextureBlendMode(pieces, SDL_BLENDMODE_BLEND);
-		SDL_SetTextureBlendMode(pieces, SDL_BLENDMODE_BLEND);
-		SDL_SetTextureAlphaMod(pieces, 120);
+		SDL_SetTextureAlphaMod(pieces, 255);
 		SDL_SetRenderTarget(renderer, pieces);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
 
 		int m = square_dim / 10;
 		for (size_t i = 0; i < active_pieces.size(); i++)
@@ -162,6 +170,31 @@ struct t_textures
 		}
 		SDL_SetRenderTarget(renderer, NULL);
 		return true;
+	}
+	void	makeSelectedTexture(Pos pos, SDL_Renderer *renderer, const t_dim& dim) {
+		if(selected) {
+			SDL_DestroyTexture(selected);
+			selected = nullptr;
+		}
+		selected = SDL_CreateTexture(
+			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+			dim.board, dim.board);
+		if (!selected) {
+			SDL_Log("Failed to create pieces texture: %s", SDL_GetError());
+		}
+		SDL_SetTextureBlendMode(selected, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(selected, 120);
+
+		SDL_SetRenderTarget(renderer, selected);
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
+
+		SDL_Rect dstRect = {pos.x * dim.square, pos.reverseY() * dim.square, dim.square, dim.square};
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
+	    SDL_RenderFillRect(renderer, &dstRect);
+
+		SDL_SetRenderTarget(renderer, NULL);
 	}
 };
 

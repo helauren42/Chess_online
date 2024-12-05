@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
 
 	game.initData();
 
-
 	game.run();
 
 	game.close();
