@@ -96,7 +96,7 @@ class Board {
 		}
 
 		void	moveSelectedPiece(const short& x, const short& y) {
-			fout("move selected piece: ", selected_piece);
+			fout("moving selected piece\n");
 			Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 			Pieces* target_piece = nullptr;
 
@@ -108,13 +108,16 @@ class Board {
 				if(selected_piece == it->get()) {
 					if(validMove(new_pos, it->get(), target_piece)) {
 						it->get()->makeMove(new_pos);
+						fout("moved piece to: \n", *it);
 						if(target_piece)
 							removePiece(target_piece);
+						selected_piece = nullptr;
+						return;
 					}
-					selected_piece = nullptr;
-					break;
 				}
 			}
+			selected_piece = nullptr;
+			fout("move failed\n");
 		}
 
 		std::unique_ptr<Pieces>	initPiece(const short& x, const short& y) {

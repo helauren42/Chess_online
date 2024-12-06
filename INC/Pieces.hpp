@@ -34,14 +34,14 @@ public:
 class Pawn : public Pieces {
 public:
 	bool		firstMove = true;
-	const short	dir = color == BLACK ? 1 : -1;
+	const short	dir = color == BLACK ? -1 : 1;
 	
 	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
 	Pawn(short _x, short _y, bool _color) : Pieces(_x, _y, PAWN, _color) {};
 	~Pawn() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
-		Move move = pos - new_pos;
+		Move move = new_pos - pos;
 
 		// first handle special cases
 		if ((move.x == 1 || move.x == -1)
@@ -56,9 +56,6 @@ public:
 
 		// then error cases
 		if(move.x != 0 || move.y != dir) {
-			out("pawn1\n");
-			out("dir: ", dir);
-			out(move.y != dir);
 			return false;
 		}
 
@@ -79,8 +76,10 @@ public:
 	~Rook() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
-
-		return true;
+		Move move = new_pos - pos;
+		if((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
+			return true;
+		return false;
 	}
 };
 
@@ -102,7 +101,10 @@ public:
 	~Bishop() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
-		return true;
+		Move move = new_pos - pos;
+		if(abs(move.x) == abs(move.y))
+			return true;
+		return false;
 	}
 };
 
@@ -113,7 +115,12 @@ public:
 	~Queen() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
-		return true;
+		Move move = new_pos - pos;
+		if((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
+			return true;
+		if(abs(move.x) == abs(move.y))
+			return true;
+		return false;
 	}
 };
 
@@ -124,7 +131,12 @@ public:
 	~King() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
-		return true;
+		Move move = new_pos - pos;
+		if(!move.x && !move.y)
+			return false;
+		if(abs(move.x) <= 1 && abs(move.y) <= 1)
+			return true;
+		return false;
 	}
 };
 
