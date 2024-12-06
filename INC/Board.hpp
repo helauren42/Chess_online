@@ -7,14 +7,14 @@
 #include <vector>
 #include "MyCppLib/Printer/Printer.hpp"
 
-struct cell {
+struct Cell {
 	PieceType 	type = NONE;
 	bool		*color = nullptr;
 };
 
 class Board {
 	private:
-		std::array<std::array<cell, 8>, 8> board;
+		std::array<std::array<Cell, 8>, 8> board;
 		std::unique_ptr<Pieces> selected_piece = nullptr;
 		std::vector<std::unique_ptr<Pieces>> active_pieces;
 		std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
@@ -48,7 +48,7 @@ class Board {
 			}
 		}
 
-		bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type) {
+		bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type) const {
 			Move move = new_pos - old_pos;
 			switch (type)
 			{
@@ -58,8 +58,20 @@ class Board {
 					if(board[old_pos.y + move.y / 2][old_pos.x].type != NONE)
 						return true;
 					return false;
-				case ROOK:
+				case ROOK: {
+					short incrX = move.x > 0 ? 1 : -1;
+					short incrY = move.y > 0 ? 1 : -1;
+					while((old_pos.x != new_pos.x || old_pos.y != new_pos.y)) {
+						if(old_pos.x != new_pos.x)
+							old_pos.x += incrX;
+						if(old_pos.y != new_pos.y)
+							old_pos.y += incrY;
+						if(board[old_pos.y][old_pos.x].type != NONE) {
+							return true;
+						}
+					}
 					return false;
+				}
 				case KNIGHT:
 					return false;
 				case BISHOP:
@@ -71,16 +83,21 @@ class Board {
 				default:
 					break;
 			}
-			return false;
+			return true;
 		}
 
 		// there is a valid move per piece, where every individual piece checks if the move is valid from their perspective
 		// meaning they can move in such a way
 		// then the board needs to validate the move by checking that there aren't any obstructions in the way stopping the piece from making the move
 		// so a validMove() per piece and a validMove() for the board
-		bool validMove(Pos new_pos, const Pieces* piece, const Pieces* target_piece) {
-			if(target_piece && piece->getColor() == target_piece->getColor())
-				return false;
+		
+		void	setBoard() {
+			Cell cell;
+			for(int i = 0; i < 8; i++) {
+				for(int j = 0; j < 8; j++) {
+					board[i][j] = cell;
+				}
+			}
 			for(auto it = active_pieces.begin(); it != active_pieces.end(); it++) {
 				Pos pos = it->get()->getPosition();
 				PieceType type = it->get()->getType();
@@ -88,6 +105,12 @@ class Board {
 				board[pos.y][pos.x].type = type;
 				board[pos.y][pos.x].color = &color;
 			}
+		}
+
+		bool validMove(Pos new_pos, const Pieces* piece, const Pieces* target_piece) {
+			if(target_piece && piece->getColor() == target_piece->getColor())
+				return false;
+			setBoard();
 			if(!piece->validMove(new_pos, target_piece))
 				return false;
 			if(foundObstacle(piece->getPosition(), new_pos, piece->getType()))
