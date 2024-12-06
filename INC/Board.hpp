@@ -74,8 +74,18 @@ class Board {
 				}
 				case KNIGHT:
 					return false;
-				case BISHOP:
+				case BISHOP: {
+					short incrX = move.x > 0 ? 1 : -1;
+					short incrY = move.y > 0 ? 1 : -1;
+					while((old_pos.x != new_pos.x && old_pos.y != new_pos.y)) {
+						old_pos.x += incrX;
+						old_pos.y += incrY;
+						if(board[old_pos.y][old_pos.x].type != NONE) {
+							return true;
+						}
+					}
 					return false;
+				}
 				case QUEEN:
 					return false;
 				case KING:
