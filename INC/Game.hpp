@@ -139,7 +139,6 @@ public:
 	bool gameEnd()
 	{
 		// add stalemate checker
-
 		Pieces *checker = board.isCheck();
 		if (!checker)
 			return false;
@@ -173,18 +172,18 @@ public:
 			textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
 			SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 			SDL_RenderPresent(renderer);
-			if (gameEnd())
-			{
-				out("WINNER is: ");
-				if (winner == WHITE)
-					out("WHITE\n");
-				else if (winner == BLACK)
-					out("BLACK\n");
-				else
-					out("STALEMATE\n");
-				SDL_Delay(6400);
-				break;
-			}
+			// if (gameEnd())
+			// {
+			// 	out("WINNER is: ");
+			// 	if (winner == WHITE)
+			// 		out("WHITE\n");
+			// 	else if (winner == BLACK)
+			// 		out("BLACK\n");
+			// 	else
+			// 		out("STALEMATE\n");
+			// 	SDL_Delay(6400);
+			// 	break;
+			// }
 			while (SDL_PollEvent(&e) != 0)
 			{
 				events.eventHandler(e, quit, player_turn);

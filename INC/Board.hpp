@@ -112,6 +112,26 @@ public:
 		}
 	};
 
+		void setBoard()
+	{
+		Cell cell;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				board[i][j] = cell;
+			}
+		}
+		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
+		{
+			Pos pos = it->get()->getPosition();
+			PieceType type = it->get()->getType();
+			bool color = it->get()->getColor();
+			board[pos.y][pos.x].type = type;
+			board[pos.y][pos.x].color = &color;
+		}
+	}
+
 	void removePiece(Pieces *piece)
 	{
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
@@ -130,8 +150,9 @@ public:
 		}
 	}
 
-	bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color) const
+	bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color)
 	{
+		setBoard();
 		Move move = new_pos - old_pos;
 		switch (type)
 		{
@@ -196,31 +217,11 @@ public:
 		return true;
 	}
 
-	void setBoard()
-	{
-		Cell cell;
-		for (int i = 0; i < 8; i++)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				board[i][j] = cell;
-			}
-		}
-		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
-		{
-			Pos pos = it->get()->getPosition();
-			PieceType type = it->get()->getType();
-			bool color = it->get()->getColor();
-			board[pos.y][pos.x].type = type;
-			board[pos.y][pos.x].color = &color;
-		}
-	}
-
 	// there is a valid move per piece, where every individual piece checks if the move is valid from their perspective
 	// meaning they can move in such a way
 	// then the board needs to validate the move by checking that there aren't any obstructions in the way stopping the piece from making the move
 	// so a validMove() per piece and a validMove() for the board
-	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece) const
+	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 	{
 		if (target_piece && piece->getColor() == target_piece->getColor())
 			return false;
@@ -231,9 +232,11 @@ public:
 		return true;
 	}
 
-	void moveSelectedPiece(const short &x, const short &y, bool &player_turn)
+	void moveSelectedPiece(const short &x, const short &y)
 	{
 		fout("moving selected piece\n");
+		
+		Pos old_pos = selected_piece->getPosition();
 		Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 		Pieces *target_piece = getTargetPiece(new_pos);
 
@@ -245,11 +248,17 @@ public:
 				if (validMove(new_pos, it->get(), target_piece))
 				{
 					it->get()->makeMove(new_pos);
+					// undo move if king is in check after move
+					if(isCheck()) {
+						it->get()->makeMove(old_pos);
+						fout("Failed to move piece, kins is checked\n");
+						return;
+					}
 					fout("moved piece to: \n", *it);
 					if (target_piece)
 						removePiece(target_piece);
 					selected_piece = nullptr;
-					player_turn = player_turn == WHITE ? BLACK : WHITE;
+					*player_turn = *player_turn == WHITE ? BLACK : WHITE;
 					return;
 				}
 			}
@@ -301,8 +310,12 @@ public:
 		Pos king_pos = king->getPosition();
 		for (auto& piece : active_pieces) 
 		{
-			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
+			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king)) {
+				fout("Piece: ", piece->getType());
+				fout("pos: ", piece->getPosition());
+				fout("Puts king in check\n");
 				return piece.get();
+			}
 		}
 		return nullptr;
 	}

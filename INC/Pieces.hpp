@@ -22,13 +22,14 @@ public:
 	};
 	virtual ~Pieces() {};
 
+	PieceType	getType() const { return type; }
+	Pos getPosition() const { return pos; }
+	bool getColor() const { return color; }
+
 	virtual bool	validMove(const Pos& new_pos, const Pieces* target) const = 0;
 	virtual void	makeMove(const Pos& new_pos) {
 		pos = new_pos;
 	};
-	PieceType	getType() const { return type; }
-	Pos getPosition() const { return pos; }
-	bool getColor() const { return color; }
 };
 
 class Pawn : public Pieces {

@@ -29,7 +29,7 @@ struct t_textures
 
 	SDL_Texture *darkSquare = nullptr;
 	SDL_Texture *lightSquare = nullptr;
-	SDL_Texture	*redSquare = nullptr;
+	SDL_Texture *redSquare = nullptr;
 
 	SDL_Texture *board = nullptr;
 
@@ -112,7 +112,7 @@ struct t_textures
 		return nullptr;
 	}
 
-	short initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, const t_dim& dim)
+	short initChessBoard(SDL_Renderer *renderer, SDL_Texture *darkSquare, SDL_Texture *lightSquare, const t_dim &dim)
 	{
 		board = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -170,15 +170,18 @@ struct t_textures
 		SDL_SetRenderTarget(renderer, NULL);
 		return true;
 	}
-	void	makeSelectedTexture(Pos pos, SDL_Renderer *renderer, const t_dim& dim) {
-		if(selected) {
+	void makeSelectedTexture(Pos pos, SDL_Renderer *renderer, const t_dim &dim)
+	{
+		if (selected)
+		{
 			SDL_DestroyTexture(selected);
 			selected = nullptr;
 		}
 		selected = SDL_CreateTexture(
 			renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
 			dim.board, dim.board);
-		if (!selected) {
+		if (!selected)
+		{
 			SDL_Log("Failed to create pieces texture: %s", SDL_GetError());
 		}
 		SDL_SetTextureBlendMode(selected, SDL_BLENDMODE_BLEND);
@@ -191,7 +194,7 @@ struct t_textures
 
 		SDL_Rect dstRect = {pos.x * dim.square, pos.reverseY() * dim.square, dim.square, dim.square};
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
-	    SDL_RenderFillRect(renderer, &dstRect);
+		SDL_RenderFillRect(renderer, &dstRect);
 
 		SDL_SetRenderTarget(renderer, NULL);
 	}
@@ -236,7 +239,7 @@ void Events::setDim(t_dim &_dim)
 	dim = &_dim;
 }
 
-void Events::clickPiece(const short x, const short y, bool& player_turn)
+void Events::clickPiece(const short x, const short y, bool &player_turn)
 {
 	const short square_x = x * 8 / dim->board;
 	const short square_y = y * 8 / dim->board;
@@ -280,22 +283,27 @@ void Events::clickPiece(const short x, const short y, bool& player_turn)
 	board->setSelectedPiece(nullptr);
 }
 
-void Events::eventHandler(const SDL_Event &e, bool &quit, bool& player_turn)
+void Events::eventHandler(const SDL_Event &e, bool &quit, bool &player_turn)
 {
 	if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 	{
 		bool type = e.type == 768 ? true : false;
 		keyEvents(e.key.keysym.sym, quit, type);
 	}
-	else if (e.type == SDL_QUIT) {
+	else if (e.type == SDL_QUIT)
+	{
 		quit = true;
 	}
 	else if (e.type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (board->getSelectedPiece() == nullptr)
+		{
+			std::string msg = player_turn == BLACK ? "Black" : "White"; 
+			fout("Player turn: ", msg);
 			clickPiece(e.button.x, e.button.y, player_turn);
+		}
 		else
-			board->moveSelectedPiece(e.button.x, e.button.y, player_turn);
+			board->moveSelectedPiece(e.button.x, e.button.y);
 	}
 }
 
@@ -311,7 +319,8 @@ void Events::keyEvents(const short key, bool &quit, const bool type)
 std::ostream &operator<<(std::ostream &os, const Events &events)
 {
 	std::map<int, bool> temp = events.getKeys();
-	for (auto it = temp.begin(); it != temp.end(); it++) {
+	for (auto it = temp.begin(); it != temp.end(); it++)
+	{
 		os << it->first << ": " << it->second << std::endl;
 	}
 	return os;
