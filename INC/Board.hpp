@@ -127,7 +127,7 @@ class Board {
 			return true;
 		}
 
-		void	moveSelectedPiece(const short& x, const short& y) {
+		void	moveSelectedPiece(const short& x, const short& y, bool &player_turn) {
 			fout("moving selected piece\n");
 			Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 			Pieces* target_piece = nullptr;
@@ -144,6 +144,7 @@ class Board {
 						if(target_piece)
 							removePiece(target_piece);
 						selected_piece = nullptr;
+						player_turn = player_turn == WHITE ? BLACK : WHITE;
 						return;
 					}
 				}

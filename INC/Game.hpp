@@ -48,6 +48,7 @@ SDL_Window*	initWindow(t_dim &dim) {
 
 class Game {
 	private:
+		bool player_turn = WHITE;
 		Board board;
 		t_textures textures;
 		Events events;
@@ -138,7 +139,7 @@ class Game {
 				SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 				SDL_RenderPresent(renderer);
 				while (SDL_PollEvent(&e) != 0) {
-					events.eventHandler(e, quit);
+					events.eventHandler(e, quit, player_turn);
 				}
 				SDL_Delay(64);
 			}

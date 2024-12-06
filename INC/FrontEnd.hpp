@@ -212,8 +212,8 @@ public:
 	void setDim(t_dim &_dim);
 	std::map<int, bool> getKeys() const { return keys; };
 
-	void eventHandler(const SDL_Event &event, bool &quit);
-	void clickPiece(const short x, const short y);
+	void eventHandler(const SDL_Event &event, bool &quit, bool &player_turn);
+	void clickPiece(const short x, const short y, bool &player_turn);
 };
 
 Events::Events()
@@ -236,7 +236,7 @@ void Events::setDim(t_dim &_dim)
 	dim = &_dim;
 }
 
-void Events::clickPiece(const short x, const short y)
+void Events::clickPiece(const short x, const short y, bool& player_turn)
 {
 	const short square_x = x * 8 / dim->board;
 	const short square_y = y * 8 / dim->board;
@@ -248,7 +248,7 @@ void Events::clickPiece(const short x, const short y)
 
 		Pos pos = piece->getPosition();
 		short pos_rev_y = pos.reverseY();
-		if (pos.x == square_x && pos_rev_y == square_y)
+		if (piece->getColor() == player_turn && pos.x == square_x && pos_rev_y == square_y)
 		{
 			switch (piece->getType())
 			{
@@ -280,7 +280,7 @@ void Events::clickPiece(const short x, const short y)
 	board->setSelectedPiece(nullptr);
 }
 
-void Events::eventHandler(const SDL_Event &e, bool &quit)
+void Events::eventHandler(const SDL_Event &e, bool &quit, bool& player_turn)
 {
 	if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 	{
@@ -293,9 +293,9 @@ void Events::eventHandler(const SDL_Event &e, bool &quit)
 	else if (e.type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (board->getSelectedPiece() == nullptr)
-			clickPiece(e.button.x, e.button.y);
+			clickPiece(e.button.x, e.button.y, player_turn);
 		else
-			board->moveSelectedPiece(e.button.x, e.button.y);
+			board->moveSelectedPiece(e.button.x, e.button.y, player_turn);
 	}
 }
 
