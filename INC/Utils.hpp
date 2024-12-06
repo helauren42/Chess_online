@@ -92,6 +92,13 @@ Pos	coordinatesToPos(const short x, const short y, const short win_width, const 
 	return pos;
 }
 
+std::ostream& operator<<(std::ostream& os, const Move& move)
+{
+	os << "x: " << move.x << std::endl;
+	os << "y: " << move.y << std::endl;
+	return os;
+}
+
 Move operator-(Pos new_pos, Pos old_pos)
 {
 	Move move;

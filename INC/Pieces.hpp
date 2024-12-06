@@ -90,7 +90,16 @@ public:
 	~Knight() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
-		return true;
+		Move move = new_pos - pos;
+		move.x = abs(move.x);
+		move.y = abs(move.y);
+		if(move.x == move.y)
+			return false;
+		short smaller = move.x < move.y ? move.x : move.y;
+		short bigger = move.y > move.x ? move.y : move.x;
+		if(smaller == 1 && bigger == 2)
+			return true;
+		return false;
 	}
 };
 
