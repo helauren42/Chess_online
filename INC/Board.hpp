@@ -58,20 +58,6 @@ class Board {
 					if(board[old_pos.y + move.y / 2][old_pos.x].type != NONE)
 						return true;
 					return false;
-				case ROOK: {
-					short incrX = move.x > 0 ? 1 : -1;
-					short incrY = move.y > 0 ? 1 : -1;
-					while((old_pos.x != new_pos.x || old_pos.y != new_pos.y)) {
-						if(old_pos.x != new_pos.x)
-							old_pos.x += incrX;
-						if(old_pos.y != new_pos.y)
-							old_pos.y += incrY;
-						if(board[old_pos.y][old_pos.x].type != NONE) {
-							return true;
-						}
-					}
-					return false;
-				}
 				case KNIGHT:
 					return false;
 				case BISHOP: {
@@ -86,6 +72,9 @@ class Board {
 					}
 					return false;
 				}
+				case KING:
+					return false;
+				case ROOK:
 				case QUEEN: {
 					short incrX = move.x > 0 ? 1 : -1;
 					short incrY = move.y > 0 ? 1 : -1;
@@ -100,8 +89,6 @@ class Board {
 					}
 					return false;
 				}
-				case KING:
-					return false;
 				default:
 					break;
 			}
