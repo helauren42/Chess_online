@@ -181,14 +181,6 @@ public:
 			return false;
 		}
 		case KING: {
-			for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
-			{
-				if (it->get()->getColor() != piece_color &&
-				validMove(new_pos, it->get(), nullptr))
-				{
-					return true;
-				}
-			}
 			return false;
 		}
 		case ROOK:
@@ -223,12 +215,18 @@ public:
 	// so a validMove() per piece and a validMove() for the board
 	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 	{
-		if (target_piece && piece->getColor() == target_piece->getColor())
+		if (target_piece && piece->getColor() == target_piece->getColor()) {
+			fout("Target piece is same color\n");
 			return false;
-		if (!piece->validMove(new_pos, target_piece))
+		}
+		if (!piece->validMove(new_pos, target_piece)) {
+			fout("Invalid move for piece\n");
 			return false;
-		if (foundObstacle(piece->getPosition(), new_pos, piece->getType(), piece->getColor()))
+		}
+		if (foundObstacle(piece->getPosition(), new_pos, piece->getType(), piece->getColor())) {
+			fout("Found obstacle\n");
 			return false;
+		}
 		return true;
 	}
 
@@ -249,7 +247,7 @@ public:
 				{
 					it->get()->makeMove(new_pos);
 					// undo move if king is in check after move
-					if(isCheck()) {
+					if(isCheck(target_piece)) {
 						it->get()->makeMove(old_pos);
 						fout("Failed to move piece, kins is checked\n");
 						return;
@@ -261,10 +259,10 @@ public:
 					*player_turn = *player_turn == WHITE ? BLACK : WHITE;
 					return;
 				}
+				fout("move can not be done, invalid\n");
 			}
 		}
 		selected_piece = nullptr;
-		fout("move failed\n");
 	}
 
 	std::vector<Pos> intersection(const Pos& start, const Pos& end) {
@@ -286,6 +284,24 @@ public:
 		return ret;
 	}
 
+	Pieces* isCheck(const Pieces* target = nullptr)
+	{
+		Pieces *king = getKing();
+		Pos king_pos = king->getPosition();
+		for (auto& piece : active_pieces) 
+		{
+			if(target && piece == target)
+				continue;
+			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king)) {
+				fout("Piece: ", piece->getType());
+				fout("pos: ", piece->getPosition());
+				fout("Puts king in check\n");
+				return piece.get();
+			}
+		}
+		return nullptr;
+	}
+
 	bool	canUncheck(Pieces* checker) {
 		Pos checker_pos = checker->getPosition();
 		for (auto& piece : active_pieces) 
@@ -304,20 +320,12 @@ public:
 		return false;
 	}
 
-	Pieces* isCheck()
+	bool isCheckmate()
 	{
-		Pieces *king = getKing();
-		Pos king_pos = king->getPosition();
-		for (auto& piece : active_pieces) 
-		{
-			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king)) {
-				fout("Piece: ", piece->getType());
-				fout("pos: ", piece->getPosition());
-				fout("Puts king in check\n");
-				return piece.get();
-			}
-		}
-		return nullptr;
+		Pieces* checker = isCheck();
+		if(!checker)
+			return false;
+		return !canUncheck(checker);
 	}
 
 	bool isImmobilized(Pieces *piece)

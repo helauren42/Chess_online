@@ -155,6 +155,7 @@ public:
 		SDL_Event e;
 		short winner = -1; // can be set to BLACK or WHITE
 		bool quit = false;
+		bool game_end = false;
 		while (!quit)
 		{
 			SDL_RenderClear(renderer);
@@ -172,23 +173,22 @@ public:
 			textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
 			SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 			SDL_RenderPresent(renderer);
-			// if (gameEnd())
-			// {
-			// 	out("WINNER is: ");
-			// 	if (winner == WHITE)
-			// 		out("WHITE\n");
-			// 	else if (winner == BLACK)
-			// 		out("BLACK\n");
-			// 	else
-			// 		out("STALEMATE\n");
-			// 	SDL_Delay(6400);
-			// 	break;
-			// }
 			while (SDL_PollEvent(&e) != 0)
 			{
 				events.eventHandler(e, quit, player_turn);
 			}
 			SDL_Delay(64);
+		}
+		if (game_end)
+		{
+			out("WINNER is: ");
+			if (winner == WHITE)
+				out("WHITE\n");
+			else if (winner == BLACK)
+				out("BLACK\n");
+			else
+				out("STALEMATE\n");
+			SDL_Delay(6400);
 		}
 		// DisplayResult();
 	}
