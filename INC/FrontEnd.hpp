@@ -250,8 +250,6 @@ void Events::clickPiece(const short x, const short y, bool& player_turn)
 		short pos_rev_y = pos.reverseY();
 		if (piece->getColor() == player_turn && pos.x == square_x && pos_rev_y == square_y)
 		{
-			if(board->isCheck() && piece->getType() != KING)
-				return;
 			switch (piece->getType())
 			{
 			case PAWN:

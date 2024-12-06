@@ -5,6 +5,7 @@
 #include "Pieces.hpp"
 #include <memory>
 #include <vector>
+#include <array>
 #include "MyCppLib/Printer/Printer.hpp"
 
 struct Cell
@@ -33,8 +34,30 @@ public:
 		dim = &_dim;
 	}
 
+	void setSelectedPiece(std::unique_ptr<Pieces> piece)
+	{
+		selected_piece = std::move(piece);
+	}
+	void setPlayerTurn(bool *_player_turn)
+	{
+		player_turn = _player_turn;
+	}
+
 	const std::vector<std::unique_ptr<Pieces>> &getActivePieces() const { return active_pieces; }
 	const std::unique_ptr<Pieces> &getSelectedPiece() const { return selected_piece; }
+
+
+	Pieces* getTargetPiece(const Pos& new_pos) {
+		Pieces* target_piece = nullptr;
+
+		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
+		{
+			if (it->get()->getPosition() == new_pos)
+				target_piece = it->get();
+		}
+		return target_piece;
+	}
+
 	Pieces *getKing() const
 	{
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
@@ -45,14 +68,50 @@ public:
 		return nullptr;
 	};
 
-	void setSelectedPiece(std::unique_ptr<Pieces> piece)
+	std::unique_ptr<Pieces> initPiece(const short &x, const short &y)
 	{
-		selected_piece = std::move(piece);
+		// make piece
+		std::unique_ptr<Pieces> piece;
+		if (y == 1 || y == 6)
+		{
+			piece = std::make_unique<Pawn>(x, y);
+		}
+		else if (x == 0 || x == 7)
+		{
+			piece = std::make_unique<Rook>(x, y);
+		}
+		else if (x == 1 || x == 6)
+		{
+			piece = std::make_unique<Knight>(x, y);
+		}
+		else if (x == 2 || x == 5)
+		{
+			piece = std::make_unique<Bishop>(x, y);
+		}
+		else if (x == 3)
+		{
+			piece = std::make_unique<Queen>(x, y);
+		}
+		else if (x == 4)
+		{
+			piece = std::make_unique<King>(x, y);
+		}
+		return piece;
 	}
-	void setPlayerTurn(bool *_player_turn)
+	void init()
 	{
-		player_turn = _player_turn;
-	}
+		for (short y = 0; y < 8; y++)
+		{
+			for (short x = 0; x < 8; x++)
+			{
+				if (y <= 1 || y >= 6)
+				{
+					active_pieces.push_back(initPiece(x, y));
+				}
+			}
+		}
+	};
+
 	void removePiece(Pieces *piece)
 	{
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
@@ -69,53 +128,6 @@ public:
 				break;
 			}
 		}
-	}
-
-	// if check false mate true -> stalemate
-	// if check true mate true -> checkmate
-	// if check true mate false -> check
-
-	bool isCheck()
-	{
-		Pieces *king = getKing();
-		Pos king_pos = king->getPosition();
-		for (auto& piece : active_pieces) 
-		{
-			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
-				return true;
-		}
-		return false;
-	}
-
-	bool isKingImmobilized()
-	{
-		Pieces *king = getKing();
-		Pos king_pos = king->getPosition();
-
-		for (int dx = -1; dx <= 1; dx++)
-		{
-			for (int dy = -1; dy <= 1; dy++)
-			{
-				if (dx == 0 && dy == 0)
-					continue;
-
-				Pos new_pos(king_pos.x + dx, king_pos.y + dy);
-
-				if (new_pos.x >= 0 && new_pos.x <= 7 && new_pos.y >= 0 && new_pos.y <= 7)
-				{
-					for (auto &piece : active_pieces)
-					{
-						if (piece->getColor() != king->getColor() &&
-							validMove(new_pos, piece.get(), nullptr))
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-
-		return false;
 	}
 
 	bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color) const
@@ -184,11 +196,6 @@ public:
 		return true;
 	}
 
-	// there is a valid move per piece, where every individual piece checks if the move is valid from their perspective
-	// meaning they can move in such a way
-	// then the board needs to validate the move by checking that there aren't any obstructions in the way stopping the piece from making the move
-	// so a validMove() per piece and a validMove() for the board
-
 	void setBoard()
 	{
 		Cell cell;
@@ -209,6 +216,10 @@ public:
 		}
 	}
 
+	// there is a valid move per piece, where every individual piece checks if the move is valid from their perspective
+	// meaning they can move in such a way
+	// then the board needs to validate the move by checking that there aren't any obstructions in the way stopping the piece from making the move
+	// so a validMove() per piece and a validMove() for the board
 	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece) const
 	{
 		if (target_piece && piece->getColor() == target_piece->getColor())
@@ -224,13 +235,8 @@ public:
 	{
 		fout("moving selected piece\n");
 		Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
-		Pieces *target_piece = nullptr;
+		Pieces *target_piece = getTargetPiece(new_pos);
 
-		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
-		{
-			if (it->get()->getPosition() == new_pos)
-				target_piece = it->get();
-		}
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 		{
 			if (selected_piece == it->get())
@@ -252,49 +258,118 @@ public:
 		fout("move failed\n");
 	}
 
-	std::unique_ptr<Pieces> initPiece(const short &x, const short &y)
-	{
-		// make piece
-		std::unique_ptr<Pieces> piece;
-		if (y == 1 || y == 6)
-		{
-			piece = std::make_unique<Pawn>(x, y);
+	std::vector<Pos> intersection(const Pos& start, const Pos& end) {
+		std::vector<Pos> ret;
+		Move move = end - start;
+		short incrX = 0, incrY = 0;
+		if(move.x)
+			incrX = move.x < 0 ? -1 : 1;
+		if(move.y)
+			incrY = move.y < 0 ? -1 : 1; 
+		Pos intersection(move.x, move.y);
+		while(intersection != end) {
+			ret.push_back(intersection);
+			intersection.x += incrX;
+			intersection.y += incrY;
+			if(intersection == end)
+				break;
 		}
-		else if (x == 0 || x == 7)
-		{
-			piece = std::make_unique<Rook>(x, y);
-		}
-		else if (x == 1 || x == 6)
-		{
-			piece = std::make_unique<Knight>(x, y);
-		}
-		else if (x == 2 || x == 5)
-		{
-			piece = std::make_unique<Bishop>(x, y);
-		}
-		else if (x == 3)
-		{
-			piece = std::make_unique<Queen>(x, y);
-		}
-		else if (x == 4)
-		{
-			piece = std::make_unique<King>(x, y);
-		}
-		return piece;
+		return ret;
 	}
-	void init()
-	{
-		for (short y = 0; y < 8; y++)
+
+	bool	canUncheck(Pieces* checker) {
+		Pos checker_pos = checker->getPosition();
+		for (auto& piece : active_pieces) 
 		{
-			for (short x = 0; x < 8; x++)
-			{
-				if (y <= 1 || y >= 6)
-				{
-					active_pieces.push_back(initPiece(x, y));
+			if (piece->getColor() != checker->getColor() && validMove(checker_pos, piece.get(), checker))
+				return true;
+		}
+		std::vector<Pos> intersections = intersection(checker_pos, getKing()->getPosition());
+		for(auto& pos : intersections) {
+			for(auto& piece : active_pieces) {
+				if(piece->getColor() != checker->getColor() && validMove(pos, piece.get(), nullptr)) {
+					return true;
 				}
 			}
 		}
-	};
+		return false;
+	}
+
+	Pieces* isCheck()
+	{
+		Pieces *king = getKing();
+		Pos king_pos = king->getPosition();
+		for (auto& piece : active_pieces) 
+		{
+			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
+				return piece.get();
+		}
+		return nullptr;
+	}
+
+	bool isImmobilized(Pieces *piece)
+	{
+		Pos piece_pos = piece->getPosition();
+		switch (piece->getType())
+		{
+			case PAWN:
+			case ROOK:
+			case BISHOP:
+			case QUEEN:
+			case KING: {
+				for (int dx = -1; dx <= 1; dx++)
+				{
+					for (int dy = -1; dy <= 1; dy++)
+					{
+						Pos new_pos(piece_pos.x + dx, piece_pos.y + dy);
+						Pieces* target = getTargetPiece(new_pos);
+						if ((dx == 0 && dy == 0) || new_pos.isOutOfBounds() || !piece->validMove(new_pos, target))
+							continue;
+						
+						if(piece->getType() != KING)
+							return false;
+
+						for (auto &piece2 : active_pieces)
+						{
+							if (piece2->getColor() != piece->getColor() &&
+								validMove(new_pos, piece2.get(), nullptr))
+							{
+								continue;
+							}
+						}
+						return false;
+					}
+				}
+				return true;
+			}
+			case KNIGHT: {
+				std::array<Move, 8> moves = {
+					Move(1, 2),
+					Move(1, -2),
+					Move(-1, 2),
+					Move(-1, -2),
+					Move(2, 1),
+					Move(2, -1),
+					Move(-2, 1),
+					Move(-2, -1)
+				};
+				for (auto& move : moves) {
+					Pos new_pos = piece_pos + move;
+					Pieces* target = getTargetPiece(new_pos);
+					if(new_pos.isOutOfBounds() || !validMove(new_pos, piece, target))
+						return true;
+				}
+				return false;
+			}
+			/* code */
+			break;
+		
+		default:
+			break;
+		}
+		return false;
+	}
+
 };
 
 #endif

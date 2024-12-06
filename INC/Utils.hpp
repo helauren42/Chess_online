@@ -12,9 +12,10 @@ enum PieceType {
 	NONE
 };
 
-enum {
+enum WINNER {
 	BLACK,
-	WHITE
+	WHITE,
+	COLOR_NONE,
 };
 
 typedef struct s_dim
@@ -29,6 +30,9 @@ struct Move
 {
 	short x;
 	short y;
+	Move() : x(0), y(0) {};
+	Move(const short _x, const short _y) : x(_x), y(_y) {};
+	~Move() {};
 };
 
 struct Pos
@@ -71,6 +75,12 @@ public:
 		else
 			rev = abs(y - 7);
 		return rev;
+	}
+
+	bool isOutOfBounds() {
+		if(x >= 0 && x <= 7 && y >= 0 && y <= 7)
+			return false;
+		return true;
 	}
 
 private:
@@ -120,6 +130,10 @@ std::ostream& operator<<(std::ostream& os, const Pos& pos) {
 	return os;
 }
 
-bool operator==(Pos pos1, Pos pos2) {
+bool operator==(const Pos& pos1, const Pos& pos2) {
 	return pos1.x == pos2.x && pos1.y == pos2.y;
+}
+
+bool operator!=(const Pos& pos1, const Pos& pos2) {
+	return pos1.x != pos2.x || pos1.y != pos2.y;
 }
