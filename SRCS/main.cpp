@@ -5,6 +5,9 @@
 // tower king protection thing
 // prevent king from moving into check positions
 
+// if King can't move
+
+
 int main(int argc, char* argv[]) {
 	Game game;
 

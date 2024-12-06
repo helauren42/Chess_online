@@ -87,7 +87,7 @@ public:
 		return false;
 	}
 
-	bool isMate()
+	bool isKingImmobilized()
 	{
 		Pieces *king = getKing();
 		Pos king_pos = king->getPosition();
@@ -118,7 +118,7 @@ public:
 		return false;
 	}
 
-	bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type) const
+	bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color) const
 	{
 		Move move = new_pos - old_pos;
 		switch (type)
@@ -139,15 +139,25 @@ public:
 			{
 				old_pos.x += incrX;
 				old_pos.y += incrY;
-				if (board[old_pos.y][old_pos.x].type != NONE)
+				if((old_pos.x == new_pos.x && old_pos.y == new_pos.y))
+					return false;
+				if (board[old_pos.y][old_pos.x].type != NONE) {
+					return true;
+				}
+			}
+			return false;
+		}
+		case KING: {
+			for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
+			{
+				if (it->get()->getColor() != piece_color &&
+				validMove(new_pos, it->get(), nullptr))
 				{
 					return true;
 				}
 			}
 			return false;
 		}
-		case KING:
-			return false;
 		case ROOK:
 		case QUEEN:
 		{
@@ -159,6 +169,8 @@ public:
 					old_pos.x += incrX;
 				if (old_pos.y != new_pos.y)
 					old_pos.y += incrY;
+				if((old_pos.x == new_pos.x && old_pos.y == new_pos.y))
+					return false;
 				if (board[old_pos.y][old_pos.x].type != NONE)
 				{
 					return true;
@@ -197,14 +209,13 @@ public:
 		}
 	}
 
-	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
+	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece) const
 	{
 		if (target_piece && piece->getColor() == target_piece->getColor())
 			return false;
-		setBoard();
 		if (!piece->validMove(new_pos, target_piece))
 			return false;
-		if (foundObstacle(piece->getPosition(), new_pos, piece->getType()))
+		if (foundObstacle(piece->getPosition(), new_pos, piece->getType(), piece->getColor()))
 			return false;
 		return true;
 	}
@@ -224,6 +235,7 @@ public:
 		{
 			if (selected_piece == it->get())
 			{
+				setBoard();
 				if (validMove(new_pos, it->get(), target_piece))
 				{
 					it->get()->makeMove(new_pos);
