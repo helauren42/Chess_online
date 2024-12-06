@@ -57,7 +57,7 @@ class Game {
 		SDL_Renderer* renderer = NULL;
 		// Player player;
 	public:
-		Game() {};
+		Game() { board.setPlayerTurn(&player_turn); };
 		~Game() {};
 		bool	initSDL() {
 			if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -123,6 +123,7 @@ class Game {
 
 		void	run() {
 			SDL_Event e;
+			short winner = -1; // can be set to BLACK or WHITE
 			bool quit = false;
 			while(!quit) {
 				SDL_RenderClear(renderer);

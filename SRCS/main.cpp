@@ -2,6 +2,8 @@
 #include "../INC/MyCppLib/Printer/Printer.hpp"
 
 // add check for check, check mate, pawns becoming queens and the special case of eating a jumping pawn
+// tower king protection thing
+// prevent king from moving into check positions
 
 int main(int argc, char* argv[]) {
 	Game game;
