@@ -328,8 +328,8 @@ public:
 			{
 				if (piece->getType() != KING && piece->getColor() != checker->getColor() && validMove(pos, piece.get(), target))
 				{
-					out("This piece can uncheck:\n", piece);
-					out("by moving to this position: ", pos);
+					fout("This piece can uncheck:\n", piece);
+					fout("by moving to this position: ", pos);
 					return true;
 				}
 			}
@@ -349,7 +349,6 @@ public:
 
 	bool isImmobilized(Pieces *piece)
 	{
-		out("is immobilized piece: ", piece);
 		Pos piece_pos = piece->getPosition();
 		switch (piece->getType())
 		{
@@ -364,7 +363,6 @@ public:
 				for (int dy = -1; dy <= 1; dy++)
 				{
 					Pos new_pos(piece_pos.x + dx, piece_pos.y + dy);
-					out("Pos: ", new_pos);
 					if ((dx == 0 && dy == 0) || new_pos.isOutOfBounds())
 						continue;
 					Pieces *target = getTargetPiece(new_pos);

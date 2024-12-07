@@ -134,9 +134,9 @@ public:
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		Move move = new_pos - pos;
-		out("new pos: ", new_pos);
-		out("pos: ", pos);
-		out("move: ", move);
+		fout("new pos: ", new_pos);
+		fout("pos: ", pos);
+		fout("move: ", move);
 		if((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
 			return true;
 		if(abs(move.x) == abs(move.y))

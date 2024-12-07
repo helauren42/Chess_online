@@ -52,6 +52,7 @@ SDL_Window *initWindow(t_dim &dim)
 class Game
 {
 private:
+	int logger_fd = -1;
 	bool player_turn = WHITE;
 	WINNER winner = COLOR_NONE;
 	Board board;
@@ -64,6 +65,9 @@ private:
 public:
 	Game() { board.setPlayerTurn(&player_turn); };
 	~Game() {};
+	void	setLoggerFd(const int fd) {
+		logger_fd = fd;
+	}
 	bool initSDL()
 	{
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -156,10 +160,15 @@ public:
 	void run()
 	{
 		SDL_Event e;
+		bool quit = false;
 		bool moved = false;
 		bool game_end = false;
-		while (1)
+		while (!quit)
 		{
+			while (SDL_PollEvent(&e) != 0)
+			{
+				events.eventHandler(e, player_turn, quit);
+			}
 			SDL_RenderClear(renderer);
 			SDL_RenderCopy(renderer, textures.board, NULL, NULL);
 			if (board.getSelectedPiece())
@@ -184,10 +193,6 @@ public:
 				}
 				board.setMoved(false);
 			}
-			while (SDL_PollEvent(&e) != 0)
-			{
-				events.eventHandler(e, player_turn);
-			}
 			SDL_Delay(64);
 		}
 		if (game_end)
@@ -204,9 +209,10 @@ public:
 		// DisplayResult();
 	}
 
-	void close()
+	void destroy()
 	{
 		freeing(renderer, window);
+		close(logger_fd);
 	}
 };
 
