@@ -19,6 +19,7 @@ class Board
 private:
 	bool *player_turn = nullptr;
 	bool moved = false;
+	bool castling = false;
 	std::array<std::array<Cell, 8>, 8> board;
 	std::unique_ptr<Pieces> selected_piece = nullptr;
 	std::vector<std::unique_ptr<Pieces>> active_pieces;
@@ -220,6 +221,23 @@ public:
 	// so a validMove() per piece and a validMove() for the board
 	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 	{
+		if(piece->getType() == KING && target_piece->getType() == ROOK
+			&& piece->getColor() == target_piece->getColor()
+			&& piece->getFirstMove() && target_piece->getFirstMove()
+			&& !isCheck()) {
+				std::vector<Pos> intersections = intersection(target_piece->getPosition(), piece->getPosition());
+				for(auto& square : intersections) {
+					for(auto& active_piece : active_pieces) {
+						if(active_piece->getColor() == piece->getColor())
+							continue;
+						if(validMove(square, active_piece.get(), nullptr))
+							return false;
+					}
+				}
+				castling = true;
+				return true;
+			}
+
 		if (target_piece && piece->getColor() == target_piece->getColor())
 		{
 			fout("Target piece is same color\n");
@@ -240,6 +258,7 @@ public:
 
 	void moveSelectedPiece(const short &x, const short &y)
 	{
+		castling = false;
 		fout("moving selected piece\n");
 
 		Pos old_pos = selected_piece->getPosition();
@@ -253,12 +272,17 @@ public:
 				setBoard();
 				if (validMove(new_pos, it->get(), target_piece))
 				{
+					if(castling == true) {
+						it->get()->makeMove(new_pos);
+						target_piece->makeMove(old_pos);
+						return;
+					}
 					it->get()->makeMove(new_pos);
 					// undo move if king is in check after move
 					if (isCheck(target_piece))
 					{
 						it->get()->makeMove(old_pos);
-						fout("Failed to move piece, kins is checked\n");
+						fout("Failed to move piece, king is checked\n");
 						return;
 					}
 					fout("Successfully moved piece to: \n", *it);

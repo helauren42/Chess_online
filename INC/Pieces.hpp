@@ -11,6 +11,7 @@
 class Pieces
 {
 protected:
+	bool firstMove = true;
 	Pos pos;
 	bool color;
 	const PieceType type;
@@ -23,18 +24,19 @@ public:
 	virtual ~Pieces() {};
 
 	PieceType	getType() const { return type; }
+	bool	getFirstMove() const { return firstMove; }
 	Pos getPosition() const { return pos; }
 	bool getColor() const { return color; }
 
 	virtual bool	validMove(const Pos& new_pos, const Pieces* target) const = 0;
-	virtual void	makeMove(const Pos& new_pos) {
+	void	makeMove(const Pos& new_pos) {
 		pos = new_pos;
+		firstMove = false;
 	};
 };
 
 class Pawn : public Pieces {
 public:
-	bool		firstMove = true;
 	const short	dir = color == BLACK ? -1 : 1;
 	
 	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
@@ -70,10 +72,6 @@ public:
 		fout("pawn move default true\n");
 		// then it should be true
 		return true;
-	}
-	void	makeMove(const Pos& new_pos) override {
-		pos = new_pos;
-		firstMove = false;
 	}
 };
 
