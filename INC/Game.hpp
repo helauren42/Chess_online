@@ -146,7 +146,8 @@ public:
 		out("game end is checked\n");
 		bool king_immobilized = board.isImmobilized(board.getKing());
 		out("king immobilized: ", king_immobilized);
-		if(king_immobilized == false) {
+		if (king_immobilized == false)
+		{
 			return false;
 		}
 		out("can uncheck bout to start\n");
@@ -154,7 +155,7 @@ public:
 		out("can uncheck: ", can_uncheck);
 		if (king_immobilized && !can_uncheck)
 		{
-			winner = checker->getColor() == WHITE ? WHITE: BLACK;
+			winner = checker->getColor() == WHITE ? WHITE : BLACK;
 			return true;
 		}
 		return false;
@@ -163,6 +164,7 @@ public:
 	void run()
 	{
 		SDL_Event e;
+		bool moved = false;
 		short winner = -1; // can be set to BLACK or WHITE
 		bool quit = false;
 		bool game_end = false;
@@ -170,7 +172,7 @@ public:
 		{
 			SDL_RenderClear(renderer);
 			SDL_RenderCopy(renderer, textures.board, NULL, NULL);
-			if (board.getSelectedPiece()) 
+			if (board.getSelectedPiece())
 			{
 				textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
 				SDL_RenderCopy(renderer, textures.selected, NULL, NULL);
@@ -183,13 +185,18 @@ public:
 			textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
 			SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
 			SDL_RenderPresent(renderer);
+			if (board.getMoved() == true)
+			{
+				if (gameEnd() == true)
+				{
+					game_end = true;
+					break;
+				}
+				board.setMoved(false);
+			}
 			while (SDL_PollEvent(&e) != 0)
 			{
 				events.eventHandler(e, quit, player_turn);
-			}
-			if(gameEnd() == true) {
-				game_end = true;
-				break;
 			}
 			SDL_Delay(64);
 		}
