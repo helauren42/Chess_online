@@ -144,7 +144,6 @@ public:
 		Move move = new_pos - pos;
 		if(!move.x && !move.y)
 			return false;
-		out(move.x, move.y);
 		if(abs(move.x) <= 1 && abs(move.y) <= 1)
 			return true;
 		return false;

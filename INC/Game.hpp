@@ -6,6 +6,7 @@
 #include "FrontEnd.hpp"
 #include "Pieces.hpp"
 #include "Board.hpp"
+#include "stdlib.h"
 // #include "Player.hpp"
 
 #include "../INC/MyCppLib/MyCppLib.hpp"
@@ -65,7 +66,7 @@ public:
 	~Game() {};
 	bool initSDL()
 	{
-		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		{
 			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 			return 1;
@@ -142,9 +143,19 @@ public:
 		Pieces *checker = board.isCheck();
 		if (!checker)
 			return false;
-		if (board.isImmobilized(board.getKing()) && !board.canUncheck(checker))
+		out("game end is checked\n");
+		bool king_immobilized = board.isImmobilized(board.getKing());
+		out("king immobilized: ", king_immobilized);
+		if(king_immobilized == false) {
+			exit(1);
+			return false;
+		}
+		out("can uncheck bout to start\n");
+		bool can_uncheck = board.canUncheck(checker);
+		out("can uncheck: ", can_uncheck);
+		if (king_immobilized && !can_uncheck)
 		{
-
+			winner = checker->getColor() == WHITE ? WHITE: BLACK;
 			return true;
 		}
 		return false;
@@ -160,7 +171,7 @@ public:
 		{
 			SDL_RenderClear(renderer);
 			SDL_RenderCopy(renderer, textures.board, NULL, NULL);
-			if (board.getSelectedPiece())
+			if (board.getSelectedPiece()) 
 			{
 				textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
 				SDL_RenderCopy(renderer, textures.selected, NULL, NULL);
@@ -177,6 +188,10 @@ public:
 			{
 				events.eventHandler(e, quit, player_turn);
 			}
+			if(gameEnd() == true) {
+				game_end = true;
+				break;
+			}
 			SDL_Delay(64);
 		}
 		if (game_end)
@@ -188,7 +203,7 @@ public:
 				out("BLACK\n");
 			else
 				out("STALEMATE\n");
-			SDL_Delay(6400);
+			SDL_Delay(640);
 		}
 		// DisplayResult();
 	}

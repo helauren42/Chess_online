@@ -330,6 +330,7 @@ public:
 
 	bool isImmobilized(Pieces *piece)
 	{
+		out("is immobilized piece: ", piece);
 		Pos piece_pos = piece->getPosition();
 		switch (piece->getType())
 		{
@@ -343,8 +344,12 @@ public:
 					for (int dy = -1; dy <= 1; dy++)
 					{
 						Pos new_pos(piece_pos.x + dx, piece_pos.y + dy);
+						out("Pos: ", new_pos);
+						if((dx == 0 && dy == 0) || new_pos.isOutOfBounds())
+							continue;
 						Pieces* target = getTargetPiece(new_pos);
-						if ((dx == 0 && dy == 0) || new_pos.isOutOfBounds() || !piece->validMove(new_pos, target))
+
+						if (!validMove(new_pos, piece, target))
 							continue;
 						
 						if(piece->getType() != KING)
@@ -355,7 +360,7 @@ public:
 							if (piece2->getColor() != piece->getColor() &&
 								validMove(new_pos, piece2.get(), nullptr))
 							{
-								continue;
+								return true;
 							}
 						}
 						return false;
