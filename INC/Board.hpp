@@ -221,7 +221,8 @@ public:
 	// so a validMove() per piece and a validMove() for the board
 	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 	{
-		if(piece->getType() == KING && target_piece->getType() == ROOK
+		if(target_piece != nullptr
+			&& piece->getType() == KING && target_piece->getType() == ROOK
 			&& piece->getColor() == target_piece->getColor()
 			&& piece->getFirstMove() && target_piece->getFirstMove()
 			&& !isCheck()) {
@@ -273,8 +274,10 @@ public:
 				if (validMove(new_pos, it->get(), target_piece))
 				{
 					if(castling == true) {
+						fout("try castling\n");
 						it->get()->makeMove(new_pos);
 						target_piece->makeMove(old_pos);
+						fout("castling done\n");
 						return;
 					}
 					it->get()->makeMove(new_pos);
