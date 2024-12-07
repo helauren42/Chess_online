@@ -273,7 +273,7 @@ public:
 			incrX = move.x < 0 ? -1 : 1;
 		if(move.y)
 			incrY = move.y < 0 ? -1 : 1; 
-		Pos intersection(move.x, move.y);
+		Pos intersection(start.x, start.y);
 		while(intersection != end) {
 			ret.push_back(intersection);
 			intersection.x += incrX;
@@ -304,11 +304,7 @@ public:
 
 	bool	canUncheck(Pieces* checker) {
 		Pos checker_pos = checker->getPosition();
-		for (auto& piece : active_pieces) 
-		{
-			if (piece->getColor() != checker->getColor() && validMove(checker_pos, piece.get(), checker))
-				return true;
-		}
+		out("can uncheck\n");
 		std::vector<Pos> intersections = intersection(checker_pos, getKing()->getPosition());
 		for(auto& pos : intersections) {
 			for(auto& piece : active_pieces) {

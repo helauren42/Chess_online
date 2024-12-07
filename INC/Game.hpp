@@ -147,7 +147,6 @@ public:
 		bool king_immobilized = board.isImmobilized(board.getKing());
 		out("king immobilized: ", king_immobilized);
 		if(king_immobilized == false) {
-			exit(1);
 			return false;
 		}
 		out("can uncheck bout to start\n");
