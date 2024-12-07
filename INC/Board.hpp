@@ -286,13 +286,14 @@ public:
 		fout("moving selected piece\n");
 
 		// remove_en_passant if match selected_piece color
-		if (has_en_passant && selected_piece->getColor() == *player_turn)
-		{
-			fout("removing en passant of color: ", *player_turn);	
-			for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
-				if (it->get()->getType() == ENPASSANT && *player_turn == it->get()->getColor())
-					active_pieces.erase(it);
-		}
+		for (auto it = active_pieces.begin(); it != active_pieces.end(); )
+			if (it->get()->getType() == ENPASSANT && *player_turn == it->get()->getColor()) {
+				fout("removing en passant of color: ", *player_turn);
+				active_pieces.erase(it);
+				fout("removed\n");
+			}
+			else
+				it++;
 
 		Pos old_pos = selected_piece->getPosition();
 		Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
@@ -318,7 +319,7 @@ public:
 						fout("castling done\n");
 						return;
 					}
-					bool has_en_passant = it->get()->getType() == PAWN && move.y == 2 ? true : false;
+					bool has_en_passant = it->get()->getType() == PAWN && abs(move.y) == 2 ? true : false;
 					it->get()->makeMove(new_pos);
 					// undo move if king is in check after move
 					if (isCheck(target_piece))
@@ -335,9 +336,10 @@ public:
 					}
 					if (has_en_passant)
 					{
-						fout("making en passant\n");
+						fout("creating en passant piece\n");
 						makeEnPassant(old_pos, move);
 					}
+
 
 					fout("Successfully moved piece: \n");
 					if (target_piece)
