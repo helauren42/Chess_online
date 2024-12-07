@@ -288,6 +288,10 @@ public:
 						fout("Failed to move piece, king is checked\n");
 						return;
 					}
+					if(it->get()->getType() == PAWN && (new_pos.y == 0 || new_pos.y == 7)) {
+						bool color = new_pos.y == 0 ? BLACK : WHITE;
+						it->reset(new Queen(new_pos.x, new_pos.y, color));
+					}
 					fout("Successfully moved piece to: \n", *it);
 					if (target_piece)
 						removePiece(target_piece);
