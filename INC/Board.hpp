@@ -318,15 +318,18 @@ public:
 	bool canUncheck(Pieces *checker)
 	{
 		Pos checker_pos = checker->getPosition();
-		out("runnning canUncheck\n");
 		std::vector<Pos> intersections = intersection(checker_pos, getKing()->getPosition());
 		for (auto &pos : intersections)
 		{
+			Pieces* target = nullptr;
+			if(checker->getPosition() == pos)
+				target = checker;
 			for (auto &piece : active_pieces)
 			{
-				if (piece->getColor() != checker->getColor() && validMove(pos, piece.get(), nullptr))
+				if (piece->getType() != KING && piece->getColor() != checker->getColor() && validMove(pos, piece.get(), target))
 				{
-
+					out("This piece can uncheck:\n", piece);
+					out("by moving to this position: ", pos);
 					return true;
 				}
 			}
@@ -339,7 +342,9 @@ public:
 		Pieces *checker = isCheck();
 		if (!checker)
 			return false;
-		return !canUncheck(checker);
+		if(isImmobilized(getKing()) && !canUncheck(checker))
+			return true;
+		return false;
 	}
 
 	bool isImmobilized(Pieces *piece)

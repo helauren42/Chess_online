@@ -141,22 +141,14 @@ public:
 	{
 		// add stalemate checker
 		Pieces *checker = board.isCheck();
-		if (!checker)
-			return false;
-		out("game end is checked\n");
-		bool king_immobilized = board.isImmobilized(board.getKing());
-		out("king immobilized: ", king_immobilized);
-		if (king_immobilized == false)
-		{
-			return false;
-		}
-		out("can uncheck bout to start\n");
-		bool can_uncheck = board.canUncheck(checker);
-		out("can uncheck: ", can_uncheck);
-		if (king_immobilized && !can_uncheck)
+		if (board.isCheckmate())
 		{
 			winner = checker->getColor() == WHITE ? WHITE : BLACK;
 			return true;
+		}
+		else {
+
+			winner = COLOR_NONE;
 		}
 		return false;
 	}
@@ -165,10 +157,8 @@ public:
 	{
 		SDL_Event e;
 		bool moved = false;
-		short winner = -1; // can be set to BLACK or WHITE
-		bool quit = false;
 		bool game_end = false;
-		while (!quit)
+		while (1)
 		{
 			SDL_RenderClear(renderer);
 			SDL_RenderCopy(renderer, textures.board, NULL, NULL);
@@ -196,7 +186,7 @@ public:
 			}
 			while (SDL_PollEvent(&e) != 0)
 			{
-				events.eventHandler(e, quit, player_turn);
+				events.eventHandler(e, player_turn);
 			}
 			SDL_Delay(64);
 		}

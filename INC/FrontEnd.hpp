@@ -206,7 +206,7 @@ private:
 	Board *board;
 	t_dim *dim;
 	std::map<int, bool> keys;
-	void keyEvents(const short key, bool &quit, const bool type);
+	void keyEvents(const short key, const bool type);
 
 public:
 	Events();
@@ -215,7 +215,7 @@ public:
 	void setDim(t_dim &_dim);
 	std::map<int, bool> getKeys() const { return keys; };
 
-	void eventHandler(const SDL_Event &event, bool &quit, bool &player_turn);
+	void eventHandler(const SDL_Event &event, bool &player_turn);
 	void clickPiece(const short x, const short y, bool &player_turn);
 };
 
@@ -283,16 +283,16 @@ void Events::clickPiece(const short x, const short y, bool &player_turn)
 	board->setSelectedPiece(nullptr);
 }
 
-void Events::eventHandler(const SDL_Event &e, bool &quit, bool &player_turn)
+void Events::eventHandler(const SDL_Event &e, bool &player_turn)
 {
 	if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 	{
 		bool type = e.type == 768 ? true : false;
-		keyEvents(e.key.keysym.sym, quit, type);
+		keyEvents(e.key.keysym.sym, type);
 	}
 	else if (e.type == SDL_QUIT)
 	{
-		quit = true;
+		exit(0);
 	}
 	else if (e.type == SDL_MOUSEBUTTONDOWN)
 	{
@@ -307,13 +307,14 @@ void Events::eventHandler(const SDL_Event &e, bool &quit, bool &player_turn)
 	}
 }
 
-void Events::keyEvents(const short key, bool &quit, const bool type)
+void Events::keyEvents(const short key, const bool type)
 {
 	if (keys.find(key) == keys.end())
 		return;
 	keys[key] = type;
-	if (keys[KEY_MY_CTRL] == true && keys[SDLK_w] == true)
-		quit = true;
+	if (keys[KEY_MY_CTRL] == true && keys[SDLK_w] == true) {
+		exit(0);
+	}
 }
 
 std::ostream &operator<<(std::ostream &os, const Events &events)

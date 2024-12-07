@@ -42,24 +42,32 @@ public:
 	~Pawn() {}
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
+		fout("new pos: ", new_pos);
+		fout("pos: ", pos);
 		Move move = new_pos - pos;
 
+		fout("move: ", move);
 		// first handle special cases
 		if ((move.x == 1 || move.x == -1)
 		&& target != nullptr
 		&& (move.y == 1 * dir)) {
-				return  true;
+			fout("pawn move 1 valid\n");
+			return  true;
 		}
-		if(target)
+		if(target != nullptr || move.x >= 2)
 			return false;
-		if(firstMove && move.y == 2 * dir)
-			return true;
 
-		// then error cases
+		if(move.x == 0 && firstMove && move.y == 2 * dir) {
+			fout("pawn move 1 valid\n");
+			return true;
+		}
+
+		// then main error cases
 		if(move.x != 0 || move.y != dir) {
 			return false;
 		}
 
+		fout("pawn move default true\n");
 		// then it should be true
 		return true;
 	}
@@ -126,6 +134,9 @@ public:
 
 	bool validMove(const Pos& new_pos, const Pieces* target) const override {
 		Move move = new_pos - pos;
+		out("new pos: ", new_pos);
+		out("pos: ", pos);
+		out("move: ", move);
 		if((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
 			return true;
 		if(abs(move.x) == abs(move.y))
