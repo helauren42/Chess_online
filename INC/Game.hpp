@@ -19,23 +19,28 @@ SDL_Window *initWindow(t_dim &dim)
 
 	SDL_Window *window = NULL;
 
-	if (SDL_GetCurrentDisplayMode(0, &display_mode) == 0)
+	if (SDL_GetCurrentDisplayMode(0, &display_mode) != 0)
 	{
-		screen_width = display_mode.w;
-		screen_height = display_mode.h;
+		printf("failed to get display mode: %s\n", SDL_GetError());
+		return NULL;
 	}
+	screen_width = display_mode.w;
+	screen_height = display_mode.h;
 
 	dim.window_height = screen_height * 0.9;
 	dim.window_width = dim.window_height;
-
+	
 	window = SDL_CreateWindow(
 		"SDL Example",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		dim.window_width, dim.window_height,
-		SDL_WINDOW_SHOWN);
+		SDL_WINDOW_RESIZABLE);
+
 
 	if (!window)
 		return NULL;
+
+	SDL_SetWindowFullscreen(window, 0);
 
 	int top = 0, left = 0, bottom = 0, right = 0;
 	if (SDL_GetWindowBordersSize(window, &top, &left, &bottom, &right) != 0)
@@ -206,7 +211,6 @@ public:
 				out("STALEMATE\n");
 			SDL_Delay(640);
 		}
-		// DisplayResult();
 	}
 
 	void destroy()
