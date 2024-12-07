@@ -9,6 +9,7 @@ enum PieceType {
 	BISHOP,
 	QUEEN,
 	KING,
+	ENPASSANT,
 	NONE
 };
 

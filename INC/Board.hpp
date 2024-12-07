@@ -17,6 +17,7 @@ struct Cell
 class Board
 {
 private:
+	bool has_en_passant = false;
 	bool *player_turn = nullptr;
 	bool moved = false;
 	bool castling = false;
@@ -138,16 +139,33 @@ public:
 
 	void removePiece(Pieces *piece)
 	{
+		fout("remove piece: ", piece);
+		if (piece->getType() == ENPASSANT)
+		{
+			Pos pawn_pos = piece->getPosition();
+			pawn_pos.y += dynamic_cast<EnPassant*>(piece)->getDir();
+			for (auto pawn_it = active_pieces.begin(); pawn_it != active_pieces.end(); pawn_it++)
+			{
+				if (pawn_it->get()->getType() == PAWN && pawn_it->get()->getColor() == piece->getColor() 
+				&& pawn_it->get()->getPosition() == pawn_pos)
+				{
+					piece = pawn_it->get();
+					break;
+				}
+			}
+		}
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 		{
 			if (*it == piece)
 			{
+				auto remove_it = it;
+
 				if (it->get()->getColor() == BLACK)
 				{
-					dead_black_pieces.push_back(std::move(*it));
+					dead_black_pieces.push_back(std::move(*remove_it));
 				}
 				else
-					dead_white_pieces.push_back(std::move(*it));
+					dead_white_pieces.push_back(std::move(*remove_it));
 				active_pieces.erase(it);
 				break;
 			}
@@ -221,23 +239,22 @@ public:
 	// so a validMove() per piece and a validMove() for the board
 	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 	{
-		if(target_piece != nullptr
-			&& piece->getType() == KING && target_piece->getType() == ROOK
-			&& piece->getColor() == target_piece->getColor()
-			&& piece->getFirstMove() && target_piece->getFirstMove()
-			&& !isCheck()) {
-				std::vector<Pos> intersections = intersection(target_piece->getPosition(), piece->getPosition());
-				for(auto& square : intersections) {
-					for(auto& active_piece : active_pieces) {
-						if(active_piece->getColor() == piece->getColor())
-							continue;
-						if(validMove(square, active_piece.get(), nullptr))
-							return false;
-					}
+		if (target_piece != nullptr && piece->getType() == KING && target_piece->getType() == ROOK && piece->getColor() == target_piece->getColor() && piece->getFirstMove() && target_piece->getFirstMove() && !isCheck())
+		{
+			std::vector<Pos> intersections = intersection(target_piece->getPosition(), piece->getPosition());
+			for (auto &square : intersections)
+			{
+				for (auto &active_piece : active_pieces)
+				{
+					if (active_piece->getColor() == piece->getColor())
+						continue;
+					if (validMove(square, active_piece.get(), nullptr))
+						return false;
 				}
-				castling = true;
-				return true;
 			}
+			castling = true;
+			return true;
+		}
 
 		if (target_piece && piece->getColor() == target_piece->getColor())
 		{
@@ -257,29 +274,51 @@ public:
 		return true;
 	}
 
+	void makeEnPassant(const Pos &old_pos, const Move &move)
+	{
+		Pos pos(old_pos.x, old_pos.y + move.y / 2);
+		active_pieces.push_back(std::make_unique<EnPassant>(pos.x, pos.y, selected_piece->getColor()));
+	}
+
 	void moveSelectedPiece(const short &x, const short &y)
 	{
 		castling = false;
 		fout("moving selected piece\n");
 
+		// remove_en_passant if match selected_piece color
+		if (has_en_passant && selected_piece->getColor() == *player_turn)
+		{
+			fout("removing en passant of color: ", *player_turn);	
+			for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
+				if (it->get()->getType() == ENPASSANT && *player_turn == it->get()->getColor())
+					active_pieces.erase(it);
+		}
+
 		Pos old_pos = selected_piece->getPosition();
 		Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 		Pieces *target_piece = getTargetPiece(new_pos);
+		if(target_piece)
+			fout("target: ", target_piece);
+		else
+			fout("no target piece found\n");
 
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 		{
+			Move move = new_pos - old_pos;
 			if (selected_piece == it->get())
 			{
 				setBoard();
 				if (validMove(new_pos, it->get(), target_piece))
 				{
-					if(castling == true) {
+					if (castling == true)
+					{
 						fout("try castling\n");
 						it->get()->makeMove(new_pos);
 						target_piece->makeMove(old_pos);
 						fout("castling done\n");
 						return;
 					}
+					bool has_en_passant = it->get()->getType() == PAWN && move.y == 2 ? true : false;
 					it->get()->makeMove(new_pos);
 					// undo move if king is in check after move
 					if (isCheck(target_piece))
@@ -288,13 +327,23 @@ public:
 						fout("Failed to move piece, king is checked\n");
 						return;
 					}
-					if(it->get()->getType() == PAWN && (new_pos.y == 0 || new_pos.y == 7)) {
+
+					if (it->get()->getType() == PAWN && (new_pos.y == 0 || new_pos.y == 7))
+					{
 						bool color = new_pos.y == 0 ? BLACK : WHITE;
 						it->reset(new Queen(new_pos.x, new_pos.y, color));
 					}
-					fout("Successfully moved piece to: \n", *it);
+					if (has_en_passant)
+					{
+						fout("making en passant\n");
+						makeEnPassant(old_pos, move);
+					}
+
+					fout("Successfully moved piece: \n");
 					if (target_piece)
+					{
 						removePiece(target_piece);
+					}
 					selected_piece = nullptr;
 					*player_turn = *player_turn == WHITE ? BLACK : WHITE;
 					moved = true;
@@ -352,8 +401,8 @@ public:
 		std::vector<Pos> intersections = intersection(checker_pos, getKing()->getPosition());
 		for (auto &pos : intersections)
 		{
-			Pieces* target = nullptr;
-			if(checker->getPosition() == pos)
+			Pieces *target = nullptr;
+			if (checker->getPosition() == pos)
 				target = checker;
 			for (auto &piece : active_pieces)
 			{
@@ -373,7 +422,7 @@ public:
 		Pieces *checker = isCheck();
 		if (!checker)
 			return false;
-		if(isImmobilized(getKing()) && !canUncheck(checker))
+		if (isImmobilized(getKing()) && !canUncheck(checker))
 			return true;
 		return false;
 	}
