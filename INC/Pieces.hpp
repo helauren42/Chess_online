@@ -21,8 +21,7 @@ public:
 	{
 		color = pos.y <= 1 ? WHITE : BLACK;
 	};
-	Pieces(short _x, short _y, PieceType _type, bool _color) : pos(_x, _y), color(_color), type(_type) {
-															   };
+	Pieces(short _x, short _y, PieceType _type, bool _color) : pos(_x, _y), color(_color), type(_type) {};
 	virtual ~Pieces() {};
 
 	PieceType getType() const { return type; }
@@ -79,7 +78,8 @@ public:
 		// then it should be true
 		return true;
 	}
-	short getDir() const {
+	short getDir() const
+	{
 		return dir;
 	}
 };
@@ -91,14 +91,16 @@ public:
 
 	EnPassant(short _x, short _y, bool _color) : Pieces(_x, _y, ENPASSANT, _color) {};
 	~EnPassant() {}
-	short getDir() const {
+	short getDir() const
+	{
 		return dir;
 	}
+
 private:
-	bool validMove(const Pos &new_pos, const Pieces *target) const override {
+	bool validMove(const Pos &new_pos, const Pieces *target) const override
+	{
 		return false;
 	}
-	
 };
 
 class Rook : public Pieces

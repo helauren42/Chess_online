@@ -19,28 +19,26 @@ SDL_Window *initWindow(t_dim &dim)
 
 	SDL_Window *window = NULL;
 
-	if (SDL_GetCurrentDisplayMode(0, &display_mode) != 0)
+	if (SDL_GetDesktopDisplayMode(0, &display_mode) != 0)
 	{
 		printf("failed to get display mode: %s\n", SDL_GetError());
 		return NULL;
 	}
 	screen_width = display_mode.w;
 	screen_height = display_mode.h;
-
-	dim.window_height = screen_height * 0.9;
-	dim.window_width = dim.window_height;
 	
 	window = SDL_CreateWindow(
 		"SDL Example",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		dim.window_width, dim.window_height,
-		SDL_WINDOW_RESIZABLE);
-
+		screen_width, screen_height,
+		SDL_WINDOW_FULLSCREEN);
 
 	if (!window)
 		return NULL;
 
 	SDL_SetWindowFullscreen(window, 0);
+
+	SDL_GetWindowSize(window, &dim.window_width, &dim.window_height);
 
 	int top = 0, left = 0, bottom = 0, right = 0;
 	if (SDL_GetWindowBordersSize(window, &top, &left, &bottom, &right) != 0)
@@ -49,7 +47,10 @@ SDL_Window *initWindow(t_dim &dim)
 		return NULL;
 	}
 
-	dim.board = dim.window_height - top - bottom;
+	dim.window_height = screen_height - top - bottom;
+	dim.window_width = screen_width - left - right;
+
+	dim.board = dim.window_height * 0.95;
 	dim.square = dim.board / 8;
 	return window;
 }
@@ -75,7 +76,7 @@ public:
 	}
 	bool initSDL()
 	{
-		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
 			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 			return 1;
@@ -170,16 +171,17 @@ public:
 		bool game_end = false;
 		while (!quit)
 		{
+			SDL_Rect rect = {0, 0, dim.board, dim.board};
 			while (SDL_PollEvent(&e) != 0)
 			{
 				events.eventHandler(e, player_turn, quit);
 			}
 			SDL_RenderClear(renderer);
-			SDL_RenderCopy(renderer, textures.board, NULL, NULL);
+			SDL_RenderCopy(renderer, textures.board, NULL, &rect);
 			if (board.getSelectedPiece())
 			{
 				textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
-				SDL_RenderCopy(renderer, textures.selected, NULL, NULL);
+				SDL_RenderCopy(renderer, textures.selected, NULL, &rect);
 			}
 			else if (textures.selected)
 			{
@@ -187,7 +189,7 @@ public:
 				textures.selected = nullptr;
 			}
 			textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
-			SDL_RenderCopy(renderer, textures.pieces, NULL, NULL);
+			SDL_RenderCopy(renderer, textures.pieces, NULL, &rect);
 			SDL_RenderPresent(renderer);
 			if (board.getMoved() == true)
 			{

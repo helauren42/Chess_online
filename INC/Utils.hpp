@@ -21,8 +21,8 @@ enum WINNER {
 
 typedef struct s_dim
 {
-	short window_width = 0;
-	short window_height = 0;
+	int window_width = 0;
+	int window_height = 0;
 	short board = 0;
 	short square = 0;
 } t_dim;

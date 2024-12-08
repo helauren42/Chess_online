@@ -285,9 +285,18 @@ void Events::clickPiece(const short x, const short y, bool &player_turn)
 
 void Events::eventHandler(const SDL_Event &e, bool &player_turn, bool &quit)
 {
+	// if(e.type == SDL_WINDOWEVENT) {
+	// 	if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
+	// 		dim->window_width = e.window.data1;
+	// 		dim->window_height = e.window.data2;
+	// 		dim->board = dim->window_width < dim->window_height ? dim->window_width : dim->window_height;
+	// 		dim->square = dim->board / 8;
+	// 	}
+	// }
+
 	if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 	{
-		bool type = e.type == 768 ? true : false;
+		bool type = e.type == SDL_KEYDOWN ? true : false;
 		keyEvents(e.key.keysym.sym, type, quit);
 	}
 	else if (e.type == SDL_QUIT)
