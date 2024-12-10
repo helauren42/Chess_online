@@ -116,7 +116,8 @@ public:
 
 	int initFoundationTextures()
 	{
-		if (textures.initSquares(renderer) || textures.initPieces(renderer) || textures.initChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim))
+		if (textures.initSquares(renderer) || textures.initPieces(renderer) || textures.initChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim)
+			|| textures.initHomeBackground(renderer, dim) || textures.initHomeLogin(renderer, dim))
 			return -1;
 		return 0;
 	}
@@ -168,7 +169,6 @@ public:
 			return true;
 		}
 		else {
-
 			winner = COLOR_NONE;
 		}
 		return false;
@@ -231,7 +231,16 @@ public:
 		SDL_Event e;
 		bool quit = false;
 		while(!quit) {
-
+			SDL_Rect rect = {0, 0, dim.window_width, dim.window_height};
+			while (SDL_PollEvent(&e) != 0)
+			{
+				events.eventHandler(e, player_turn, quit);
+			}
+			SDL_RenderClear(renderer);
+			SDL_RenderCopy(renderer, textures.home.background, NULL, &rect);
+			// SDL_RenderCopy(renderer, textures.home.login, NULL, &rect);
+			SDL_RenderPresent(renderer);
+			SDL_Delay(64);
 		}
 	}
 

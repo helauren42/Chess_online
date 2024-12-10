@@ -37,33 +37,91 @@ struct t_textures
 	SDL_Texture *pieces = nullptr;
 	SDL_Texture *selected = nullptr;
 
-
-	struct Home {
-		static SDL_Texture *background;
+	struct Home
+	{
+		SDL_Texture *background;
+		SDL_Texture *login;
+		short start_x;
+		short start_y;
+		short width;
+		short height;
 	};
 
+	Home home;
 
 	t_textures() {}
 	~t_textures() {}
 
+	short initHomeLogin(SDL_Renderer *renderer, const t_dim &dim) {
 
+		// home.login = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
+		// if (!home.login)
+		// 	throw(std::runtime_error("Failed to create login texture: " + std::string(SDL_GetError())));
+		// SDL_SetRenderTarget(renderer, home.login);
+		// SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		// SDL_RenderClear(renderer);
 
-	short initHome(SDL_Renderer *renderer, const t_dim& dim) {
-		Home::background = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
-		if (!Home::background)
+		// SDL_Color lightBrown = {181, 101, 29, 255};
+		// SDL_Rect usernameField = {dim.window_width / 4, dim.window_height / 3, dim.window_width / 2, 40};
+		// SDL_Rect passwordField = {dim.window_width / 4, dim.window_height / 3 + 50, dim.window_width / 2, 40};
+		
+		// SDL_SetRenderDrawColor(renderer, lightBrown.r, lightBrown.g, lightBrown.b, lightBrown.a);
+    	// SDL_RenderFillRect(renderer, &usernameField);
+    	// SDL_RenderFillRect(renderer, &passwordField);
+
+		// TTF_Font* font = TTF_OpenFont("./Fonts/CormorantGaramond-Bold.ttf", 24);  // Specify your font path and size
+		// if (!font)
+		// 	throw(std::runtime_error("Failed to load font: " + std::string(TTF_GetError())));
+
+		// SDL_Surface* usernameLabelSurface = TTF_RenderText_Solid(font, "Username:", lightBrown);
+		// SDL_Texture* usernameLabelTexture = SDL_CreateTextureFromSurface(renderer, usernameLabelSurface);
+		// SDL_Rect usernameLabelRect = {usernameField.x - 120, usernameField.y + 10, usernameLabelSurface->w, usernameLabelSurface->h};
+		// SDL_RenderCopy(renderer, usernameLabelTexture, NULL, &usernameLabelRect);
+
+		// SDL_Surface* passwordLabelSurface = TTF_RenderText_Solid(font, "Password:", lightBrown);
+		// SDL_Texture* passwordLabelTexture = SDL_CreateTextureFromSurface(renderer, passwordLabelSurface);
+		// SDL_Rect passwordLabelRect = {passwordField.x - 120, passwordField.y + 10, passwordLabelSurface->w, passwordLabelSurface->h};
+		// SDL_RenderCopy(renderer, passwordLabelTexture, NULL, &passwordLabelRect);
+
+		return 0;
+	}
+
+	short initHomeBackground(SDL_Renderer *renderer, const t_dim &dim)
+	{
+		home.background = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
+		if (!home.background)
 			throw(std::runtime_error("Failed to create background texture: " + std::string(SDL_GetError())));
-		SDL_SetRenderTarget(renderer, Home::background);
+		SDL_SetRenderTarget(renderer, home.background);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		SDL_RenderClear(renderer);
 		short n_squares_width = dim.window_width / dim.square;
 		short n_squares_height = dim.window_height / dim.square;
-		for (int y = 0; y < n_squares_height; y++) {
-			for (int x = 0; x < n_squares_width; x++) {
+		for (int y = 0; y < n_squares_height; y++)
+		{
+			for (int x = 0; x < n_squares_width; x++)
+			{
 				SDL_Texture *currentSquare = (y + x) % 2 == 0 ? lightSquare : darkSquare;
 				SDL_Rect dstRect = {x * dim.square, y * dim.square, dim.square, dim.square};
 				SDL_RenderCopy(renderer, currentSquare, NULL, &dstRect);
 			}
 		}
+
+		SDL_Texture *blackOverlay = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
+		if (!blackOverlay)
+			throw(std::runtime_error("Failed to create overlay texture: " + std::string(SDL_GetError())));
+
+		SDL_SetRenderTarget(renderer, blackOverlay); 
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);
+		SDL_RenderClear(renderer);
+
+		SDL_SetTextureBlendMode(blackOverlay, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderTarget(renderer, home.background);
+
+		SDL_Rect dstRect = {0, 0, dim.window_width, dim.window_height};
+
+		SDL_RenderCopy(renderer, blackOverlay, NULL, &dstRect);
+
 		SDL_SetRenderTarget(renderer, NULL);
 		return 0;
 	};
@@ -235,7 +293,7 @@ private:
 	Board *board;
 	t_dim *dim;
 	std::map<int, bool> keys;
-	void keyEvents(const short key, const bool type, bool& quit);
+	void keyEvents(const short key, const bool type, bool &quit);
 
 public:
 	Events();
@@ -244,7 +302,7 @@ public:
 	void setDim(t_dim &_dim);
 	std::map<int, bool> getKeys() const { return keys; };
 
-	void eventHandler(const SDL_Event &event, bool &player_turn, bool& quit);
+	void eventHandler(const SDL_Event &event, bool &player_turn, bool &quit);
 	void clickPiece(const short x, const short y, bool &player_turn);
 };
 
@@ -336,7 +394,7 @@ void Events::eventHandler(const SDL_Event &e, bool &player_turn, bool &quit)
 	{
 		if (board->getSelectedPiece() == nullptr)
 		{
-			std::string msg = player_turn == BLACK ? "Black" : "White"; 
+			std::string msg = player_turn == BLACK ? "Black" : "White";
 			fout("Player turn: ", msg);
 			clickPiece(e.button.x, e.button.y, player_turn);
 		}
@@ -345,12 +403,13 @@ void Events::eventHandler(const SDL_Event &e, bool &player_turn, bool &quit)
 	}
 }
 
-void Events::keyEvents(const short key, const bool type, bool& quit)
+void Events::keyEvents(const short key, const bool type, bool &quit)
 {
 	if (keys.find(key) == keys.end())
 		return;
 	keys[key] = type;
-	if (keys[KEY_MY_CTRL] == true && keys[SDLK_w] == true) {
+	if (keys[KEY_MY_CTRL] == true && keys[SDLK_w] == true)
+	{
 		quit = true;
 	}
 }
