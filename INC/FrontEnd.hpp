@@ -37,8 +37,37 @@ struct t_textures
 	SDL_Texture *pieces = nullptr;
 	SDL_Texture *selected = nullptr;
 
+
+	struct Home {
+		static SDL_Texture *background;
+	};
+
+
 	t_textures() {}
 	~t_textures() {}
+
+
+
+	short initHome(SDL_Renderer *renderer, const t_dim& dim) {
+		Home::background = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
+		if (!Home::background)
+			throw(std::runtime_error("Failed to create background texture: " + std::string(SDL_GetError())));
+		SDL_SetRenderTarget(renderer, Home::background);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
+		short n_squares_width = dim.window_width / dim.square;
+		short n_squares_height = dim.window_height / dim.square;
+		for (int y = 0; y < n_squares_height; y++) {
+			for (int x = 0; x < n_squares_width; x++) {
+				SDL_Texture *currentSquare = (y + x) % 2 == 0 ? lightSquare : darkSquare;
+				SDL_Rect dstRect = {x * dim.square, y * dim.square, dim.square, dim.square};
+				SDL_RenderCopy(renderer, currentSquare, NULL, &dstRect);
+			}
+		}
+		SDL_SetRenderTarget(renderer, NULL);
+		return 0;
+	};
+
 	short initSquares(SDL_Renderer *renderer)
 	{
 		darkSquare = IMG_LoadTexture(renderer, "./IMG/USE/square_brown_dark.png");

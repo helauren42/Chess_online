@@ -17,6 +17,8 @@ int main(int argc, char* argv[]) {
 
 	game.initData();
 
+	game.home();
+
 	game.run();
 
 	game.destroy();

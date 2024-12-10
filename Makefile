@@ -3,7 +3,7 @@ NAME = chess
 SRCS = $(wildcard ./SRCS/*.cpp)
 
 CFLAGS = -Wall -Werror -Wextra -Wno-unused
-LDFLAGS = -lSDL2 -lSDL2_image
+LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 OBJS = $(SRCS:./SRCS/%.cpp=./obj/%.o)
 

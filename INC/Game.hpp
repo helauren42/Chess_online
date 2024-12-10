@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "FrontEnd.hpp"
 #include "Pieces.hpp"
 #include "Board.hpp"
@@ -76,6 +77,10 @@ public:
 	}
 	bool initSDL()
 	{
+		if(TTF_Init()) {
+			printf("TTF could not initialize!\n");
+			return 1;
+		}
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
 			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -144,12 +149,18 @@ public:
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		IMG_Quit();
+		TTF_Quit();
 		SDL_Quit();
 	}
 
 	bool gameEnd()
 	{
 		// add stalemate checker
+		// for(auto &piece : board.active_pieces) {
+		// 	if(!piece->isImmobilized()) {
+		// 		return false;
+		// 	}
+		// }
 		Pieces *checker = board.isCheck();
 		if (board.isCheckmate())
 		{
@@ -212,6 +223,15 @@ public:
 			else
 				out("STALEMATE\n");
 			SDL_Delay(640);
+		}
+	}
+
+	void home()
+	{
+		SDL_Event e;
+		bool quit = false;
+		while(!quit) {
+
 		}
 	}
 
