@@ -238,7 +238,7 @@ public:
 			}
 			SDL_RenderClear(renderer);
 			SDL_RenderCopy(renderer, textures.home.background, NULL, &rect);
-			// SDL_RenderCopy(renderer, textures.home.login, NULL, &rect);
+			SDL_RenderCopy(renderer, textures.home.login, NULL, &rect);
 			SDL_RenderPresent(renderer);
 			SDL_Delay(64);
 		}

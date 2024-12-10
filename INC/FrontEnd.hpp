@@ -52,36 +52,59 @@ struct t_textures
 	t_textures() {}
 	~t_textures() {}
 
-	short initHomeLogin(SDL_Renderer *renderer, const t_dim &dim) {
+	short initHomeLogin(SDL_Renderer *renderer, const t_dim &dim)
+	{
+		home.login = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
+		if (!home.login)
+			throw(std::runtime_error("Failed to create login texture: " + std::string(SDL_GetError())));
 
-		// home.login = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dim.window_width, dim.window_height);
-		// if (!home.login)
-		// 	throw(std::runtime_error("Failed to create login texture: " + std::string(SDL_GetError())));
-		// SDL_SetRenderTarget(renderer, home.login);
-		// SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		// SDL_RenderClear(renderer);
+		SDL_SetRenderTarget(renderer, home.login);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
 
-		// SDL_Color lightBrown = {181, 101, 29, 255};
-		// SDL_Rect usernameField = {dim.window_width / 4, dim.window_height / 3, dim.window_width / 2, 40};
-		// SDL_Rect passwordField = {dim.window_width / 4, dim.window_height / 3 + 50, dim.window_width / 2, 40};
-		
-		// SDL_SetRenderDrawColor(renderer, lightBrown.r, lightBrown.g, lightBrown.b, lightBrown.a);
-    	// SDL_RenderFillRect(renderer, &usernameField);
-    	// SDL_RenderFillRect(renderer, &passwordField);
+		SDL_Color lightBrown = {181, 101, 29, 255};
 
-		// TTF_Font* font = TTF_OpenFont("./Fonts/CormorantGaramond-Bold.ttf", 24);  // Specify your font path and size
-		// if (!font)
-		// 	throw(std::runtime_error("Failed to load font: " + std::string(TTF_GetError())));
+		int fieldWidth = dim.window_width / 2;
+		int fieldHeight = 40;
+		int xPos = (dim.window_width - fieldWidth) / 2;
+		int yPos = (dim.window_height / 3);
+		SDL_Rect usernameField = {xPos, yPos, fieldWidth, fieldHeight};
+		SDL_Rect passwordField = {xPos, yPos + 50, fieldWidth, fieldHeight};
 
-		// SDL_Surface* usernameLabelSurface = TTF_RenderText_Solid(font, "Username:", lightBrown);
-		// SDL_Texture* usernameLabelTexture = SDL_CreateTextureFromSurface(renderer, usernameLabelSurface);
-		// SDL_Rect usernameLabelRect = {usernameField.x - 120, usernameField.y + 10, usernameLabelSurface->w, usernameLabelSurface->h};
-		// SDL_RenderCopy(renderer, usernameLabelTexture, NULL, &usernameLabelRect);
+		SDL_SetRenderDrawColor(renderer, lightBrown.r, lightBrown.g, lightBrown.b, lightBrown.a);
+		SDL_RenderFillRect(renderer, &usernameField);
+		SDL_RenderFillRect(renderer, &passwordField);
 
-		// SDL_Surface* passwordLabelSurface = TTF_RenderText_Solid(font, "Password:", lightBrown);
-		// SDL_Texture* passwordLabelTexture = SDL_CreateTextureFromSurface(renderer, passwordLabelSurface);
-		// SDL_Rect passwordLabelRect = {passwordField.x - 120, passwordField.y + 10, passwordLabelSurface->w, passwordLabelSurface->h};
-		// SDL_RenderCopy(renderer, passwordLabelTexture, NULL, &passwordLabelRect);
+		TTF_Font *font = TTF_OpenFont("./Fonts/CormorantGaramond-Bold.ttf", 24);
+		if (!font)
+			throw(std::runtime_error("Failed to load font: " + std::string(TTF_GetError())));
+
+		SDL_Surface *usernameLabelSurface = TTF_RenderText_Solid(font, "Username:", lightBrown);
+		SDL_Texture *usernameLabelTexture = SDL_CreateTextureFromSurface(renderer, usernameLabelSurface);
+		SDL_Rect usernameLabelRect = {xPos - 120, yPos + 10, usernameLabelSurface->w, usernameLabelSurface->h}; // Position label to the left of the field
+		SDL_RenderCopy(renderer, usernameLabelTexture, NULL, &usernameLabelRect);
+
+		SDL_Surface *passwordLabelSurface = TTF_RenderText_Solid(font, "Password:", lightBrown);
+		SDL_Texture *passwordLabelTexture = SDL_CreateTextureFromSurface(renderer, passwordLabelSurface);
+		SDL_Rect passwordLabelRect = {xPos - 120, yPos + 60, passwordLabelSurface->w, passwordLabelSurface->h}; // Position label to the left of the field
+		SDL_RenderCopy(renderer, passwordLabelTexture, NULL, &passwordLabelRect);
+
+		SDL_FreeSurface(usernameLabelSurface);
+		SDL_FreeSurface(passwordLabelSurface);
+		SDL_DestroyTexture(usernameLabelTexture);
+		SDL_DestroyTexture(passwordLabelTexture);
+
+		TTF_CloseFont(font);
+
+		SDL_SetRenderTarget(renderer, NULL);
+
+		SDL_Rect rect = {0, 0, dim.window_width, dim.window_height};
+
+		SDL_RenderCopy(renderer, home.background, NULL, &rect);
+
+		SDL_SetTextureBlendMode(home.login, SDL_BLENDMODE_BLEND);
+
+		SDL_RenderCopy(renderer, home.login, NULL, &rect);
 
 		return 0;
 	}
@@ -110,7 +133,7 @@ struct t_textures
 		if (!blackOverlay)
 			throw(std::runtime_error("Failed to create overlay texture: " + std::string(SDL_GetError())));
 
-		SDL_SetRenderTarget(renderer, blackOverlay); 
+		SDL_SetRenderTarget(renderer, blackOverlay);
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);
 		SDL_RenderClear(renderer);
@@ -372,14 +395,6 @@ void Events::clickPiece(const short x, const short y, bool &player_turn)
 
 void Events::eventHandler(const SDL_Event &e, bool &player_turn, bool &quit)
 {
-	// if(e.type == SDL_WINDOWEVENT) {
-	// 	if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
-	// 		dim->window_width = e.window.data1;
-	// 		dim->window_height = e.window.data2;
-	// 		dim->board = dim->window_width < dim->window_height ? dim->window_width : dim->window_height;
-	// 		dim->square = dim->board / 8;
-	// 	}
-	// }
 
 	if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 	{
