@@ -17,16 +17,16 @@ int main() {
 	connect(socketfd, (struct sockaddr *)&addr, sizeof(addr));
 
 	std::string http_request = "GET / HTTP/1.1\r\n"
-        "Host: 127.0.0.1:8000\r\n"
-        "Connection: close\r\n\r\n";
+		"Host: 127.0.0.1:8000\r\n"
+		"Connection: close\r\n\r\n";
 	send(socketfd, http_request.c_str(), http_request.length(), 0);
-   
-    char buffer[4096];
-    int bytes_read = 0;
-    while ((bytes_read = read(socketfd, buffer, sizeof(buffer) - 1)) > 0) {
-        buffer[bytes_read] = '\0'; // Null-terminate the buffer
-        printf("%s", buffer); // Print the response
-    }
+
+	char buffer[4096];
+	int bytes_read = 0;
+	while ((bytes_read = read(socketfd, buffer, sizeof(buffer) - 1)) > 0) {
+		buffer[bytes_read] = '\0'; // Null-terminate the buffer
+		printf("%s", buffer); // Print the response
+	}
 	
 	return 0;
 }
