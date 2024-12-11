@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
 
 public:
     MStackedWidgets* stackedWidgets;
+    void setWidget(const State& state);
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 

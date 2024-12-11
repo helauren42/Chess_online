@@ -13,6 +13,18 @@ MStackedWidgets::~MStackedWidgets() {
     delete signupWidget;
 }
 
+void MainWindow::setWidget(const State& state) {
+    switch (state) {
+    case LOGIN:
+        stackedWidgets->setCurrentWidget(stackedWidgets->loginWidget);
+        break;
+    case SIGNUP:
+        stackedWidgets->setCurrentWidget(stackedWidgets->signupWidget);
+    default:
+        break;
+    }
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -23,8 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidgets = new MStackedWidgets();
 
     setCentralWidget(stackedWidgets);
-
-    stackedWidgets->setCurrentWidget(stackedWidgets->signupWidget);
+    
+    this->setWidget(manager.state);
 }
 
 MainWindow::~MainWindow()

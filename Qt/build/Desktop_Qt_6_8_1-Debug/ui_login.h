@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -20,28 +21,36 @@ QT_BEGIN_NAMESPACE
 class Ui_login
 {
 public:
-    QLabel *label;
-    QLineEdit *lineEdit;
-    QLineEdit *lineEdit_2;
-    QLabel *label_2;
+    QLabel *LUsername;
+    QLineEdit *EUsername;
+    QLineEdit *EPassword;
+    QLabel *LPassword;
+    QPushButton *loginButton;
+    QPushButton *redirSignUp;
 
     void setupUi(QWidget *login)
     {
         if (login->objectName().isEmpty())
             login->setObjectName("login");
         login->resize(640, 480);
-        label = new QLabel(login);
-        label->setObjectName("label");
-        label->setGeometry(QRect(150, 170, 91, 41));
-        lineEdit = new QLineEdit(login);
-        lineEdit->setObjectName("lineEdit");
-        lineEdit->setGeometry(QRect(280, 180, 171, 25));
-        lineEdit_2 = new QLineEdit(login);
-        lineEdit_2->setObjectName("lineEdit_2");
-        lineEdit_2->setGeometry(QRect(280, 240, 171, 25));
-        label_2 = new QLabel(login);
-        label_2->setObjectName("label_2");
-        label_2->setGeometry(QRect(150, 230, 91, 41));
+        LUsername = new QLabel(login);
+        LUsername->setObjectName("LUsername");
+        LUsername->setGeometry(QRect(150, 170, 91, 41));
+        EUsername = new QLineEdit(login);
+        EUsername->setObjectName("EUsername");
+        EUsername->setGeometry(QRect(280, 180, 171, 25));
+        EPassword = new QLineEdit(login);
+        EPassword->setObjectName("EPassword");
+        EPassword->setGeometry(QRect(280, 240, 171, 25));
+        LPassword = new QLabel(login);
+        LPassword->setObjectName("LPassword");
+        LPassword->setGeometry(QRect(150, 230, 91, 41));
+        loginButton = new QPushButton(login);
+        loginButton->setObjectName("loginButton");
+        loginButton->setGeometry(QRect(250, 330, 89, 25));
+        redirSignUp = new QPushButton(login);
+        redirSignUp->setObjectName("redirSignUp");
+        redirSignUp->setGeometry(QRect(220, 70, 171, 25));
 
         retranslateUi(login);
 
@@ -51,9 +60,11 @@ public:
     void retranslateUi(QWidget *login)
     {
         login->setWindowTitle(QCoreApplication::translate("login", "Form", nullptr));
-        label->setText(QCoreApplication::translate("login", "username", nullptr));
-        lineEdit_2->setText(QString());
-        label_2->setText(QCoreApplication::translate("login", "password", nullptr));
+        LUsername->setText(QCoreApplication::translate("login", "username", nullptr));
+        EPassword->setText(QString());
+        LPassword->setText(QCoreApplication::translate("login", "password", nullptr));
+        loginButton->setText(QCoreApplication::translate("login", "Login", nullptr));
+        redirSignUp->setText(QCoreApplication::translate("login", "click here to sign up", nullptr));
     } // retranslateUi
 
 };

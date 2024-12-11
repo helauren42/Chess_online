@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="LUsername">
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -26,7 +26,7 @@
     <string>username</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="EUsername">
    <property name="geometry">
     <rect>
      <x>280</x>
@@ -36,7 +36,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="EPassword">
    <property name="geometry">
     <rect>
      <x>280</x>
@@ -49,7 +49,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="LPassword">
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -60,6 +60,32 @@
    </property>
    <property name="text">
     <string>password</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="loginButton">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>330</y>
+     <width>89</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Login</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="redirSignUp">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>70</y>
+     <width>171</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>click here to sign up</string>
    </property>
   </widget>
  </widget>

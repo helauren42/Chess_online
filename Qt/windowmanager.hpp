@@ -1,5 +1,5 @@
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef WINDOWMANAGER_HPP
+#define WINDOWMANAGER_HPP
 
 #include <QMainWindow>
 #include <QApplication>
@@ -49,4 +49,10 @@ struct Manager {
     Account account;
 };
 
-#endif // COMMON_H
+class WindowManager
+{
+public:
+    WindowManager();
+};
+
+#endif // WINDOWMANAGER_HPP
