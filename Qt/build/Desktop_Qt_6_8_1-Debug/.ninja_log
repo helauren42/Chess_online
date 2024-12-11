@@ -1,0 +1,9 @@
+# ninja log v5
+0	304	1733862714881980866	ChessQt_autogen/timestamp	1c6b3944663444f0
+0	304	1733862714881980866	ChessQt_autogen/mocs_compilation.cpp	1c6b3944663444f0
+0	304	1733862714881980866	/home/helauren/ChessQt/build/Desktop_Qt_6_8_1-Debug/ChessQt_autogen/timestamp	1c6b3944663444f0
+0	304	1733862714881980866	/home/helauren/ChessQt/build/Desktop_Qt_6_8_1-Debug/ChessQt_autogen/mocs_compilation.cpp	1c6b3944663444f0
+305	1972	1733862716553009236	CMakeFiles/ChessQt.dir/ChessQt_autogen/mocs_compilation.cpp.o	4870fe46724f8069
+305	1995	1733862716576009627	CMakeFiles/ChessQt.dir/main.cpp.o	549ccec0d37699b8
+305	2022	1733862716603010085	CMakeFiles/ChessQt.dir/mainwindow.cpp.o	fff3a91ae0e25318
+2022	2394	1733862716972016351	ChessQt	a5e5f53aaef7a391
