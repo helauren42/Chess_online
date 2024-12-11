@@ -313,7 +313,7 @@ TARGET        = Qt
 first: all
 ####### Build rules
 
-Qt: ui_login.h ui_mainwindow.h ui_signup.h $(OBJECTS)  
+Qt: ui_login.h ui_signup.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET)  $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../../Qt.pro /home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++/qmake.conf /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
@@ -808,7 +808,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../common.hpp ../../login.hpp ../../mainwindow.hpp ../../signup.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../signup.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../login.ui ../../mainwindow.ui ../../signup.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../login.ui ../../signup.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1444,16 +1444,12 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_login.h ui_mainwindow.h ui_signup.h
+compiler_uic_make_all: ui_login.h ui_signup.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_login.h ui_mainwindow.h ui_signup.h
+	-$(DEL_FILE) ui_login.h ui_signup.h
 ui_login.h: ../../login.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../login.ui -o ui_login.h
-
-ui_mainwindow.h: ../../mainwindow.ui \
-		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../mainwindow.ui -o ui_mainwindow.h
 
 ui_signup.h: ../../signup.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
@@ -2298,7 +2294,15 @@ signup.o: ../../signup.cpp ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		ui_signup.h
+		ui_signup.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o signup.o ../../signup.cpp
 
 moc_login.o: moc_login.cpp 

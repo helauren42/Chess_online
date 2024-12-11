@@ -22,7 +22,6 @@ HEADERS += \
 
 FORMS += \
     login.ui \
-    mainwindow.ui \
     signup.ui
 
 # Default rules for deployment.
