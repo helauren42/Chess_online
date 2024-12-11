@@ -6,7 +6,7 @@
 #include <QScreen>
 #include <QWindow>
 #include <QWidget>
-
+#include <QStackedWidget>
 
 struct t_dim {
     QRect screenGeometry;
