@@ -12,12 +12,3 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-void MainWindow::on_submit_clicked()
-{
-    QString firstName = ui->firstText->toPlainText();
-    QString lastName = ui->lastText->toPlainText();
-
-    this->close();
-}
-

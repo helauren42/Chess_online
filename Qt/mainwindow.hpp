@@ -1,22 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QApplication>
-#include <QScreen>
-#include <QWindow>
-
-struct t_dim {
-    QRect screenGeometry;
-    short board;
-
-    t_dim() {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        screenGeometry = screen->geometry();
-        board = screenGeometry.height();
-    }
-    ~t_dim() {}
-};
+#include "common.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,7 +18,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_submit_clicked();
 
 private:
     Ui::MainWindow *ui;

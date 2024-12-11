@@ -30,7 +30,6 @@ public:
     QTextEdit *lastText;
     QLabel *firstName;
     QLabel *lastName;
-    QTextEdit *result;
     QStatusBar *statusbar;
     QMenuBar *menuBar;
 
@@ -38,7 +37,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(638, 392);
+        MainWindow->resize(668, 399);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         submit = new QPushButton(centralwidget);
@@ -56,17 +55,13 @@ public:
         lastName = new QLabel(centralwidget);
         lastName->setObjectName("lastName");
         lastName->setGeometry(QRect(110, 180, 131, 41));
-        result = new QTextEdit(centralwidget);
-        result->setObjectName("result");
-        result->setGeometry(QRect(100, 320, 471, 70));
-        result->setReadOnly(true);
         MainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName("menuBar");
-        menuBar->setGeometry(QRect(0, 0, 638, 22));
+        menuBar->setGeometry(QRect(0, 0, 668, 22));
         MainWindow->setMenuBar(menuBar);
 
         retranslateUi(MainWindow);
