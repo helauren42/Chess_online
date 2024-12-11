@@ -13,7 +13,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
@@ -31,7 +30,6 @@ public:
     QLabel *firstName;
     QLabel *lastName;
     QStatusBar *statusbar;
-    QMenuBar *menuBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -59,10 +57,6 @@ public:
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
-        menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName("menuBar");
-        menuBar->setGeometry(QRect(0, 0, 668, 22));
-        MainWindow->setMenuBar(menuBar);
 
         retranslateUi(MainWindow);
 
