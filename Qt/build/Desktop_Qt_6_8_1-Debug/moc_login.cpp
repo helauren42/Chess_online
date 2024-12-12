@@ -42,7 +42,6 @@ static constexpr auto qt_meta_stringdata_ZN5loginE = QtMocHelpers::stringData(
     "",
     "sigFaultyLogin",
     "sigRedirSignup",
-    "sigRedirMenu",
     "on_loginButton_clicked",
     "on_redirSignUp_clicked"
 );
@@ -56,25 +55,23 @@ Q_CONSTINIT static const uint qt_meta_data_ZN5loginE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   50,    2, 0x06,    1 /* Public */,
-       3,    0,   51,    2, 0x06,    2 /* Public */,
-       4,    0,   52,    2, 0x06,    3 /* Public */,
-       5,    0,   53,    2, 0x06,    4 /* Public */,
+       1,    0,   44,    2, 0x06,    1 /* Public */,
+       3,    0,   45,    2, 0x06,    2 /* Public */,
+       4,    0,   46,    2, 0x06,    3 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       6,    0,   54,    2, 0x08,    5 /* Private */,
-       7,    0,   55,    2, 0x08,    6 /* Private */,
+       5,    0,   47,    2, 0x08,    4 /* Private */,
+       6,    0,   48,    2, 0x08,    5 /* Private */,
 
  // signals: parameters
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -101,8 +98,6 @@ Q_CONSTINIT const QMetaObject login::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'sigRedirSignup'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'sigRedirMenu'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_loginButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_redirSignUp_clicked'
@@ -119,9 +114,8 @@ void login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         case 0: _t->sigValidLogin(); break;
         case 1: _t->sigFaultyLogin(); break;
         case 2: _t->sigRedirSignup(); break;
-        case 3: _t->sigRedirMenu(); break;
-        case 4: _t->on_loginButton_clicked(); break;
-        case 5: _t->on_redirSignUp_clicked(); break;
+        case 3: _t->on_loginButton_clicked(); break;
+        case 4: _t->on_redirSignUp_clicked(); break;
         default: ;
         }
     }
@@ -148,13 +142,6 @@ void login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
                 return;
             }
         }
-        {
-            using _q_method_type = void (login::*)();
-            if (_q_method_type _q_method = &login::sigRedirMenu; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
-                *result = 3;
-                return;
-            }
-        }
     }
 }
 
@@ -177,14 +164,14 @@ int login::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 5;
     }
     return _id;
 }
@@ -205,11 +192,5 @@ void login::sigFaultyLogin()
 void login::sigRedirSignup()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
-}
-
-// SIGNAL 3
-void login::sigRedirMenu()
-{
-    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 QT_WARNING_POP
