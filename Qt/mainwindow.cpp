@@ -49,12 +49,12 @@ void MainWindow::onOpenMenu() {
 }
 
 void MainWindow::onLaunchGame() {
-    qDebug() << "launching game widget";
+    qDebug() << "pre launch game widget";
     this->setWindowTitle("Game");
-    this->showMaximized();
-
-    this->setFixedSize(this->size());
+    // this->showMaximized();
     stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
+    // sigStartGame();
+    qDebug() << "launching game widget";
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -63,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("Login");
+    // this->setFixedSize(this->size());
 
     stackedWidgets = new MStackedWidgets();
 
@@ -81,7 +82,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Menu
     connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
 
+    // Game
     connect(stackedWidgets->widMenu, &Menu::sigLauchGame, this, &MainWindow::onLaunchGame);
+    // connect(this, &MainWindow::sigStartGame, stackedWidgets->widGame, &Game::onStart);
 }
 
 MainWindow::~MainWindow()

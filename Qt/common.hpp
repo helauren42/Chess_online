@@ -19,18 +19,12 @@ enum GameMode {
     ONLINE
 };
 
-// struct t_dim {
-//     QRect screenGeometry;
-//     short board;
-//     short x_mid;
+struct t_dim {
+    short board;
+    short x_mid;
 
-//     t_dim() {
-//         QScreen *screen = QGuiApplication::primaryScreen();
-//         screenGeometry = screen->geometry();
-//         board = screenGeometry.height();
-//     }
-//     ~t_dim() {}
-// };
+    ~t_dim() {}
+};
 
 struct Date {
     int day;
@@ -64,5 +58,13 @@ struct SharedData {
         gameInfo = nullptr;
     }
 };
+
+// void clearWidget(QWidget* widget) {
+//     QList<QWidget*> children = widget->findChildren<QWidget*>();
+
+//     for (QWidget* child : children) {
+//         delete child;
+//     }
+// };
 
 #endif

@@ -34,6 +34,7 @@ public:
 
 signals:
     void sigOpenMenu();
+    void sigStartGame();
 
 private slots:
     void onSigLogin();
