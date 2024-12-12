@@ -55,15 +55,19 @@ OBJECTS_DIR   = ./
 SOURCES       = ../../login.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
+		../../menu.cpp \
 		../../signup.cpp moc_login.cpp \
 		moc_mainwindow.cpp \
+		moc_menu.cpp \
 		moc_signup.cpp
 OBJECTS       = login.o \
 		main.o \
 		mainwindow.o \
+		menu.o \
 		signup.o \
 		moc_login.o \
 		moc_mainwindow.o \
+		moc_menu.o \
 		moc_signup.o
 DIST          = /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/helauren/Qt/6.8.1/gcc_64/mkspecs/common/unix.conf \
@@ -301,9 +305,11 @@ DIST          = /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt.pro ../../common.hpp \
 		../../login.hpp \
 		../../mainwindow.hpp \
+		../../menu.h \
 		../../signup.hpp ../../login.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
+		../../menu.cpp \
 		../../signup.cpp
 QMAKE_TARGET  = Qt
 DESTDIR       = 
@@ -313,7 +319,7 @@ TARGET        = Qt
 first: all
 ####### Build rules
 
-Qt: ui_login.h ui_mainwindow.h ui_signup.h $(OBJECTS)  
+Qt: ui_login.h ui_mainwindow.h ui_menu.h ui_signup.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET)  $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../../Qt.pro /home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++/qmake.conf /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
@@ -806,9 +812,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../common.hpp ../../login.hpp ../../mainwindow.hpp ../../signup.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../signup.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../login.ui ../../mainwindow.ui ../../signup.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../common.hpp ../../login.hpp ../../mainwindow.hpp ../../menu.h ../../signup.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../menu.cpp ../../signup.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../login.ui ../../mainwindow.ui ../../menu.ui ../../signup.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -840,9 +846,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -dM -E -o moc_predefs.h /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_login.cpp moc_mainwindow.cpp moc_signup.cpp
+compiler_moc_header_make_all: moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_signup.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_login.cpp moc_mainwindow.cpp moc_signup.cpp
+	-$(DEL_FILE) moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_signup.cpp
 moc_login.cpp: ../../login.hpp \
 		../../common.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
@@ -1266,6 +1272,199 @@ moc_mainwindow.cpp: ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.hpp -o moc_mainwindow.cpp
 
+moc_menu.cpp: ../../menu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtversionchecks.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtconfiginclude.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qconfig.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtcore-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtconfigmacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationdefinitions.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtcoreexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qassert.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtypes.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtversion.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsysinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlogging.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcompare_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qatomic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qyieldcpu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qconstructormacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdarwinhelpers.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qforeach.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qttypetraits.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfunctionpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmalloc.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qminmax.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnumeric.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qoverload.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qswap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtresource.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qttranslation.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qversiontagging.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtgui-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcompare.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcomparehelpers.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20type_traits.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtmetamacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfunctionaltools_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobject.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstring.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qchar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearray.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qrefcount.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qarraydata.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qpair.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qarraydatapointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qarraydataops.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qxptype_traits.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20memory.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringfwd.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringliteral.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlatin1stringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qanystringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qutf8stringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringtokenizer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringconverter.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringconverter_base.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlist.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiterator.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringlist.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qalgorithms.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcoreevent.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmetatype.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatastream.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiodevicebase.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfloat16.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmath.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiterable.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmetacontainer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontainerinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtaggedpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qscopeguard.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobject_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbindingstorage.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmargins.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q23utility.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qaction.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qkeysequence.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qicon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsize.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpixmap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qrect.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qpoint.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qcolor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qrgb.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qrgba64.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qshareddata.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qimage.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpixelformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtransform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpolygon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qregion.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qspan.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qline.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qvariant.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdebug.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtextstream.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qshareddata_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qset.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qhash.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpalette.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qbrush.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qfont.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qendian.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qfontinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qcursor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qbitmap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qevent.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiodevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qurl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qeventpoint.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qvector2d.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qvectornd.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpointingdevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputdevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qscreen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QList \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QObject \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QRect \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QSize \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QSizeF \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QTransform \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnativeinterface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qscreen_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdeadlinetimer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qelapsedtimer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qeventloop.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcoreapplication_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfuture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfutureinterface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmutex.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtsan_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qresultstore.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfuture_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qthreadpool.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qthread.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qrunnable.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qexception.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qpromise.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		moc_predefs.h \
+		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menu.h -o moc_menu.cpp
+
 moc_signup.cpp: ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
@@ -1482,9 +1681,9 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_login.h ui_mainwindow.h ui_signup.h
+compiler_uic_make_all: ui_login.h ui_mainwindow.h ui_menu.h ui_signup.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_login.h ui_mainwindow.h ui_signup.h
+	-$(DEL_FILE) ui_login.h ui_mainwindow.h ui_menu.h ui_signup.h
 ui_login.h: ../../login.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../login.ui -o ui_login.h
@@ -1492,6 +1691,10 @@ ui_login.h: ../../login.ui \
 ui_mainwindow.h: ../../mainwindow.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../mainwindow.ui -o ui_mainwindow.h
+
+ui_menu.h: ../../menu.ui \
+		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../menu.ui -o ui_menu.h
 
 ui_signup.h: ../../signup.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
@@ -2152,8 +2355,206 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMenuBar \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmenu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStatusBar \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstatusbar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
+
+menu.o: ../../menu.cpp ../../menu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtversionchecks.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtconfiginclude.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qconfig.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtcore-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtconfigmacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationdefinitions.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtcoreexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qassert.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtypes.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtversion.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsysinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlogging.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcompare_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qatomic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qyieldcpu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qconstructormacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdarwinhelpers.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qforeach.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qttypetraits.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfunctionpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmalloc.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qminmax.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnumeric.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qoverload.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qswap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtresource.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qttranslation.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qversiontagging.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtgui-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcompare.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcomparehelpers.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20type_traits.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtmetamacros.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfunctionaltools_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobject.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstring.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qchar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearray.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qrefcount.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qarraydata.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qpair.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qarraydatapointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qarraydataops.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qxptype_traits.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20memory.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringfwd.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringliteral.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlatin1stringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qanystringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qutf8stringview.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringtokenizer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringconverter.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringconverter_base.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlist.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiterator.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringlist.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qalgorithms.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcoreevent.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmetatype.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatastream.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiodevicebase.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfloat16.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmath.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiterable.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmetacontainer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontainerinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtaggedpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qscopeguard.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobject_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qbindingstorage.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmargins.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q23utility.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qaction.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qkeysequence.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qicon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsize.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpixmap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qrect.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qpoint.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qcolor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qrgb.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qrgba64.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qshareddata.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qimage.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpixelformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtransform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpolygon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qregion.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qspan.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qline.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qvariant.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdebug.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtextstream.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qshareddata_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qset.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qhash.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpalette.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qbrush.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qfont.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qendian.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qfontinfo.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qcursor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qbitmap.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qevent.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qiodevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qurl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qeventpoint.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qvector2d.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qvectornd.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpointingdevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputdevice.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qscreen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QList \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QObject \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QRect \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QSize \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QSizeF \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QTransform \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnativeinterface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qscreen_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdeadlinetimer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qelapsedtimer.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qeventloop.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcoreapplication_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfuture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfutureinterface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qmutex.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtsan_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qresultstore.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfuture_impl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qthreadpool.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qthread.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qrunnable.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qexception.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qpromise.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		ui_menu.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu.o ../../menu.cpp
 
 signup.o: ../../signup.cpp ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
@@ -2391,6 +2792,9 @@ moc_login.o: moc_login.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_menu.o: moc_menu.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menu.o moc_menu.cpp
 
 moc_signup.o: moc_signup.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_signup.o moc_signup.cpp

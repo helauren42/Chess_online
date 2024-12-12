@@ -27,9 +27,11 @@ private:
     Ui::login *ui;
 
 signals:
-    void sigRedirSignup();
     void sigValidLogin();
     void sigFaultyLogin();
+
+    void sigRedirSignup();
+    void sigRedirMenu();
 };
 
 #endif // LOGIN_H

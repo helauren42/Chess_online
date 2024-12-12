@@ -1,12 +1,22 @@
 #include "mainwindow.hpp"
 #include <QDebug>
+#include <QFile>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w(nullptr);
-    w.show();
+    QFile file(":styles.qss");
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Failed to open stylesheet file";
+        return -1;
+    }
 
-    a.exec();
+    QString stylesheet = file.readAll();
+
+    QApplication app(argc, argv);
+    app.setStyleSheet(stylesheet);
+    MainWindow window(nullptr);
+    window.show();
+
+    app.exec();
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "common.hpp"
 #include "login.hpp"
 #include "signup.hpp"
+#include "menu.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -13,8 +14,9 @@ QT_END_NAMESPACE
 
 class MStackedWidgets : public QStackedWidget {
 public:
-    login* loginWidget;
-    signup* signupWidget;
+    login* widLogin;
+    signup* widSignup;
+    Menu* widMenu;
     MStackedWidgets();
     ~MStackedWidgets();
 };
@@ -34,6 +36,8 @@ private slots:
     void onFaultyLogin();
 
     void onSigSignup();
+
+    void onOpenMenu();
 
 private:
     Ui::MainWindow *ui;

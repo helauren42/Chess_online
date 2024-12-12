@@ -12,17 +12,20 @@ SOURCES += \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
+    menu.cpp \
     signup.cpp
 
 HEADERS += \
     common.hpp \
     login.hpp \
     mainwindow.hpp \
+    menu.hpp \
     signup.hpp
 
 FORMS += \
     login.ui \
     mainwindow.ui \
+    menu.ui \
     signup.ui
 
 # Default rules for deployment.
