@@ -10,6 +10,9 @@
 
 #include <memory>
 
+struct SharedData;
+extern SharedData shared_data;
+
 enum GameMode {
     HOTSEAT,
     AI,
@@ -39,23 +42,27 @@ struct Account {
     std::string username;
     std::string password;
     Date dob;
+    void set(const std::string& _username, const std::string& _password) {
+        username = _username;
+        password = _password;
+    }
 };
 
 struct GameInfo {
     GameMode mode;
     std::string opponent;
+    void set(GameMode _mode, std::string _opponent) {
+        mode = _mode;
+        opponent = _opponent;
+    };
 };
 
-class SharedData {
-private:
+struct SharedData {
     Account account;
-    std::unique_ptr<GameInfo> gameInfo = nullptr;
-public:
-    void setGameInfo(GameMode _mode, std::string _opponent) {
-        gameInfo = std::make_unique<GameInfo>();
-        gameInfo->mode = _mode;
-        gameInfo->opponent = _opponent;
-    };
+    std::unique_ptr<GameInfo> gameInfo = std::make_unique<GameInfo>();
+    void destroyGameInfo() {
+        gameInfo = nullptr;
+    }
 };
 
 #endif
