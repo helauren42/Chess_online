@@ -429,6 +429,8 @@ public:
 		return false;
 	}
 
+	// add is stalemate
+
 	bool isImmobilized(Pieces *piece)
 	{
 		Pos piece_pos = piece->getPosition();

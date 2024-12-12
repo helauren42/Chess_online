@@ -63,8 +63,6 @@ private:
 	bool player_turn = WHITE;
 	WINNER winner = COLOR_NONE;
 	Board board;
-	t_textures textures;
-	Events events;
 	t_dim dim;
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
@@ -74,84 +72,6 @@ public:
 	~Game() {};
 	void	setLoggerFd(const int fd) {
 		logger_fd = fd;
-	}
-	bool initSDL()
-	{
-		if(TTF_Init()) {
-			printf("TTF could not initialize!\n");
-			return 1;
-		}
-		if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		{
-			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-			return 1;
-		}
-		window = initWindow(dim);
-		if (!window)
-		{
-			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			SDL_Quit();
-			return 1;
-		}
-
-		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-		if (!renderer)
-		{
-			printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
-			SDL_DestroyWindow(window);
-			SDL_Quit();
-			return 1;
-		}
-
-		if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-		{
-			printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-			SDL_DestroyRenderer(renderer);
-			SDL_DestroyWindow(window);
-			SDL_Quit();
-			return 1;
-		}
-		return 0;
-	}
-
-	int initFoundationTextures()
-	{
-		if (textures.initSquares(renderer) || textures.initPieces(renderer) || textures.initChessBoard(renderer, textures.darkSquare, textures.lightSquare, dim)
-			|| textures.initHomeBackground(renderer, dim) || textures.initHomeLogin(renderer, dim))
-			return -1;
-		return 0;
-	}
-
-	void initData()
-	{
-		events.setBoard(board);
-		events.setDim(dim);
-		board.setDim(dim);
-	}
-
-	void freeing(SDL_Renderer *renderer, SDL_Window *window)
-	{
-		SDL_DestroyTexture(textures.b_pawn);
-		SDL_DestroyTexture(textures.b_rook);
-		SDL_DestroyTexture(textures.b_knight);
-		SDL_DestroyTexture(textures.b_bishop);
-		SDL_DestroyTexture(textures.b_queen);
-		SDL_DestroyTexture(textures.b_king);
-		SDL_DestroyTexture(textures.w_pawn);
-		SDL_DestroyTexture(textures.w_rook);
-		SDL_DestroyTexture(textures.w_knight);
-		SDL_DestroyTexture(textures.w_bishop);
-		SDL_DestroyTexture(textures.w_queen);
-		SDL_DestroyTexture(textures.w_king);
-		SDL_DestroyTexture(textures.darkSquare);
-		SDL_DestroyTexture(textures.lightSquare);
-		SDL_DestroyTexture(textures.board);
-
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		IMG_Quit();
-		TTF_Quit();
-		SDL_Quit();
 	}
 
 	bool gameEnd()
@@ -183,25 +103,21 @@ public:
 		while (!quit)
 		{
 			SDL_Rect rect = {0, 0, dim.board, dim.board};
-			while (SDL_PollEvent(&e) != 0)
-			{
-				events.eventHandler(e, player_turn, quit);
-			}
-			SDL_RenderClear(renderer);
-			SDL_RenderCopy(renderer, textures.board, NULL, &rect);
-			if (board.getSelectedPiece())
-			{
-				textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
-				SDL_RenderCopy(renderer, textures.selected, NULL, &rect);
-			}
-			else if (textures.selected)
-			{
-				SDL_DestroyTexture(textures.selected);
-				textures.selected = nullptr;
-			}
-			textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
-			SDL_RenderCopy(renderer, textures.pieces, NULL, &rect);
-			SDL_RenderPresent(renderer);
+			// while (SDL_PollEvent(&e) != 0)
+			// {
+			// 	events.eventHandler(e, player_turn, quit);
+			// }
+			// if (board.getSelectedPiece())
+			// {
+			// 	textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
+			// 	SDL_RenderCopy(renderer, textures.selected, NULL, &rect);
+			// }
+			// else if (textures.selected)
+			// {
+			// 	SDL_DestroyTexture(textures.selected);
+			// 	textures.selected = nullptr;
+			// }
+			// textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
 			if (board.getMoved() == true)
 			{
 				if (gameEnd() == true)
@@ -223,24 +139,6 @@ public:
 			else
 				out("STALEMATE\n");
 			SDL_Delay(640);
-		}
-	}
-
-	void home()
-	{
-		SDL_Event e;
-		bool quit = false;
-		while(!quit) {
-			SDL_Rect rect = {0, 0, dim.window_width, dim.window_height};
-			while (SDL_PollEvent(&e) != 0)
-			{
-				events.eventHandler(e, player_turn, quit);
-			}
-			SDL_RenderClear(renderer);
-			SDL_RenderCopy(renderer, textures.home.background, NULL, &rect);
-			SDL_RenderCopy(renderer, textures.home.login, NULL, &rect);
-			SDL_RenderPresent(renderer);
-			SDL_Delay(64);
 		}
 	}
 
