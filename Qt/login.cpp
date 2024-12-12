@@ -14,6 +14,14 @@ login::~login()
     delete ui;
 }
 
+void login::setFaultyState() {
+    this->ui->state->setText("Input invalid");
+
+    QPalette palette = this->ui->state->palette();
+    palette.setColor(QPalette::WindowText, Qt::red);
+    this->ui->state->setPalette(palette);
+}
+
 void login::on_loginButton_clicked()
 {
     this->username = this->ui->EUsername->text();

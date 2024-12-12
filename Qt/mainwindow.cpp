@@ -18,6 +18,17 @@ void    MainWindow::onSigLogin() {
     this->setWindowTitle("Login");
 }
 
+void    MainWindow::onValidLogin() {
+    stackedWidgets->setCurrentWidget(stackedWidgets->loginWidget);
+    qDebug() << "login succesfull";
+}
+
+void    MainWindow::onFaultyLogin() {
+    stackedWidgets->setCurrentWidget(stackedWidgets->loginWidget);
+    this->stackedWidgets->loginWidget->setFaultyState();
+    qDebug() << "login failed";
+}
+
 void    MainWindow::onSigSignup() {
     stackedWidgets->setCurrentWidget(stackedWidgets->signupWidget);
     this->setWindowTitle("Sign up");
@@ -37,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent)
     stackedWidgets->setCurrentWidget(stackedWidgets->loginWidget);
 
     connect(stackedWidgets->loginWidget, &login::sigRedirSignup, this, &MainWindow::onSigSignup);
+    connect(stackedWidgets->loginWidget, &login::sigValidLogin, this, &MainWindow::onValidLogin);
+    connect(stackedWidgets->loginWidget, &login::sigFaultyLogin, this, &MainWindow::onFaultyLogin);
+
     connect(stackedWidgets->signupWidget, &signup::sigRedirLogin, this, &MainWindow::onSigLogin);
 
 }

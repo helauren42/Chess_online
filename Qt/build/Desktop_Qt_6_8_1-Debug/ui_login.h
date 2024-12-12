@@ -27,6 +27,7 @@ public:
     QLabel *LPassword;
     QPushButton *loginButton;
     QPushButton *redirSignUp;
+    QLabel *state;
 
     void setupUi(QWidget *login)
     {
@@ -51,6 +52,9 @@ public:
         redirSignUp = new QPushButton(login);
         redirSignUp->setObjectName("redirSignUp");
         redirSignUp->setGeometry(QRect(220, 80, 171, 25));
+        state = new QLabel(login);
+        state->setObjectName("state");
+        state->setGeometry(QRect(230, 290, 141, 17));
 
         retranslateUi(login);
 
@@ -65,6 +69,7 @@ public:
         LPassword->setText(QCoreApplication::translate("login", "password", nullptr));
         loginButton->setText(QCoreApplication::translate("login", "Login", nullptr));
         redirSignUp->setText(QCoreApplication::translate("login", "click here to sign up", nullptr));
+        state->setText(QString());
     } // retranslateUi
 
 };

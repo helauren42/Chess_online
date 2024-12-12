@@ -20,7 +20,6 @@ public:
 
 private slots:
     void on_signUpButton_clicked();
-
     void on_redirLogIn_clicked();
 
 private:

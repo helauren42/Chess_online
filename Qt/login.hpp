@@ -15,6 +15,7 @@ class login : public QWidget
 public:
     explicit login(QWidget *parent = nullptr);
     ~login();
+    void setFaultyState();
 
 private slots:
     void on_loginButton_clicked();

@@ -29,8 +29,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void onSigSignup();
     void onSigLogin();
+    void onValidLogin();
+    void onFaultyLogin();
+
+    void onSigSignup();
 
 private:
     Ui::MainWindow *ui;
