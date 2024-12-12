@@ -51,7 +51,7 @@ struct Account {
 struct GameInfo {
     GameMode mode;
     std::string opponent;
-    void set(GameMode _mode, std::string _opponent) {
+    void set(const GameMode &_mode, const std::string& _opponent) {
         mode = _mode;
         opponent = _opponent;
     };
