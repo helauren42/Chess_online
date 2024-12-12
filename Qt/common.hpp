@@ -59,12 +59,4 @@ struct SharedData {
     }
 };
 
-// void clearWidget(QWidget* widget) {
-//     QList<QWidget*> children = widget->findChildren<QWidget*>();
-
-//     for (QWidget* child : children) {
-//         delete child;
-//     }
-// };
-
 #endif

@@ -14,10 +14,8 @@ void Game::MakeChessBoard() {
         }
     }
 
-
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
-            qDebug() << row * 8 + col;
             QLabel* square = squares[row * 8 + col];
 
             square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
