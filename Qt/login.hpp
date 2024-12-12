@@ -31,7 +31,6 @@ signals:
     void sigFaultyLogin();
 
     void sigRedirSignup();
-    void sigRedirMenu();
 };
 
 #endif // LOGIN_H

@@ -5,6 +5,7 @@
 #include "login.hpp"
 #include "signup.hpp"
 #include "menu.hpp"
+#include "game.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,6 +18,7 @@ public:
     login* widLogin;
     signup* widSignup;
     Menu* widMenu;
+    Game* widGame;
     MStackedWidgets();
     ~MStackedWidgets();
 };
@@ -30,6 +32,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void sigOpenMenu();
+
 private slots:
     void onSigLogin();
     void onValidLogin();
@@ -38,6 +43,7 @@ private slots:
     void onSigSignup();
 
     void onOpenMenu();
+    void onLaunchGame();
 
 private:
     Ui::MainWindow *ui;

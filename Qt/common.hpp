@@ -19,18 +19,18 @@ enum GameMode {
     ONLINE
 };
 
-struct t_dim {
-    QRect screenGeometry;
-    short board;
-    short x_mid;
+// struct t_dim {
+//     QRect screenGeometry;
+//     short board;
+//     short x_mid;
 
-    t_dim() {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        screenGeometry = screen->geometry();
-        board = screenGeometry.height();
-    }
-    ~t_dim() {}
-};
+//     t_dim() {
+//         QScreen *screen = QGuiApplication::primaryScreen();
+//         screenGeometry = screen->geometry();
+//         board = screenGeometry.height();
+//     }
+//     ~t_dim() {}
+// };
 
 struct Date {
     int day;
@@ -51,7 +51,7 @@ struct Account {
 struct GameInfo {
     GameMode mode;
     std::string opponent;
-    void set(const GameMode &_mode, const std::string& _opponent) {
+    void set(const GameMode &_mode, const std::string _opponent = "") {
         mode = _mode;
         opponent = _opponent;
     };

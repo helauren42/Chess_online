@@ -5,14 +5,18 @@ MStackedWidgets::MStackedWidgets() {
     widLogin = new login();
     widSignup = new signup();
     widMenu = new Menu();
+    widGame = new Game();
     this->addWidget(widLogin);
     this->addWidget(widSignup);
     this->addWidget(widMenu);
+    this->addWidget(widGame);
 }
 
 MStackedWidgets::~MStackedWidgets() {
     delete widLogin;
     delete widSignup;
+    delete widMenu;
+    delete widGame;
 }
 
 void    MainWindow::onSigLogin() {
@@ -23,6 +27,7 @@ void    MainWindow::onSigLogin() {
 void    MainWindow::onValidLogin() {
     stackedWidgets->setCurrentWidget(stackedWidgets->widLogin);
     qDebug() << "login succesfull";
+    emit this->sigOpenMenu();
 }
 
 void    MainWindow::onFaultyLogin() {
@@ -43,6 +48,15 @@ void MainWindow::onOpenMenu() {
     qDebug() << "on open menu";
 }
 
+void MainWindow::onLaunchGame() {
+    qDebug() << "launching game widget";
+    this->setWindowTitle("Game");
+    this->showMaximized();
+
+    this->setFixedSize(this->size());
+    stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -61,13 +75,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(stackedWidgets->widLogin, &login::sigValidLogin, this, &MainWindow::onValidLogin);
     connect(stackedWidgets->widLogin, &login::sigFaultyLogin, this, &MainWindow::onFaultyLogin);
 
-    connect(stackedWidgets->widLogin, &login::sigRedirMenu, this, &MainWindow::onOpenMenu);
-
     // Signup
     connect(stackedWidgets->widSignup, &signup::sigRedirLogin, this, &MainWindow::onSigLogin);
 
     // Menu
+    connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
 
+    connect(stackedWidgets->widMenu, &Menu::sigLauchGame, this, &MainWindow::onLaunchGame);
 }
 
 MainWindow::~MainWindow()

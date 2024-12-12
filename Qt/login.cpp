@@ -28,6 +28,7 @@ void login::on_loginButton_clicked()
     this->password = this->ui->EPassword->text();
     qDebug() << "username: " << this->username << "\n";
     qDebug() << "password: " << this->password << "\n";
+    shared_data.account.set(this->username.toStdString(), this->password.toStdString());
     if(this->username != "" && this->password != "")
         emit this->sigValidLogin();
     else
@@ -38,4 +39,3 @@ void login::on_redirSignUp_clicked()
 {
     emit sigRedirSignup();
 }
-

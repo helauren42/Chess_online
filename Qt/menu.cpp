@@ -12,3 +12,10 @@ Menu::~Menu()
 {
     delete ui;
 }
+
+void Menu::on_hotseat_clicked()
+{
+    shared_data.gameInfo->set(GameMode::HOTSEAT, "");
+    this->sigLauchGame();
+}
+

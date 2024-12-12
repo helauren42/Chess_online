@@ -6,18 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>638</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="AI">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>130</y>
+     <x>380</x>
+     <y>160</y>
      <width>151</width>
      <height>25</height>
     </rect>
@@ -26,24 +26,11 @@
     <string>Single Player(vs AI)</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>130</y>
-     <width>151</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>2 players</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="Llocal">
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>60</y>
+     <y>90</y>
      <width>41</width>
      <height>31</height>
     </rect>
@@ -52,11 +39,11 @@
     <string>Local</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="Lonline">
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>240</y>
+     <y>300</y>
      <width>71</width>
      <height>31</height>
     </rect>
@@ -68,8 +55,8 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>290</y>
+     <x>390</x>
+     <y>360</y>
      <width>151</width>
      <height>25</height>
     </rect>
@@ -81,8 +68,8 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>290</y>
+     <x>120</x>
+     <y>360</y>
      <width>141</width>
      <height>25</height>
     </rect>
@@ -92,7 +79,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>30</y>
+     <y>40</y>
      <width>641</width>
      <height>20</height>
     </rect>
@@ -105,13 +92,26 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>220</y>
+     <y>250</y>
      <width>641</width>
      <height>20</height>
     </rect>
    </property>
    <property name="orientation">
     <enum>Qt::Orientation::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="hotseat">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>160</y>
+     <width>151</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>2 player(hotseat)</string>
    </property>
   </widget>
  </widget>
