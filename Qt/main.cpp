@@ -1,10 +1,12 @@
 #include "mainwindow.hpp"
 #include <QDebug>
 #include <QFile>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
-    QFile file(":styles.qss");
+    qDebug() << QDir::currentPath();
+    QFile file("../../styles.qss");
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Failed to open stylesheet file";
         return -1;

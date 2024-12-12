@@ -305,7 +305,7 @@ DIST          = /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt.pro ../../common.hpp \
 		../../login.hpp \
 		../../mainwindow.hpp \
-		../../menu.h \
+		../../menu.hpp \
 		../../signup.hpp ../../login.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
@@ -812,7 +812,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../common.hpp ../../login.hpp ../../mainwindow.hpp ../../menu.h ../../signup.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../common.hpp ../../login.hpp ../../mainwindow.hpp ../../menu.hpp ../../signup.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../menu.cpp ../../signup.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../login.ui ../../mainwindow.ui ../../menu.ui ../../signup.ui $(DISTDIR)/
 
@@ -1268,11 +1268,12 @@ moc_mainwindow.cpp: ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../menu.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.hpp -o moc_mainwindow.cpp
 
-moc_menu.cpp: ../../menu.h \
+moc_menu.cpp: ../../menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1463,7 +1464,7 @@ moc_menu.cpp: ../../menu.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menu.h -o moc_menu.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menu.hpp -o moc_menu.cpp
 
 moc_signup.cpp: ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
@@ -2142,7 +2143,11 @@ main.o: ../../main.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug
+		../../menu.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QFile \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfile.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfiledevice.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
@@ -2355,6 +2360,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../menu.hpp \
 		ui_mainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMenuBar \
@@ -2364,7 +2370,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstatusbar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
-menu.o: ../../menu.cpp ../../menu.h \
+menu.o: ../../menu.cpp ../../menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2553,7 +2559,10 @@ menu.o: ../../menu.cpp ../../menu.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		ui_menu.h
+		ui_menu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu.o ../../menu.cpp
 
 signup.o: ../../signup.cpp ../../signup.hpp \
