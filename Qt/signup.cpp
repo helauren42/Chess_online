@@ -23,10 +23,7 @@ void signup::on_signUpButton_clicked()
     qDebug() << "dob: " << this->dob;
 }
 
-
 void signup::on_redirLogIn_clicked()
 {
-    manager.stateChange = true;
-    manager.state = LOGIN;
+    emit sigRedirLogin();
 }
-

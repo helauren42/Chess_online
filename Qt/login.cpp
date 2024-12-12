@@ -20,12 +20,14 @@ void login::on_loginButton_clicked()
     this->password = this->ui->EPassword->text();
     qDebug() << "username: " << this->username << "\n";
     qDebug() << "password: " << this->password << "\n";
+    if(this->username != "" && this->password != "")
+        emit this->sigValidLogin();
+    else
+        emit this->sigFaultyLogin();
 }
-
 
 void login::on_redirSignUp_clicked()
 {
-    manager.stateChange = true;
-    manager.state = SIGNUP;
+    emit sigRedirSignup();
 }
 

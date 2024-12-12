@@ -8,9 +8,6 @@
 #include <QWidget>
 #include <QStackedWidget>
 
-struct Manager;
-extern Manager manager;
-
 struct t_dim {
     QRect screenGeometry;
     short board;
@@ -41,12 +38,6 @@ struct Account {
     std::string username;
     std::string password;
     Date dob;
-};
-
-struct Manager {
-    State   state = LOGIN;
-    bool    stateChange = true;
-    Account account;
 };
 
 #endif // COMMON_H

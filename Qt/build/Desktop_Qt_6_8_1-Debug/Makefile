@@ -313,7 +313,7 @@ TARGET        = Qt
 first: all
 ####### Build rules
 
-Qt: ui_login.h ui_signup.h $(OBJECTS)  
+Qt: ui_login.h ui_mainwindow.h ui_signup.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET)  $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../../Qt.pro /home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++/qmake.conf /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
@@ -808,7 +808,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../common.hpp ../../login.hpp ../../mainwindow.hpp ../../signup.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../signup.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../login.ui ../../signup.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../../login.ui ../../mainwindow.ui ../../signup.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -844,8 +844,9 @@ compiler_moc_header_make_all: moc_login.cpp moc_mainwindow.cpp moc_signup.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_login.cpp moc_mainwindow.cpp moc_signup.cpp
 moc_login.cpp: ../../login.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
@@ -897,6 +898,7 @@ moc_login.cpp: ../../login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
@@ -1032,6 +1034,20 @@ moc_login.cpp: ../../login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../login.hpp -o moc_login.cpp
@@ -1243,6 +1259,9 @@ moc_mainwindow.cpp: ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		../../login.hpp \
 		../../signup.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.hpp -o moc_mainwindow.cpp
@@ -1436,6 +1455,25 @@ moc_signup.cpp: ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../signup.hpp -o moc_signup.cpp
@@ -1444,12 +1482,16 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_login.h ui_signup.h
+compiler_uic_make_all: ui_login.h ui_mainwindow.h ui_signup.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_login.h ui_signup.h
+	-$(DEL_FILE) ui_login.h ui_mainwindow.h ui_signup.h
 ui_login.h: ../../login.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../login.ui -o ui_login.h
+
+ui_mainwindow.h: ../../mainwindow.ui \
+		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/uic ../../mainwindow.ui -o ui_mainwindow.h
 
 ui_signup.h: ../../signup.ui \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/uic
@@ -1466,8 +1508,9 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 ####### Compile
 
 login.o: ../../login.cpp ../../login.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
@@ -1519,6 +1562,7 @@ login.o: ../../login.cpp ../../login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
@@ -1654,19 +1698,35 @@ login.o: ../../login.cpp ../../login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		ui_login.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QTextEdit \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtextedit.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		ui_login.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLineEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlineedit.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextcursor.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextformat.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o login.o ../../login.cpp
 
 main.o: ../../main.cpp ../../mainwindow.hpp \
@@ -1875,7 +1935,11 @@ main.o: ../../main.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		../../login.hpp \
-		../../signup.hpp
+		../../signup.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
@@ -2085,24 +2149,10 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		../../login.hpp \
 		../../signup.hpp \
-		ui_mainwindow.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStatusBar \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstatusbar.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QTextEdit \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtextedit.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextcursor.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextformat.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
 signup.o: ../../signup.cpp ../../signup.hpp \
@@ -2294,15 +2344,46 @@ signup.o: ../../signup.cpp ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		ui_signup.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		ui_signup.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QDateEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdatetimeedit.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtimezone.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qvalidator.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qregularexpression.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLineEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextcursor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o signup.o ../../signup.cpp
 
 moc_login.o: moc_login.cpp 

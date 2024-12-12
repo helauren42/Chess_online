@@ -1,9 +1,8 @@
-#ifndef SIGNUP_HPP
-#define SIGNUP_HPP
+#ifndef SIGNUP_H
+#define SIGNUP_H
 
 #include <QWidget>
 #include <QDate>
-#include <array>
 
 #include "common.hpp"
 
@@ -29,6 +28,9 @@ private:
     QString password;
     QDate dob;
     Ui::signup *ui;
+
+signals:
+    void sigRedirLogin();
 };
 
-#endif // SIGNUP_HPP
+#endif // SIGNUP_H

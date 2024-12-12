@@ -18,13 +18,17 @@ public:
 
 private slots:
     void on_loginButton_clicked();
-
     void on_redirSignUp_clicked();
 
 private:
     QString username;
     QString password;
     Ui::login *ui;
+
+signals:
+    void sigRedirSignup();
+    void sigValidLogin();
+    void sigFaultyLogin();
 };
 
 #endif // LOGIN_H
