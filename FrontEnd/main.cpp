@@ -8,13 +8,15 @@ t_dim       dim;
 
 int main(int argc, char *argv[])
 {
-    QFile file("../../styles.css");
+    QString cwd = QDir::currentPath();
+    qDebug() << "Current Working Directory:" << cwd;
+
+    QFile file("../../../FrontEnd/styles.css");
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Failed to open stylesheet file";
         return -1;
     }
 
-    qDebug() << "here";
     QString stylesheet = file.readAll();
 
     QApplication app(argc, argv);
