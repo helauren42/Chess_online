@@ -497,7 +497,7 @@ public:
 			break;
 		}
 		return false;
-	}
+	};
 };
 
 #endif
