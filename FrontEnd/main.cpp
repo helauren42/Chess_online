@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     QFile file("../../styles.css");
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Failed to open stylesheet file";
-        return -1;
+        return  -1;
     }
 
     qDebug() << "here";
