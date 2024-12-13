@@ -2,13 +2,14 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include "../BackEnd/MyCppLib/Logger/Logger.hpp"
 
 SharedData  shared_data;
 t_dim       dim;
 
 int main(int argc, char *argv[])
 {
-    QString cwd = QDir::currentPath();
+    Logger::setLoggerFile("logger.txt", true);
     qDebug() << "Current Working Directory:" << cwd;
 
     QFile file("../../../FrontEnd/styles.css");

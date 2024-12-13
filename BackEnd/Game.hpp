@@ -19,9 +19,6 @@ private:
 public:
 	Game() { board.setPlayerTurn(&player_turn); };
 	~Game() {};
-	void	setLoggerFd(const int fd) {
-		logger_fd = fd;
-	}
 
 	bool gameEnd()
 	{
@@ -41,50 +38,6 @@ public:
 			winner = COLOR_NONE;
 		}
 		return false;
-	}
-
-	void run()
-	{
-		bool quit = false;
-		bool moved = false;
-		bool game_end = false;
-		while (!quit)
-		{
-			// while (SDL_PollEvent(&e) != 0)
-			// {
-			// 	events.eventHandler(e, player_turn, quit);
-			// }
-			// if (board.getSelectedPiece())
-			// {
-			// 	textures.makeSelectedTexture(board.getSelectedPiece()->getPosition(), renderer, dim);
-			// 	SDL_RenderCopy(renderer, textures.selected, NULL, &rect);
-			// }
-			// else if (textures.selected)
-			// {
-			// 	SDL_DestroyTexture(textures.selected);
-			// 	textures.selected = nullptr;
-			// }
-			// textures.makePiecesTextures(renderer, board.getActivePieces(), dim.square);
-			if (board.getMoved() == true)
-			{
-				if (gameEnd() == true)
-				{
-					game_end = true;
-					break;
-				}
-				board.setMoved(false);
-			}
-		}
-		if (game_end)
-		{
-			out("WINNER is: ");
-			if (winner == WHITE)
-				out("WHITE\n");
-			else if (winner == BLACK)
-				out("BLACK\n");
-			else
-				out("STALEMATE\n");
-		}
 	}
 
 	void destroy()

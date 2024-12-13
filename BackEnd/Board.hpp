@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 #include <array>
-#include "MyCppLib/Printer/Printer.hpp"
+#include "../MyCppLib/Printer/Printer.hpp"
 
 struct Cell
 {
@@ -139,7 +139,7 @@ public:
 
 	void removePiece(Pieces *piece)
 	{
-		fout("remove piece: ", piece);
+		debug("remove piece: ", piece);
 		if (piece->getType() == ENPASSANT)
 		{
 			Pos pawn_pos = piece->getPosition();
@@ -258,17 +258,17 @@ public:
 
 		if (target_piece && piece->getColor() == target_piece->getColor())
 		{
-			fout("Target piece is same color\n");
+			debug("Target piece is same color\n");
 			return false;
 		}
 		if (!piece->validMove(new_pos, target_piece))
 		{
-			fout("Invalid move for piece\n");
+			debug("Invalid move for piece\n");
 			return false;
 		}
 		if (foundObstacle(piece->getPosition(), new_pos, piece->getType(), piece->getColor()))
 		{
-			fout("Found obstacle\n");
+			debug("Found obstacle\n");
 			return false;
 		}
 		return true;
@@ -283,14 +283,14 @@ public:
 	void moveSelectedPiece(const short &x, const short &y)
 	{
 		castling = false;
-		fout("moving selected piece\n");
+		debug("moving selected piece\n");
 
 		// remove_en_passant if match selected_piece color
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); )
 			if (it->get()->getType() == ENPASSANT && *player_turn == it->get()->getColor()) {
-				fout("removing en passant of color: ", *player_turn);
+				debug("removing en passant of color: ", *player_turn);
 				active_pieces.erase(it);
-				fout("removed\n");
+				debug("removed\n");
 			}
 			else
 				it++;
@@ -299,9 +299,9 @@ public:
 		Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 		Pieces *target_piece = getTargetPiece(new_pos);
 		if(target_piece)
-			fout("target: ", target_piece);
+			debug("target: ", target_piece);
 		else
-			fout("no target piece found\n");
+			debug("no target piece found\n");
 
 		for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 		{
@@ -313,10 +313,10 @@ public:
 				{
 					if (castling == true)
 					{
-						fout("try castling\n");
+						debug("try castling\n");
 						it->get()->makeMove(new_pos);
 						target_piece->makeMove(old_pos);
-						fout("castling done\n");
+						debug("castling done\n");
 						return;
 					}
 					bool has_en_passant = it->get()->getType() == PAWN && abs(move.y) == 2 ? true : false;
@@ -325,7 +325,7 @@ public:
 					if (isCheck(target_piece))
 					{
 						it->get()->makeMove(old_pos);
-						fout("Failed to move piece, king is checked\n");
+						debug("Failed to move piece, king is checked\n");
 						return;
 					}
 
@@ -336,12 +336,12 @@ public:
 					}
 					if (has_en_passant)
 					{
-						fout("creating en passant piece\n");
+						debug("creating en passant piece\n");
 						makeEnPassant(old_pos, move);
 					}
 
 
-					fout("Successfully moved piece: \n");
+					debug("Successfully moved piece: \n");
 					if (target_piece)
 					{
 						removePiece(target_piece);
@@ -351,7 +351,7 @@ public:
 					moved = true;
 					return;
 				}
-				fout("move can not be done, invalid\n");
+				debug("move can not be done, invalid\n");
 			}
 		}
 		selected_piece = nullptr;
@@ -388,9 +388,9 @@ public:
 				continue;
 			if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
 			{
-				fout("Piece: ", piece->getType());
-				fout("pos: ", piece->getPosition());
-				fout("Puts king in check\n");
+				debug("Piece: ", piece->getType());
+				debug("pos: ", piece->getPosition());
+				debug("Puts king in check\n");
 				return piece.get();
 			}
 		}
@@ -410,8 +410,8 @@ public:
 			{
 				if (piece->getType() != KING && piece->getColor() != checker->getColor() && validMove(pos, piece.get(), target))
 				{
-					fout("This piece can uncheck:\n", piece);
-					fout("by moving to this position: ", pos);
+					debug("This piece can uncheck:\n", piece);
+					debug("by moving to this position: ", pos);
 					return true;
 				}
 			}

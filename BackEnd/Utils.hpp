@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+#include "../MyCppLib/Logger/Logger.hpp"
+
+using namespace Logger;
+
 enum PieceType {
 	PAWN,
 	ROOK,
