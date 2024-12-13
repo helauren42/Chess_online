@@ -2,12 +2,10 @@
 #define GAME_HPP
 
 #include "FrontEnd.hpp"
-#include "Pieces.hpp"
 #include "Board.hpp"
 #include "stdlib.h"
 // #include "Player.hpp"
 
-#include "MyCppLib/MyCppLib.hpp"
 
 class Game
 {
