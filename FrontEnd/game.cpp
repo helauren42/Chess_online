@@ -69,8 +69,8 @@ Game::Game(QWidget *parent)
     this->_width = this->width();
     computeDim();
 
-    lightSquare = QPixmap("../../IMG/USE/square_brown_light.png");
-    darkSquare = QPixmap("../../IMG/USE/square_brown_dark.png");
+    lightSquare = QPixmap("../../../IMG/USE/square_brown_light.png");
+    darkSquare = QPixmap("../../../IMG/USE/square_brown_dark.png");
 }
 
 Game::~Game()
