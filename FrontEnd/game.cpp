@@ -17,9 +17,7 @@ void Game::MakeChessBoard() {
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             QLabel* square = squares[row * 8 + col];
-
             square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
-
             // Set the background image based on the square's color
             if ((row + col) % 2 == 0) {
                 square->setPixmap(lightSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
@@ -28,6 +26,25 @@ void Game::MakeChessBoard() {
             }
         }
     }
+}
+
+unsigned int Game::count_pieces() const {
+    auto cells = board->getCellBoard();
+    unsigned int count = 0;
+    for (int y = 0; y < 8 ; y++) {
+        for (int x = 0; x < 8 ; x++) {
+            if(cells[y][x].type != NONE)
+                count++;
+        }
+    }
+    return count;
+}
+
+void Game::MakePieces() {
+    unsigned int num_pieces = count_pieces();
+    qDebug() << "MakeChessBoard()";
+    qDebug() << "number of pieces: " << num_pieces;
+    board->setBoard();
 }
 
 void Game::computeDim() {

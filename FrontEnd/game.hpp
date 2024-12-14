@@ -22,12 +22,14 @@ public:
     explicit Game(QWidget *parent = nullptr);
     ~Game();
     void MakeChessBoard();
+    void MakePieces();
     QPixmap lightSquare;
     QPixmap darkSquare;
     void computeDim();
     void resizeEvent(QResizeEvent* event);
     void emptySquares();    
     std::unique_ptr<Board> board;
+    unsigned int count_pieces() const;
 
 public slots:
     void onStartGame();
@@ -40,6 +42,7 @@ private:
     int square_len;
     int start_x;
     QList<QLabel*> squares;
+    QList<QLabel*> square_pieces;
 };
 
 #endif // GAME_HPP
