@@ -24,14 +24,6 @@ enum WINNER {
 	COLOR_NONE,
 };
 
-typedef struct s_dim
-{
-	int window_width = 0;
-	int window_height = 0;
-	short board = 0;
-	short square = 0;
-} t_dim;
-
 struct Move
 {
 	short x;

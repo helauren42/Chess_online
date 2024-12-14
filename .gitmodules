@@ -1,3 +1,6 @@
 [submodule "INC/MyCppLib"]
 	path = INC/MyCppLib
 	url = git@github.com:helauren42/MyCppLib.git
+[submodule "MyCppLib"]
+	path = MyCppLib
+	url = git@github.com:helauren42/MyCppLib.git
