@@ -41,9 +41,9 @@ public:
 	void setSelectedPiece(std::unique_ptr<Pieces> piece);
 	void setPlayerTurn(bool *_player_turn);
 
-	const std::vector<std::unique_ptr<Pieces>> &Board::getActivePieces() const;
-	const std::unique_ptr<Pieces> &Board::getSelectedPiece() const;
-	std::array<std::array<Cell, 8>, 8> Board::getCellBoard() const;
+	const std::vector<std::unique_ptr<Pieces>>& getActivePieces() const;
+	const std::unique_ptr<Pieces>& getSelectedPiece() const;
+	std::array<std::array<Cell, 8>, 8>  getCellBoard() const;
 
 	void setBoard();
 	Pieces *getTargetPiece(const Pos &new_pos) const;
@@ -51,9 +51,9 @@ public:
 
 	/* ---------------------------------------------------------------------- Validating move --------------------------------------------------------------------------- */
 
-	bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color);
+    bool foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color);
 	bool validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece);
-	std::vector<Pos> intersection(const Pos &start, const Pos &end);
+    std::vector<Pos> intersection(const Pos &start, const Pos &end)  const;
 
 	/* ---------------------------------------------------------------------- Making the move --------------------------------------------------------------------------- */
 
@@ -64,10 +64,10 @@ public:
 	/* ---------------------------------------------------------------------- End game checks --------------------------------------------------------------------------- */
 
 	// add is stalemate
-	Pieces *isCheck(const Pieces *target = nullptr);
-	bool canUncheck(Pieces *checker);
-	bool isCheckmate();
-	bool isImmobilized(Pieces *piece);
+    Pieces *isCheck(const Pieces *target = nullptr);
+    bool canUncheck(Pieces *checker);
+    bool isCheckmate();
+    bool isImmobilized(Pieces *piece);
 };
 
 #endif

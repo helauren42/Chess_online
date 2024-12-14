@@ -80,7 +80,7 @@ Pieces *Board::getKing() const
 
 /* ---------------------------------------------------------------------- Validating move --------------------------------------------------------------------------- */
 
-std::vector<Pos> Board::intersection(const Pos &start, const Pos &end)
+std::vector<Pos> Board::intersection(const Pos &start, const Pos &end)  const
 {
 	std::vector<Pos> ret;
 	Move move = end - start;
@@ -103,6 +103,7 @@ std::vector<Pos> Board::intersection(const Pos &start, const Pos &end)
 
 bool Board::foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_color)
 {
+    (void)piece_color;
 	setBoard();
 	Move move = new_pos - old_pos;
 	switch (type)
@@ -310,7 +311,7 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 
 /* ---------------------------------------------------------------------- End game checks --------------------------------------------------------------------------- */
 
-Pieces* Board::isCheck(const Pieces *target = nullptr)
+Pieces* Board::isCheck(const Pieces *target)
 {
 	Pieces *king = getKing();
 	Pos king_pos = king->getPosition();

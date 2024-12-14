@@ -42,7 +42,8 @@ private:
     int square_len;
     int start_x;
     QList<QLabel*> squares;
-    QList<QLabel*> square_pieces;
+    std::vector<std::unique_ptr<QLabel>> square_pieces;
+    std::map<std::pair<PieceType, bool>, QPixmap> images;
 };
 
 #endif // GAME_HPP
