@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Game
     connect(stackedWidgets->widMenu, &Menu::sigLauchGame, this, &MainWindow::onLaunchGame);
     connect(stackedWidgets->widMenu, &Menu::sigLauchGame, stackedWidgets->widGame, &Game::onStartGame);
+    // connect(stackedWidgets->widGame, &Game::sigClickedBoard, stackedWidgets->widGame, &Game::onClickBoard);
 }
 
 MainWindow::~MainWindow()

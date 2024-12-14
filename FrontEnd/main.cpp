@@ -9,7 +9,9 @@ t_dim       dim;
 
 int main(int argc, char *argv[])
 {
-    Logger::setLoggerFile("logger.txt", true);
+    Logger::setLoggerFile("logger.txt", false);
+
+    Logger::info("start");
 
     QFile file("../../../FrontEnd/styles.css");
     if (!file.open(QFile::ReadOnly | QFile::Text)) {

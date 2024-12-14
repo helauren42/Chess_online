@@ -14,12 +14,15 @@ void Game::MakeChessBoard() {
         }
     }
 
+    Pieces* red_piece = board->getSelectedPiece().get();
+
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             QLabel* square = squares[row * 8 + col];
             square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
-            // Set the background image based on the square's color
-            if ((row + col) % 2 == 0) {
+            if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().reverseY())
+                square->setPixmap(redSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
+            else if ((row + col) % 2 == 0) {
                 square->setPixmap(lightSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
             } else {
                 square->setPixmap(darkSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
@@ -68,10 +71,10 @@ void Game::MakePieces() {
                 center = msc * 8 / 10;
             qDebug() << "row: " << row;
             qDebug() << "col: " << col;
+            qDebug() << "type: " << cell.type;
+            qDebug() << "color: " << cell.color;
             QLabel* square = square_pieces[i++].get();
             square->setGeometry(start_x + col * square_len + msc / 2 + center, row * square_len + msc / 2, square_len - msc, square_len - msc);
-            // qDebug() << "type: " << cell.type;
-            // qDebug() << "color: " << cell.color;
             square->setPixmap(images.at(std::make_tuple(cell.type, cell.color)).scaled(square_len - msc, square_len - msc, Qt::KeepAspectRatio));
             square->show();
         }
@@ -125,9 +128,8 @@ Game::Game(QWidget *parent)
     computeDim();
 
     lightSquare = QPixmap("../../../IMG/USE/square_brown_light.png");
-    qDebug() << lightSquare;
     darkSquare = QPixmap("../../../IMG/USE/square_brown_dark.png");
-    qDebug() << darkSquare;
+    redSquare = QPixmap("../../../IMG/USE/square_red.png");
 }
 
 Game::~Game()
