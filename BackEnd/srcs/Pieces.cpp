@@ -1,116 +1,139 @@
 #include "Pieces.hpp"
 
-/* ---------------------------------------------------------------------- setters getters --------------------------------------------------------------------------- */
+Pieces::Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type)
+{
+	color = pos.y <= 1 ? WHITE : BLACK;
+}
+
+Pieces::Pieces(short _x, short _y, PieceType _type, bool _color) : pos(_x, _y), color(_color), type(_type) {}
+
+Pieces::~Pieces() {}
 
 PieceType Pieces::getType() const { return type; }
 bool Pieces::getFirstMove() const { return firstMove; }
 Pos Pieces::getPosition() const { return pos; }
 bool Pieces::getColor() const { return color; }
 
+void Pieces::makeMove(const Pos &new_pos)
+{
+	pos = new_pos;
+	firstMove = false;
+}
 
-/* ---------------------------------------------------------------------- make move --------------------------------------------------------------------------- */
+Pawn::Pawn(short _x, short _y) : Pieces(_x, _y, PAWN), dir(color == BLACK ? -1 : 1) {}
 
+Pawn::Pawn(short _x, short _y, bool _color) : Pieces(_x, _y, PAWN, _color), dir(_color == BLACK ? -1 : 1) {}
 
-	void Pieces::makeMove(const Pos &new_pos)
-	{
-		pos = new_pos;
-		firstMove = false;
-	};
+Pawn::~Pawn() {}
 
-    bool Pawn::validMove(const Pos &new_pos, const Pieces *target) const
-    {
-        (void) target;
-		info("new pos: ", new_pos);
-		info("pos: ", pos);
-		Move move = new_pos - pos;
+bool Pawn::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) target;
+	Move move = new_pos - pos;
 
-		info("move: ", move);
-		// first handle special cases
-		if ((move.x == 1 || move.x == -1) && target != nullptr && (move.y == 1 * dir))
-		{
-			info("pawn move 1 valid\n");
-			return true;
-		}
-		if (target != nullptr || move.x >= 2)
-			return false;
-
-		if (move.x == 0 && firstMove && move.y == 2 * dir)
-		{
-			info("pawn move 1 valid\n");
-			return true;
-		}
-
-		if (move.x != 0 || move.y != dir)
-			return false;
-
-		info("pawn move default true\n");
+	if ((move.x == 1 || move.x == -1) && target != nullptr && (move.y == 1 * dir))
 		return true;
-	}
-
-	bool EnPassant::validMove(const Pos &new_pos, const Pieces *target) const
-    {
-        (void) new_pos;
-        (void) target;
+	if (target != nullptr || move.x >= 2)
 		return false;
-	}
 
-	bool Rook::validMove(const Pos &new_pos, const Pieces *target) const
-	{
-        (void) target;
-		Move move = new_pos - pos;
-		if ((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
-			return true;
-		return false;
-	}
+	if (move.x == 0 && firstMove && move.y == 2 * dir)
+		return true;
 
-	bool Knight::validMove(const Pos &new_pos, const Pieces *target) const
-    {
-        (void) target;
-		Move move = new_pos - pos;
-		move.x = abs(move.x);
-		move.y = abs(move.y);
-		if (move.x == move.y)
-			return false;
-		short smaller = move.x < move.y ? move.x : move.y;
-		short bigger = move.y > move.x ? move.y : move.x;
-		if (smaller == 1 && bigger == 2)
-			return true;
+	if (move.x != 0 || move.y != dir)
 		return false;
-	}
 
-	bool Bishop::validMove(const Pos &new_pos, const Pieces *target) const
-    {
-        (void) target;
-		Move move = new_pos - pos;
-		if (abs(move.x) == abs(move.y))
-			return true;
-		return false;
-	}
+	return true;
+}
 
-	bool Queen::validMove(const Pos &new_pos, const Pieces *target) const
-    {
-        (void) target;
-		Move move = new_pos - pos;
-		info("new pos: ", new_pos);
-		info("pos: ", pos);
-		info("move: ", move);
-		if ((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
-			return true;
-		if (abs(move.x) == abs(move.y))
-			return true;
-		return false;
-	}
+short Pawn::getDir() const { return dir; }
 
-	bool King::validMove(const Pos &new_pos, const Pieces *target) const
-    {
-        (void) target;
-		Move move = new_pos - pos;
-		if (!move.x && !move.y)
-			return false;
-		if (abs(move.x) <= 1 && abs(move.y) <= 1)
-			return true;
+EnPassant::EnPassant(short _x, short _y, bool _color) : Pieces(_x, _y, ENPASSANT, _color), dir(_color == BLACK ? -1 : 1) {}
+
+EnPassant::~EnPassant() {}
+
+short EnPassant::getDir() const { return dir; }
+
+bool EnPassant::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) new_pos;
+	(void) target;
+	return false;
+}
+
+Rook::Rook(short _x, short _y) : Pieces(_x, _y, ROOK) {}
+Rook::Rook(short _x, short _y, bool _color) : Pieces(_x, _y, ROOK, _color) {}
+Rook::~Rook() {}
+
+bool Rook::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) target;
+	Move move = new_pos - pos;
+	if ((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
+		return true;
+	return false;
+}
+
+Knight::Knight(short _x, short _y) : Pieces(_x, _y, KNIGHT) {}
+Knight::Knight(short _x, short _y, bool _color) : Pieces(_x, _y, KNIGHT, _color) {}
+Knight::~Knight() {}
+
+bool Knight::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) target;
+	Move move = new_pos - pos;
+	move.x = abs(move.x);
+	move.y = abs(move.y);
+	if (move.x == move.y)
 		return false;
-	}
+	short smaller = move.x < move.y ? move.x : move.y;
+	short bigger = move.y > move.x ? move.y : move.x;
+	if (smaller == 1 && bigger == 2)
+		return true;
+	return false;
+}
+
+Bishop::Bishop(short _x, short _y) : Pieces(_x, _y, BISHOP) {}
+Bishop::Bishop(short _x, short _y, bool _color) : Pieces(_x, _y, BISHOP, _color) {}
+Bishop::~Bishop() {}
+
+bool Bishop::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) target;
+	Move move = new_pos - pos;
+	if (abs(move.x) == abs(move.y))
+		return true;
+	return false;
+}
+
+Queen::Queen(short _x, short _y) : Pieces(_x, _y, QUEEN) {}
+Queen::Queen(short _x, short _y, bool _color) : Pieces(_x, _y, QUEEN, _color) {}
+Queen::~Queen() {}
+
+bool Queen::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) target;
+	Move move = new_pos - pos;
+	if ((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
+		return true;
+	if (abs(move.x) == abs(move.y))
+		return true;
+	return false;
+}
+
+King::King(short _x, short _y) : Pieces(_x, _y, KING) {}
+King::King(short _x, short _y, bool _color) : Pieces(_x, _y, KING, _color) {}
+King::~King() {}
+
+bool King::validMove(const Pos &new_pos, const Pieces *target) const
+{
+	(void) target;
+	Move move = new_pos - pos;
+	if (!move.x && !move.y)
+		return false;
+	if (abs(move.x) <= 1 && abs(move.y) <= 1)
+		return true;
+	return false;
+}
 
 /* ---------------------------------------------------------------------- Operator Overloads --------------------------------------------------------------------------- */
 

@@ -3,7 +3,6 @@
 
 #include <string>
 #include <memory>
-
 #include "Utils.hpp"
 #include <iostream>
 
@@ -16,12 +15,9 @@ protected:
 	const PieceType type;
 
 public:
-	Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type)
-	{
-		color = pos.y <= 1 ? WHITE : BLACK;
-	};
-	Pieces(short _x, short _y, PieceType _type, bool _color) : pos(_x, _y), color(_color), type(_type) {};
-	virtual ~Pieces() {};
+	Pieces(short _x, short _y, PieceType _type);
+	Pieces(short _x, short _y, PieceType _type, bool _color);
+	virtual ~Pieces();
 
 	PieceType getType() const;
 	bool getFirstMove() const;
@@ -35,90 +31,83 @@ public:
 class Pawn : public Pieces
 {
 public:
-	const short dir = color == BLACK ? -1 : 1;
+	const short dir;
 
-	Pawn(short _x, short _y) : Pieces(_x, _y, PAWN) {};
-	Pawn(short _x, short _y, bool _color) : Pieces(_x, _y, PAWN, _color) {};
-	~Pawn() {}
+	Pawn(short _x, short _y);
+	Pawn(short _x, short _y, bool _color);
+	~Pawn();
 
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
-	short getDir() const
-	{
-		return dir;
-	}
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	short getDir() const;
 };
 
 class EnPassant : public Pieces
 {
 public:
-	const short dir = color == BLACK ? -1 : 1;
+	const short dir;
 
-	EnPassant(short _x, short _y, bool _color) : Pieces(_x, _y, ENPASSANT, _color) {};
-	~EnPassant() {}
-	short getDir() const
-	{
-		return dir;
-	}
+	EnPassant(short _x, short _y, bool _color);
+	~EnPassant();
+	short getDir() const;
 
 private:
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
 };
 
 class Rook : public Pieces
 {
 public:
-	Rook(short _x, short _y) : Pieces(_x, _y, ROOK) {};
-	Rook(short _x, short _y, bool _color) : Pieces(_x, _y, ROOK, _color) {};
+	Rook(short _x, short _y);
+	Rook(short _x, short _y, bool _color);
+	~Rook();
 
-	~Rook() {}
-
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
 };
 
 class Knight : public Pieces
 {
 public:
-	Knight(short _x, short _y) : Pieces(_x, _y, KNIGHT) {};
-	Knight(short _x, short _y, bool _color) : Pieces(_x, _y, KNIGHT, _color) {};
-	~Knight() {}
+	Knight(short _x, short _y);
+	Knight(short _x, short _y, bool _color);
+	~Knight();
 
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
 };
 
 class Bishop : public Pieces
 {
 public:
-	Bishop(short _x, short _y) : Pieces(_x, _y, BISHOP) {};
-	Bishop(short _x, short _y, bool _color) : Pieces(_x, _y, BISHOP, _color) {};
-	~Bishop() {}
+	Bishop(short _x, short _y);
+	Bishop(short _x, short _y, bool _color);
+	~Bishop();
 
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
 };
 
 class Queen : public Pieces
 {
 public:
-	Queen(short _x, short _y) : Pieces(_x, _y, QUEEN) {};
-	Queen(short _x, short _y, bool _color) : Pieces(_x, _y, QUEEN, _color) {};
-	~Queen() {}
+	Queen(short _x, short _y);
+	Queen(short _x, short _y, bool _color);
+	~Queen();
 
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
 };
 
 class King : public Pieces
 {
 public:
-	King(short _x, short _y) : Pieces(_x, _y, KING) {};
-	King(short _x, short _y, bool _color) : Pieces(_x, _y, KING, _color) {};
-	~King() {}
+	King(short _x, short _y);
+	King(short _x, short _y, bool _color);
+	~King();
 
-    bool validMove(const Pos &new_pos, const Pieces *target) const override;
+	bool validMove(const Pos &new_pos, const Pieces *target) const override;
 };
 
 bool operator==(const std::unique_ptr<Pieces> &piece1, const std::unique_ptr<Pieces> &piece2);
 bool operator==(const std::unique_ptr<Pieces> &piece1, const Pieces *piece2);
 bool operator==(const Pieces *piece1, const std::unique_ptr<Pieces> &piece2);
-std::ostream& operator<<(std::ostream &os, const Pieces *_piece);
 std::ostream& operator<<(std::ostream &os, const std::unique_ptr<Pieces> &_piece);
+std::ostream& operator<<(std::ostream &os, const Pieces *_piece);
 
 #endif
