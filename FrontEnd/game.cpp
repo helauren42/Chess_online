@@ -27,7 +27,7 @@ void Game::MakeChessBoard() {
                     square->setPixmap(darkSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
                 }
             }
-            else if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().y == row) {
+            else if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().reverseY() == row) {
                 square->setPixmap(redSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
                 Out::stdOut("here3");
             }

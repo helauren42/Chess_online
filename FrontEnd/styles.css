@@ -1,8 +1,17 @@
 QLineEdit {
-    background-color: white;
+    background-color: rgb(210, 211, 255);
     border: 1px solid gray;
     border-radius: 5px;
     padding: 5px;
-    color: black;
+    color: rgb(4, 3, 7);
 }
 
+QWidget {
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 0px;
+}
+
+Game {
+    height: 100%;
+}
