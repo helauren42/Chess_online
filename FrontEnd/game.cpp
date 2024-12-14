@@ -14,18 +14,22 @@ void Game::MakeChessBoard() {
         }
     }
 
-    Pieces* red_piece = board->getSelectedPiece().get();
+    const Pieces* red_piece = board->getSelectedPiece().get();
 
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             QLabel* square = squares[row * 8 + col];
             square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
-            if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().y == row)
+            if(red_piece == nullptr) {
+                if ((row + col) % 2 == 0) {
+                    square->setPixmap(lightSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
+                } else {
+                    square->setPixmap(darkSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
+                }
+            }
+            else if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().y == row) {
                 square->setPixmap(redSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
-            else if ((row + col) % 2 == 0) {
-                square->setPixmap(lightSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
-            } else {
-                square->setPixmap(darkSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
+                Out::stdOut("here3");
             }
         }
     }

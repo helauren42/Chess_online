@@ -19,7 +19,7 @@ private:
 	bool has_en_passant = false;
 	bool castling = false;
 	std::array<std::array<Cell, 8>, 8> cell_board;
-	std::unique_ptr<Pieces> selected_piece = nullptr;
+    std::unique_ptr<Pieces> selected_piece = nullptr;
 	std::vector<std::unique_ptr<Pieces>> active_pieces;
 	std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
 	std::vector<std::unique_ptr<Pieces>> dead_black_pieces;
@@ -28,7 +28,7 @@ private:
 
 public:
 	bool player_turn = WHITE;
-	Board() {};
+    Board() {};
 	~Board() {};
 
 	/* ---------------------------------------------------------------------- initialization  --------------------------------------------------------------------------- */
@@ -38,11 +38,11 @@ public:
 
 	/* ---------------------------------------------------------------------- getters and setters  --------------------------------------------------------------------------- */
 
-	void setSelectedPiece(std::unique_ptr<Pieces> piece);
+    void setSelectedPiece(std::unique_ptr<Pieces> piece);
 	void setPlayerTurn(bool *_player_turn);
 
 	const std::vector<std::unique_ptr<Pieces>>& getActivePieces() const;
-	const std::unique_ptr<Pieces>& getSelectedPiece() const;
+    const std::unique_ptr<Pieces>& getSelectedPiece() const;
     const std::array<std::array<Cell, 8>, 8>&  getCellBoard() const;
 
 	void setBoard();

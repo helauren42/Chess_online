@@ -4,8 +4,8 @@
 
 std::unique_ptr<Pieces> Board::initPiece(const short &x, const short &y)
 {
-	// make piece
-	std::unique_ptr<Pieces> piece;
+    // make piece
+    std::unique_ptr<Pieces> piece;
 	if (y == 1 || y == 6)
 		piece = std::make_unique<Pawn>(x, y);
 	else if (x == 0 || x == 7)
@@ -229,16 +229,16 @@ void Board::makeEnPassant(const Pos &old_pos, const Move &move)
 
 void Board::moveSelectedPiece(const Pos &new_pos)
 {
+    Out::stdOut("moving selected piece\n");
 	castling = false;
-	info("moving selected piece\n");
 
 	// remove the en_passant temporary piece if match selected_piece color
 	for (auto it = active_pieces.begin(); it != active_pieces.end();)
 		if (it->get()->getType() == ENPASSANT && player_turn == it->get()->getColor())
 		{
-			info("removing en passant of color: ", player_turn);
+            Out::stdOut("removing en passant of color: ", player_turn);
 			active_pieces.erase(it);
-			info("removed\n");
+            Out::stdOut("removed\n");
 		}
 		else
 			it++;
@@ -247,24 +247,26 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 	// Pos new_pos = coordinatesToPos(x, y, dim->board, dim->board);
 	Pieces *target_piece = getTargetPiece(new_pos);
 	if (target_piece)
-		info("target: ", target_piece);
+        Out::stdOut("target: ", target_piece);
 	else
-		info("no target piece found\n");
+        Out::stdOut("no target piece found");
 
 	for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 	{
 		Move move = new_pos - old_pos;
-		if (selected_piece == it->get())
+        if (selected_piece == it->get())
 		{
-			setBoard();
+            setBoard();
+            Out::stdOut("testing move");
 			if (validMove(new_pos, it->get(), target_piece))
-			{
+            {
+                Out::stdOut("Move is valid");
 				if (castling == true)
 				{
-					info("try castling\n");
+                    Out::stdOut("try castling");
 					it->get()->makeMove(new_pos);
 					target_piece->makeMove(old_pos);
-					info("castling done\n");
+                    Out::stdOut("castling done");
 					return;
 				}
 				bool has_en_passant = it->get()->getType() == PAWN && abs(move.y) == 2 ? true : false;
@@ -273,7 +275,7 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 				if (isCheck(target_piece))
 				{
 					it->get()->makeMove(old_pos);
-					info("Failed to move piece, king is checked\n");
+                    Out::stdOut("Failed to move piece, king is checked");
 					return;
 				}
 
@@ -285,20 +287,20 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 				}
 				if (has_en_passant)
 				{
-					info("creating en passant piece\n");
+                    Out::stdOut("creating en passant piece");
 					makeEnPassant(old_pos, move);
 				}
 
-				info("Successfully moved piece: \n");
+                Out::stdOut("Successfully moved piece: ");
 				if (target_piece)
 				{
-					removePiece(target_piece);
+                    removePiece(target_piece);
 				}
 				selected_piece = nullptr;
 				player_turn = player_turn == WHITE ? BLACK : WHITE;
 				return;
 			}
-			info("move can not be done, invalid\n");
+            Out::stdOut("move can not be done, invalid");
 		}
 	}
 	selected_piece = nullptr;

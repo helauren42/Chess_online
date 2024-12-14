@@ -139,6 +139,7 @@ bool King::validMove(const Pos &new_pos, const Pieces *target) const
 
 bool operator==(const std::unique_ptr<Pieces> &piece1, const std::unique_ptr<Pieces> &piece2)
 {
+    Out::stdOut("operator == 1");
 	if (piece1->getPosition() == piece2->getPosition() && piece1->getType() == piece2->getType() && piece1->getColor() == piece2->getColor())
 		return true;
 	return false;
@@ -146,13 +147,15 @@ bool operator==(const std::unique_ptr<Pieces> &piece1, const std::unique_ptr<Pie
 
 bool operator==(const std::unique_ptr<Pieces> &piece1, const Pieces *piece2)
 {
-	if (piece1->getPosition() == piece2->getPosition() && piece1->getType() == piece2->getType() && piece1->getColor() == piece2->getColor())
+    Out::stdOut("operator == 2");
+    if (piece1->getPosition() == piece2->getPosition() && piece1->getType() == piece2->getType() && piece1->getColor() == piece2->getColor())
 		return true;
 	return false;
 }
 
 bool operator==(const Pieces *piece1, const std::unique_ptr<Pieces> &piece2)
 {
+    Out::stdOut("operator == 3");
 	if (piece1->getPosition() == piece2->getPosition() && piece1->getType() == piece2->getType() && piece1->getColor() == piece2->getColor())
 		return true;
 	return false;

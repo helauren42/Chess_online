@@ -84,7 +84,8 @@ private:
         pos.x = x * 8 / board_len;
         pos.y = clicked_y * 8 / board_len;
         pos.y = pos.reverseY();
-        qDebug() << "clicked square x: " << pos.x << ", y: " << pos.y;
+        // std::cout << "clicked square x: " << pos.x << ", y: " << pos.y << std::endl;
+        Out::stdOut("my clicked square x: ", pos.x, ", y: ", pos.y);
         return pos;
     }
 
@@ -127,7 +128,6 @@ private:
     }
     void handleClick(const int clicked_x, const int clicked_y) {
         Pos clicked_square = getClickedSquare(clicked_x, clicked_y);
-        qDebug() << "clicked square x: " << " " << clicked_square.x << " y: " <<clicked_square.y;
         if(!board->getSelectedPiece()) {
             qDebug() << "selecting piece";
             selectPiece(clicked_square);
