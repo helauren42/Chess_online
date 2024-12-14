@@ -17,7 +17,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
-INCPATH       = -I../../../Qt -I. -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I. -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../../../FrontEnd -I. -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I. -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/helauren/Qt/6.8.1/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Qt1.0.0
-DISTDIR = /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/.tmp/Qt1.0.0
+DISTDIR = /home/helauren/Desktop/chess_online/FrontEnd/build/Desktop_Qt_6_8_1-Debug/.tmp/Qt1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/helauren/Qt/6.8.1/gcc_64/lib -Wl,-rpath-link,/home/helauren/Qt/6.8.1/gcc_64/lib
 LIBS          = $(SUBLIBS) /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Widgets.so /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Gui.so /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Core.so -lpthread -lGL   
@@ -52,7 +52,10 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../../game.cpp \
+SOURCES       = ../../../BackEnd/srcs/Utils.cpp \
+		../../../BackEnd/srcs/Board.cpp \
+		../../../BackEnd/srcs/Pieces.cpp \
+		../../game.cpp \
 		../../login.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
@@ -62,7 +65,10 @@ SOURCES       = ../../game.cpp \
 		moc_mainwindow.cpp \
 		moc_menu.cpp \
 		moc_signup.cpp
-OBJECTS       = game.o \
+OBJECTS       = Utils.o \
+		Board.o \
+		Pieces.o \
+		game.o \
 		login.o \
 		main.o \
 		mainwindow.o \
@@ -306,12 +312,18 @@ DIST          = /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/exceptions.prf \
 		/home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/yacc.prf \
 		/home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/lex.prf \
-		../../../../Qt.pro ../../common.hpp \
+		../../../../Qt.pro ../../../BackEnd/inc/Utils.hpp \
+		../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Pieces.hpp \
+		../../common.hpp \
 		../../game.hpp \
 		../../login.hpp \
 		../../mainwindow.hpp \
 		../../menu.hpp \
-		../../signup.hpp ../../game.cpp \
+		../../signup.hpp ../../../BackEnd/srcs/Utils.cpp \
+		../../../BackEnd/srcs/Board.cpp \
+		../../../BackEnd/srcs/Pieces.cpp \
+		../../game.cpp \
 		../../login.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
@@ -818,8 +830,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../common.hpp ../../game.hpp ../../login.hpp ../../mainwindow.hpp ../../menu.hpp ../../signup.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../game.cpp ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../menu.cpp ../../signup.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../BackEnd/inc/Utils.hpp ../../../BackEnd/inc/Board.hpp ../../../BackEnd/inc/Pieces.hpp ../../common.hpp ../../game.hpp ../../login.hpp ../../mainwindow.hpp ../../menu.hpp ../../signup.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../BackEnd/srcs/Utils.cpp ../../../BackEnd/srcs/Board.cpp ../../../BackEnd/srcs/Pieces.cpp ../../game.cpp ../../login.cpp ../../main.cpp ../../mainwindow.cpp ../../menu.cpp ../../signup.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../game.ui ../../login.ui ../../mainwindow.ui ../../menu.ui ../../signup.ui $(DISTDIR)/
 
 
@@ -856,8 +868,9 @@ compiler_moc_header_make_all: moc_game.cpp moc_login.cpp moc_mainwindow.cpp moc_
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_game.cpp moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_signup.cpp
 moc_game.cpp: ../../game.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
@@ -909,6 +922,7 @@ moc_game.cpp: ../../game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
@@ -1044,9 +1058,34 @@ moc_game.cpp: ../../game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
+		../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
+		../../../BackEnd/inc/Pieces.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../game.hpp -o moc_game.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../game.hpp -o moc_game.cpp
 
 moc_login.cpp: ../../login.hpp \
 		../../common.hpp \
@@ -1255,7 +1294,7 @@ moc_login.cpp: ../../login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../login.hpp -o moc_login.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../login.hpp -o moc_login.cpp
 
 moc_mainwindow.cpp: ../../mainwindow.hpp \
 		../../common.hpp \
@@ -1469,9 +1508,20 @@ moc_mainwindow.cpp: ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		../../menu.hpp \
 		../../game.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
+		../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
+		../../../BackEnd/inc/Pieces.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.hpp -o moc_mainwindow.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.hpp -o moc_mainwindow.cpp
 
 moc_menu.cpp: ../../menu.hpp \
 		../../common.hpp \
@@ -1680,7 +1730,7 @@ moc_menu.cpp: ../../menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menu.hpp -o moc_menu.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../menu.hpp -o moc_menu.cpp
 
 moc_signup.cpp: ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
@@ -1892,7 +1942,7 @@ moc_signup.cpp: ../../signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/Qt -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../signup.hpp -o moc_signup.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Desktop_Qt_6_8_1-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../signup.hpp -o moc_signup.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1931,9 +1981,28 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
+Utils.o: ../../../BackEnd/srcs/Utils.cpp ../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Utils.o ../../../BackEnd/srcs/Utils.cpp
+
+Board.o: ../../../BackEnd/srcs/Board.cpp ../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
+		../../../BackEnd/inc/Pieces.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Board.o ../../../BackEnd/srcs/Board.cpp
+
+Pieces.o: ../../../BackEnd/srcs/Pieces.cpp ../../../BackEnd/inc/Pieces.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pieces.o ../../../BackEnd/srcs/Pieces.cpp
+
 game.o: ../../game.cpp ../../game.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
@@ -1985,6 +2054,7 @@ game.o: ../../game.cpp ../../game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
@@ -2120,7 +2190,33 @@ game.o: ../../game.cpp ../../game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		ui_game.h
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
+		../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
+		../../../BackEnd/inc/Pieces.hpp \
+		ui_game.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../../game.cpp
 
 login.o: ../../login.cpp ../../login.hpp \
@@ -2557,6 +2653,17 @@ main.o: ../../main.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		../../menu.hpp \
 		../../game.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
+		../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
+		../../../BackEnd/inc/Pieces.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QFile \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfile.h \
@@ -2565,7 +2672,9 @@ main.o: ../../main.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdir.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdirlisting.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfileinfo.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtimezone.h
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtimezone.h \
+		../../../MyCppLib/Logger/Logger.hpp \
+		../../../MyCppLib/Printer/Printer.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
@@ -2780,6 +2889,17 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		../../menu.hpp \
 		../../game.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
+		../../../BackEnd/inc/Board.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
+		../../../BackEnd/inc/Pieces.hpp \
 		ui_mainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMenuBar \
