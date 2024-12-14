@@ -21,13 +21,13 @@ class Game : public QWidget
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override {
-        qDebug() << "start x: " << start_x;
+        Out::stdOut("start x: ", start_x);
         if (event->button() == Qt::LeftButton) {
             const auto click_pos = event->pos();
             if(click_pos.x() >= start_x && click_pos.x() <= start_x + _width
                 && click_pos.y() >= 0 && click_pos.y() <= _height)
                 handleClick(click_pos.x(), click_pos.y());
-            qDebug() << "Mouse Released at:" << event->pos();
+            Out::stdOut("Mouse Released at:", event->pos().x(), " ", event->pos().y());
         }
     }
 
@@ -84,7 +84,6 @@ private:
         pos.x = x * 8 / board_len;
         pos.y = clicked_y * 8 / board_len;
         pos.y = pos.reverseY();
-        // std::cout << "clicked square x: " << pos.x << ", y: " << pos.y << std::endl;
         Out::stdOut("my clicked square x: ", pos.x, ", y: ", pos.y);
         return pos;
     }
@@ -96,7 +95,6 @@ private:
         {
             const std::unique_ptr<Pieces>::pointer piece = it->get();
             Pos pos = piece->getPosition();
-            short pos_rev_y = pos.reverseY();
             if (piece->getColor() == board->player_turn && pos.x == clicked_square.x && pos.y == clicked_square.y)
             {
                 switch (piece->getType())

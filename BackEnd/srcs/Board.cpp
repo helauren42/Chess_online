@@ -238,7 +238,6 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 		{
             Out::stdOut("removing en passant of color: ", player_turn);
 			active_pieces.erase(it);
-            Out::stdOut("removed\n");
 		}
 		else
 			it++;
@@ -271,16 +270,20 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 				}
 				bool has_en_passant = it->get()->getType() == PAWN && abs(move.y) == 2 ? true : false;
 				it->get()->makeMove(new_pos);
+                Out::stdOut("crash");
 				// undo move if king is in check after move
 				if (isCheck(target_piece))
 				{
+                    Out::stdOut("king is checked");
 					it->get()->makeMove(old_pos);
                     Out::stdOut("Failed to move piece, king is checked");
 					return;
 				}
 
+                Out::stdOut("crash2");
 				if (it->get()->getType() == PAWN && (new_pos.y == 0 || new_pos.y == 7))
 				{
+                    Out::stdOut("Pawn becomes Queen");
 					bool color = new_pos.y == 0 ? BLACK : WHITE;
 					// should allow player to pick new piece but for now it's just a queen
 					it->reset(new Queen(new_pos.x, new_pos.y, color));
@@ -310,17 +313,21 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 
 Pieces* Board::isCheck(const Pieces *target)
 {
+    Out::stdOut("1");
 	Pieces *king = getKing();
 	Pos king_pos = king->getPosition();
-	for (auto &piece : active_pieces)
+    Out::stdOut("2");
+    for (auto &piece : active_pieces)
 	{
+        Out::stdOut("3");
 		if (target && piece == target)
 			continue;
-		if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
+        Out::stdOut("4");
+        if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
 		{
-			info("Piece: ", piece->getType());
-			info("pos: ", piece->getPosition());
-			info("Puts king in check\n");
+            Out::stdOut("Piece: ", piece->getType());
+            Out::stdOut("pos: ", piece->getPosition());
+            Out::stdOut("Puts king in check\n");
 			return piece.get();
 		}
 	}
