@@ -55,18 +55,25 @@ void Game::MakePieces() {
 
     int i = 0;
     auto cells = board->getCellBoard();
+    int msc = square_len / 7;
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             auto cell = cells[row][col];
             if(cell.type == NONE || cell.type == ENPASSANT)
                 continue;
+            int center = 0;
+            if(cell.type == ROOK)
+                center = msc * 55 / 100;
+            else if(cell.type == PAWN)
+                center = msc * 8 / 10;
             qDebug() << "row: " << row;
             qDebug() << "col: " << col;
             QLabel* square = square_pieces[i++].get();
-            square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
+            square->setGeometry(start_x + col * square_len + msc / 2 + center, row * square_len + msc / 2, square_len - msc, square_len - msc);
             // qDebug() << "type: " << cell.type;
             // qDebug() << "color: " << cell.color;
-            square->setPixmap(images.at(std::make_tuple(cell.type, cell.color)).scaled(square_len, square_len, Qt::KeepAspectRatio));
+            square->setPixmap(images.at(std::make_tuple(cell.type, cell.color)).scaled(square_len - msc, square_len - msc, Qt::KeepAspectRatio));
+            square->show();
         }
     }
 }
