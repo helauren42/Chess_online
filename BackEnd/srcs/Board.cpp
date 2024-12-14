@@ -36,23 +36,18 @@ void Board::setPlayerTurn(bool *_player_turn) { player_turn = _player_turn; }
 
 const std::vector<std::unique_ptr<Pieces>> &Board::getActivePieces() const { return this->active_pieces; }
 const std::unique_ptr<Pieces> &Board::getSelectedPiece() const { return selected_piece; }
-std::array<std::array<Cell, 8>, 8> Board::getCellBoard() const { return cell_board; }
+const std::array<std::array<Cell, 8>, 8>& Board::getCellBoard() const { return cell_board; }
 
 void Board::setBoard()
 {
-	Cell cell;
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-			cell_board[i][j] = cell;
-	}
 	for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 	{
 		Pos pos = it->get()->getPosition();
 		PieceType type = it->get()->getType();
 		bool color = it->get()->getColor();
+        std::string s = color == WHITE ? "WHITE" : "BLACK";
 		cell_board[pos.y][pos.x].type = type;
-		cell_board[pos.y][pos.x].color = &color;
+        cell_board[pos.y][pos.x].color = color;
 	}
 }
 

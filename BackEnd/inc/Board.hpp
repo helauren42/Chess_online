@@ -10,14 +10,13 @@
 struct Cell
 {
 	PieceType type = NONE;
-	bool *color = nullptr;
+    bool color;
 };
 
 class Board
 {
 private:
 	bool has_en_passant = false;
-	bool player_turn = WHITE;
 	bool castling = false;
 	std::array<std::array<Cell, 8>, 8> cell_board;
 	std::unique_ptr<Pieces> selected_piece = nullptr;
@@ -28,6 +27,7 @@ private:
 	const std::array<Move, 8> king_moves = {Move(1, 2), Move(1, -2), Move(-1, 2), Move(-1, -2), Move(2, 1), Move(2, -1), Move(-2, 1), Move(-2, -1)};
 
 public:
+	bool player_turn = WHITE;
 	Board() {};
 	~Board() {};
 
@@ -43,7 +43,7 @@ public:
 
 	const std::vector<std::unique_ptr<Pieces>>& getActivePieces() const;
 	const std::unique_ptr<Pieces>& getSelectedPiece() const;
-	std::array<std::array<Cell, 8>, 8>  getCellBoard() const;
+    const std::array<std::array<Cell, 8>, 8>&  getCellBoard() const;
 
 	void setBoard();
 	Pieces *getTargetPiece(const Pos &new_pos) const;

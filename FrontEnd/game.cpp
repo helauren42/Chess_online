@@ -20,7 +20,7 @@ void Game::MakeChessBoard() {
         for (int col = 0; col < 8; col++) {
             QLabel* square = squares[row * 8 + col];
             square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
-            if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().reverseY())
+            if(red_piece && red_piece->getPosition().x == col && red_piece->getPosition().y == row)
                 square->setPixmap(redSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
             else if ((row + col) % 2 == 0) {
                 square->setPixmap(lightSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
@@ -32,19 +32,20 @@ void Game::MakeChessBoard() {
 }
 
 unsigned int Game::count_pieces() const {
+    board->setBoard();
     auto cells = board->getCellBoard();
     unsigned int count = 0;
     for (int y = 0; y < 8 ; y++) {
         for (int x = 0; x < 8 ; x++) {
-            if(cells[y][x].type != NONE)
+            if(cells[y][x].type != NONE && cells[y][x].type != ENPASSANT){
                 count++;
+            }
         }
     }
     return count;
 }
 
 void Game::MakePieces() {
-    board->setBoard();
     unsigned int num_pieces = count_pieces();
     qDebug() << "MakePieces()";
     qDebug() << "number of pieces: " << num_pieces;
@@ -58,9 +59,12 @@ void Game::MakePieces() {
 
     int i = 0;
     auto cells = board->getCellBoard();
+    // auto active_pieces = board->getActivePieces();
     int msc = square_len / 7;
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
+            Pos pos(col, row);
+            pos.y = pos.reverseY();
             auto cell = cells[row][col];
             if(cell.type == NONE || cell.type == ENPASSANT)
                 continue;
@@ -69,13 +73,9 @@ void Game::MakePieces() {
                 center = msc * 55 / 100;
             else if(cell.type == PAWN)
                 center = msc * 8 / 10;
-            qDebug() << "row: " << row;
-            qDebug() << "col: " << col;
-            qDebug() << "type: " << cell.type;
-            qDebug() << "color: " << cell.color;
             QLabel* square = square_pieces[i++].get();
-            square->setGeometry(start_x + col * square_len + msc / 2 + center, row * square_len + msc / 2, square_len - msc, square_len - msc);
-            square->setPixmap(images.at(std::make_tuple(cell.type, cell.color)).scaled(square_len - msc, square_len - msc, Qt::KeepAspectRatio));
+            square->setGeometry(start_x + pos.x * square_len + msc / 2 + center, pos.y * square_len + msc / 2, square_len - msc, square_len - msc);
+            square->setPixmap(images.at(std::make_pair(cell.type, cell.color)).scaled(square_len - msc, square_len - msc, Qt::KeepAspectRatio));
             square->show();
         }
     }

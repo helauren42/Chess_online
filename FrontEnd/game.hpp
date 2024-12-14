@@ -56,19 +56,19 @@ private:
     QPixmap redSquare;
     QList<QLabel*> squares;
     std::vector<std::unique_ptr<QLabel>> square_pieces;
-    const std::map<std::tuple<PieceType, bool>, QPixmap> images = {
-        {std::make_tuple(PAWN, WHITE), QPixmap("../../../IMG/USE/w_pawn.png")},
-        {std::make_tuple(BISHOP, WHITE), QPixmap("../../../IMG/USE/w_bishop.png")},
-        {std::make_tuple(KNIGHT, WHITE), QPixmap("../../../IMG/USE/w_knight.png")},
-        {std::make_tuple(ROOK, WHITE), QPixmap("../../../IMG/USE/w_rook.png")},
-        {std::make_tuple(QUEEN, WHITE), QPixmap("../../../IMG/USE/w_queen.png")},
-        {std::make_tuple(KING, WHITE), QPixmap("../../../IMG/USE/w_king.png")},
-        {std::make_tuple(PAWN, BLACK), QPixmap("../../../IMG/USE/b_pawn.png")},
-        {std::make_tuple(BISHOP, BLACK), QPixmap("../../../IMG/USE/b_bishop.png")},
-        {std::make_tuple(KNIGHT, BLACK), QPixmap("../../../IMG/USE/b_knight.png")},
-        {std::make_tuple(ROOK, BLACK), QPixmap("../../../IMG/USE/b_rook.png")},
-        {std::make_tuple(QUEEN, BLACK), QPixmap("../../../IMG/USE/b_queen.png")},
-        {std::make_tuple(KING, BLACK), QPixmap("../../../IMG/USE/b_king.png")}
+    const std::map<std::pair<PieceType, bool>, QPixmap> images = {
+        {std::make_pair(PAWN, WHITE), QPixmap("../../../IMG/USE/w_pawn.png")},
+        {std::make_pair(BISHOP, WHITE), QPixmap("../../../IMG/USE/w_bishop.png")},
+        {std::make_pair(KNIGHT, WHITE), QPixmap("../../../IMG/USE/w_knight.png")},
+        {std::make_pair(ROOK, WHITE), QPixmap("../../../IMG/USE/w_rook.png")},
+        {std::make_pair(QUEEN, WHITE), QPixmap("../../../IMG/USE/w_queen.png")},
+        {std::make_pair(KING, WHITE), QPixmap("../../../IMG/USE/w_king.png")},
+        {std::make_pair(PAWN, BLACK), QPixmap("../../../IMG/USE/b_pawn.png")},
+        {std::make_pair(BISHOP, BLACK), QPixmap("../../../IMG/USE/b_bishop.png")},
+        {std::make_pair(KNIGHT, BLACK), QPixmap("../../../IMG/USE/b_knight.png")},
+        {std::make_pair(ROOK, BLACK), QPixmap("../../../IMG/USE/b_rook.png")},
+        {std::make_pair(QUEEN, BLACK), QPixmap("../../../IMG/USE/b_queen.png")},
+        {std::make_pair(KING, BLACK), QPixmap("../../../IMG/USE/b_king.png")}
     };
 
     void MakeChessBoard();
@@ -121,18 +121,20 @@ private:
                 default:
                     break;
                 }
-                std::ostringstream os;
-                os << board->getSelectedPiece();
-                qDebug() << "click piece selected piece: " << os.str();
                 return;
             }
         }
     }
     void handleClick(const int clicked_x, const int clicked_y) {
         Pos clicked_square = getClickedSquare(clicked_x, clicked_y);
-
+        qDebug() << "clicked square x: " << " " << clicked_square.x << " y: " <<clicked_square.y;
         if(!board->getSelectedPiece()) {
+            qDebug() << "selecting piece";
             selectPiece(clicked_square);
+            std::ostringstream os;
+            if(board->getSelectedPiece())
+                os << board->getSelectedPiece();
+            qDebug() << "click piece selected piece: " << os.str();
         }
         else
             board->moveSelectedPiece(clicked_square);
