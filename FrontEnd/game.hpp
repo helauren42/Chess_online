@@ -96,27 +96,27 @@ private:
             const std::unique_ptr<Pieces>::pointer piece = it->get();
             Pos pos = piece->getPosition();
             short pos_rev_y = pos.reverseY();
-            if (piece->getColor() == board->player_turn && pos.x == clicked_square.x && pos_rev_y == clicked_square.y)
+            if (piece->getColor() == board->player_turn && pos.x == clicked_square.x && pos.y == clicked_square.y)
             {
                 switch (piece->getType())
                 {
                 case PAWN:
-                    board->setSelectedPiece(std::make_unique<Pawn>(pos.x, pos.y, piece->getColor()));
+                    board->setSelectedPiece(std::make_unique<Pawn>(pos.x, pos_rev_y, piece->getColor()));
                     break;
                 case ROOK:
-                    board->setSelectedPiece(std::make_unique<Rook>(pos.x, pos.y, piece->getColor()));
+                    board->setSelectedPiece(std::make_unique<Rook>(pos.x, pos_rev_y, piece->getColor()));
                     break;
                 case KNIGHT:
-                    board->setSelectedPiece(std::make_unique<Knight>(pos.x, pos.y, piece->getColor()));
+                    board->setSelectedPiece(std::make_unique<Knight>(pos.x, pos_rev_y, piece->getColor()));
                     break;
                 case BISHOP:
-                    board->setSelectedPiece(std::make_unique<Bishop>(pos.x, pos.y, piece->getColor()));
+                    board->setSelectedPiece(std::make_unique<Bishop>(pos.x, pos_rev_y, piece->getColor()));
                     break;
                 case QUEEN:
-                    board->setSelectedPiece(std::make_unique<Queen>(pos.x, pos.y, piece->getColor()));
+                    board->setSelectedPiece(std::make_unique<Queen>(pos.x, pos_rev_y, piece->getColor()));
                     break;
                 case KING:
-                    board->setSelectedPiece(std::make_unique<King>(pos.x, pos.y, piece->getColor()));
+                    board->setSelectedPiece(std::make_unique<King>(pos.x, pos_rev_y, piece->getColor()));
                     break;
                 default:
                     break;
