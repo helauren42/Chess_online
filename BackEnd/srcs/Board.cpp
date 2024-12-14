@@ -1,4 +1,4 @@
-#include "Board.hpp"
+#include "../inc/Board.hpp"
 
 /* ---------------------------------------------------------------------- INITIALIZATION --------------------------------------------------------------------------- */
 
@@ -34,9 +34,9 @@ void Board::init()
 void Board::setSelectedPiece(std::unique_ptr<Pieces> piece) { selected_piece = std::move(piece); }
 void Board::setPlayerTurn(bool *_player_turn) { player_turn = _player_turn; }
 
-const std::vector<std::unique_ptr<Pieces>> &Board::getActivePieces() const { return active_pieces; }
+const std::vector<std::unique_ptr<Pieces>> &Board::getActivePieces() const { return this->active_pieces; }
 const std::unique_ptr<Pieces> &Board::getSelectedPiece() const { return selected_piece; }
-const std::array<std::array<Cell, 8>, 8> &Board::getCellBoard() const { return cell_board; }
+std::array<std::array<Cell, 8>, 8> Board::getCellBoard() const { return cell_board; }
 
 void Board::setBoard()
 {

@@ -1,4 +1,4 @@
-#include "Utils.hpp"
+#include "../inc/Utils.hpp"
 
 Move::Move() : x(0), y(0) {}
 

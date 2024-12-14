@@ -1,4 +1,4 @@
-#include "Pieces.hpp"
+#include "../inc/Pieces.hpp"
 
 Pieces::Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type)
 {

@@ -9,6 +9,9 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ../BackEnd/srcs/Utils.cpp \
+    ../BackEnd/srcs/Board.cpp \
+    ../BackEnd/srcs/Pieces.cpp \
     game.cpp \
     login.cpp \
     main.cpp \
@@ -17,6 +20,9 @@ SOURCES += \
     signup.cpp
 
 HEADERS += \
+    ../BackEnd/inc/Utils.hpp \
+    ../BackEnd/inc/Board.hpp \
+    ../BackEnd/inc/Pieces.hpp \
     common.hpp \
     game.hpp \
     login.hpp \

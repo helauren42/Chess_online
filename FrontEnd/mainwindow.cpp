@@ -52,7 +52,6 @@ void MainWindow::onLaunchGame() {
     qDebug() << "pre launch game widget";
     this->setWindowTitle("Game");
     stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
-    // sigStartGame();
     qDebug() << "launching game widget";
 }
 
@@ -83,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Game
     connect(stackedWidgets->widMenu, &Menu::sigLauchGame, this, &MainWindow::onLaunchGame);
-    // connect(this, &MainWindow::sigStartGame, stackedWidgets->widGame, &Game::onStart);
+    connect(stackedWidgets->widMenu, &Menu::sigLauchGame, stackedWidgets->widGame, &Game::onStartGame);
 }
 
 MainWindow::~MainWindow()

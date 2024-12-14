@@ -30,10 +30,6 @@ void Game::MakeChessBoard() {
     }
 }
 
-void    Game::onStart() {
-    MakeChessBoard();
-}
-
 void Game::computeDim() {
     this->board_len = this->_height;
     this->square_len = board_len / 8;
@@ -57,6 +53,11 @@ void Game::emptySquares() {
         (*it)->deleteLater();
     }
     squares.clear();
+}
+
+void Game::onStartGame() {
+    board->init();
+    MakeChessBoard();
 }
 
 Game::Game(QWidget *parent)

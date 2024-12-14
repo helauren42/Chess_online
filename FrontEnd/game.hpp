@@ -7,7 +7,8 @@
 #include <QLabel>
 #include <QResizeEvent>
 #include <QLabel>
-#include "../BackEnd/Board.hpp"
+#include "../BackEnd/inc/Board.hpp"
+#include "../BackEnd/inc/Utils.hpp"
 
 namespace Ui {
 class Game;
@@ -26,10 +27,10 @@ public:
     void computeDim();
     void resizeEvent(QResizeEvent* event);
     void emptySquares();    
-    Board* board;
+    std::unique_ptr<Board> board;
 
 public slots:
-    void onStart();
+    void onStartGame();
 
 private:
     Ui::Game *ui;
