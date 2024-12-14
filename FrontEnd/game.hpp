@@ -23,12 +23,11 @@ public:
     ~Game();
     void MakeChessBoard();
     void MakePieces();
-    QPixmap lightSquare;
-    QPixmap darkSquare;
+
     void computeDim();
     void resizeEvent(QResizeEvent* event);
-    void emptySquares();    
-    std::unique_ptr<Board> board;
+    void emptySquares();
+
     unsigned int count_pieces() const;
 
 public slots:
@@ -41,9 +40,27 @@ private:
     int board_len;
     int square_len;
     int start_x;
+
+    std::unique_ptr<Board> board;
+
+    QPixmap lightSquare;
+    QPixmap darkSquare;
     QList<QLabel*> squares;
     std::vector<std::unique_ptr<QLabel>> square_pieces;
-    std::map<std::pair<PieceType, bool>, QPixmap> images;
+    const std::map<std::tuple<PieceType, bool>, QPixmap> images = {
+        {std::make_tuple(PAWN, WHITE), QPixmap("../../../IMG/USE/w_pawn.png")},
+        {std::make_tuple(BISHOP, WHITE), QPixmap("../../../IMG/USE/w_bishop.png")},
+        {std::make_tuple(KNIGHT, WHITE), QPixmap("../../../IMG/USE/w_knight.png")},
+        {std::make_tuple(ROOK, WHITE), QPixmap("../../../IMG/USE/w_rook.png")},
+        {std::make_tuple(QUEEN, WHITE), QPixmap("../../../IMG/USE/w_queen.png")},
+        {std::make_tuple(KING, WHITE), QPixmap("../../../IMG/USE/w_king.png")},
+        {std::make_tuple(PAWN, BLACK), QPixmap("../../../IMG/USE/b_pawn.png")},
+        {std::make_tuple(BISHOP, BLACK), QPixmap("../../../IMG/USE/b_bishop.png")},
+        {std::make_tuple(KNIGHT, BLACK), QPixmap("../../../IMG/USE/b_knight.png")},
+        {std::make_tuple(ROOK, BLACK), QPixmap("../../../IMG/USE/b_rook.png")},
+        {std::make_tuple(QUEEN, BLACK), QPixmap("../../../IMG/USE/b_queen.png")},
+        {std::make_tuple(KING, BLACK), QPixmap("../../../IMG/USE/b_king.png")}
+    };
 };
 
 #endif // GAME_HPP

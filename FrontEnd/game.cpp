@@ -47,23 +47,26 @@ void Game::MakePieces() {
     qDebug() << "number of pieces: " << num_pieces;
 
     while(square_pieces.size() < num_pieces) {
-        square_pieces.push_back(std::make_unique<QLabel>());
+        square_pieces.push_back(std::make_unique<QLabel>(this));
     }
     while(square_pieces.size() > num_pieces) {
         square_pieces.pop_back();
     }
 
     int i = 0;
+    auto cells = board->getCellBoard();
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
+            auto cell = cells[row][col];
+            if(cell.type == NONE || cell.type == ENPASSANT)
+                continue;
+            qDebug() << "row: " << row;
+            qDebug() << "col: " << col;
             QLabel* square = square_pieces[i++].get();
             square->setGeometry(start_x + col * square_len, row * square_len, square_len, square_len);
-            // Set the background image based on the square's color
-            if ((row + col) % 2 == 0) {
-                square->setPixmap(lightSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
-            } else {
-                square->setPixmap(darkSquare.scaled(square_len, square_len, Qt::KeepAspectRatio));
-            }
+            // qDebug() << "type: " << cell.type;
+            // qDebug() << "color: " << cell.color;
+            square->setPixmap(images.at(std::make_tuple(cell.type, cell.color)).scaled(square_len, square_len, Qt::KeepAspectRatio));
         }
     }
 }
@@ -83,6 +86,7 @@ void Game::resizeEvent(QResizeEvent* event) {
 
     computeDim();
     MakeChessBoard();
+    MakePieces();
     qDebug() << "Window resized to width: " << this->_width << "height: " << this->_height;
 }
 
@@ -95,13 +99,18 @@ void Game::emptySquares() {
 
 void Game::onStartGame() {
     board->init();
+    qDebug() << "here1";
     MakeChessBoard();
+    qDebug() << "here2";
+    MakePieces();
+    qDebug() << "here3";
 }
 
 Game::Game(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Game)
 {
+    board = std::make_unique<Board>();
     ui->setupUi(this);
 
     this->_height = this->height();
@@ -109,37 +118,9 @@ Game::Game(QWidget *parent)
     computeDim();
 
     lightSquare = QPixmap("../../../IMG/USE/square_brown_light.png");
+    qDebug() << lightSquare;
     darkSquare = QPixmap("../../../IMG/USE/square_brown_dark.png");
-
-    std::pair<PieceType, bool> key(PAWN, WHITE);
-    images[key] = QPixmap("../../../IMG/USE/w_pawn.png");
-    key->first = BISHOP;
-    images[key] = QPixmap("../../../IMG/USE/w_bishop.png");
-    key->first = KNIGHT;
-    images[key] = QPixmap("../../../IMG/USE/w_knight.png");
-    key->first = ROOK;
-    images[key] = QPixmap("../../../IMG/USE/w_rook.png");
-    key->first = QUEEN;
-    images[key] = QPixmap("../../../IMG/USE/w_queen.png");
-    key->first = KING;
-    images[key] = QPixmap("../../../IMG/USE/w_king.png");
-    
-    key->second = BLACK;
-    key->first = PAWN;
-    images[key] = QPixmap("../../../IMG/USE/b_pawn.png");
-    key->first = BISHOP;
-    images[key] = QPixmap("../../../IMG/USE/b_bishop.png");
-    key->first = KNIGHT;
-    images[key] = QPixmap("../../../IMG/USE/b_knight.png");
-    key->first = ROOK;
-    images[key] = QPixmap("../../../IMG/USE/b_rook.png");
-    key->first = QUEEN;
-    images[key] = QPixmap("../../../IMG/USE/b_queen.png");
-    key->first = KING;
-    images[key] = QPixmap("../../../IMG/USE/b_king.png");
-    
-    board = std::make_unique<Board>(8, 8);
-    MakeChessBoard();
+    qDebug() << darkSquare;
 }
 
 Game::~Game()
