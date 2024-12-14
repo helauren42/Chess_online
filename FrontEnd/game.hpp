@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QResizeEvent>
 #include <QLabel>
+#include "../BackEnd/Board.hpp"
 
 namespace Ui {
 class Game;
@@ -24,7 +25,9 @@ public:
     QPixmap darkSquare;
     void computeDim();
     void resizeEvent(QResizeEvent* event);
-    void emptySquares();
+    void emptySquares();    
+    Board* board;
+
 public slots:
     void onStart();
 
