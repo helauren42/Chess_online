@@ -322,15 +322,17 @@ Pieces* Board::isCheck(const Pieces *target)
         Out::stdOut("3");
 		if (target && piece == target)
 			continue;
-        Out::stdOut("4");
         if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
 		{
             Out::stdOut("Piece: ", piece->getType());
             Out::stdOut("pos: ", piece->getPosition());
             Out::stdOut("Puts king in check\n");
+		    Out::stdOut("ret piece");
 			return piece.get();
 		}
+        Out::stdOut("4");
 	}
+    Out::stdOut("ret nullptr");
 	return nullptr;
 }
 
