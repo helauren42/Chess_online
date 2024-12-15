@@ -1,5 +1,7 @@
 #include "../inc/Board.hpp"
 
+// add check for draw if last 3 moves are the same
+
 /* ---------------------------------------------------------------------- INITIALIZATION --------------------------------------------------------------------------- */
 
 std::unique_ptr<Pieces> Board::initPiece(const short &x, const short &y)
@@ -215,7 +217,7 @@ bool Board::validMove(Pos new_pos, const Pieces *piece, const Pieces *target_pie
 
 void Board::removePiece(Pieces *piece)
 {
-	info("remove piece: ", piece);
+	Out::stdOut("remove piece: ", piece);
 	if (piece->getType() == ENPASSANT)
 	{
 		Pos pawn_pos = piece->getPosition();
@@ -258,8 +260,6 @@ void Board::moveSelectedPiece(const Pos &new_pos)
     Out::stdOut("moving selected piece\n");
 	castling = false;
 
-	Out::stdOut("start ACTIVE PIECES SIZE: ", active_pieces.size());
-
 	// remove the en_passant temporary piece if match selected_piece color
 	for (auto it = active_pieces.begin(); it != active_pieces.end();)
 		if (it->get()->getType() == ENPASSANT && player_turn == it->get()->getColor())
@@ -284,7 +284,6 @@ void Board::moveSelectedPiece(const Pos &new_pos)
         if (selected_piece == it->get())
 		{
             setBoard();
-            Out::stdOut("testing move");
 			if (validMove(new_pos, it->get(), target_piece))
             {
                 Out::stdOut("Move is valid");
@@ -358,11 +357,10 @@ Pieces* Board::isCheck(const Pieces *target)
             Out::stdOut("Piece: ", piece->getType());
             Out::stdOut("pos: ", piece->getPosition());
             Out::stdOut("Puts king in check\n");
-		    Out::stdOut("ret piece");
 			return piece.get();
 		}
 	}
-    Out::stdOut("ret nullptr");
+    Out::stdOut("no check");
 	return nullptr;
 }
 
@@ -394,12 +392,11 @@ bool Board::isCheckmate()
 	if (!checker)
 		return false;
 	if (isImmobilized(getKing()) && !canUncheck(checker)) {
-		
+		winner = player_turn == BLACK ? WHITE : BLACK;
 		return true;
 	}
 	return false;
 }
-
 
 bool Board::isStalemate() {
 	for (auto& piece : active_pieces) {

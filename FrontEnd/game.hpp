@@ -10,6 +10,9 @@
 #include "../BackEnd/inc/Board.hpp"
 #include "../BackEnd/inc/Pieces.hpp"
 #include "../BackEnd/inc/Utils.hpp"
+#include "../BackEnd/inc/Online.hpp"
+
+#include <memory>
 
 namespace Ui {
 class Game;
@@ -48,6 +51,8 @@ private:
     int board_len;
     int square_len;
     int start_x;
+
+    bool is_finished;
 
     std::unique_ptr<Board> board;
 
@@ -127,7 +132,6 @@ private:
     void handleClick(const int clicked_x, const int clicked_y) {
         Pos clicked_square = getClickedSquare(clicked_x, clicked_y);
         if(!board->getSelectedPiece()) {
-            qDebug() << "selecting piece";
             selectPiece(clicked_square);
             std::ostringstream os;
             if(board->getSelectedPiece())
@@ -137,7 +141,8 @@ private:
         else {
             Out::stdOut("calling move selected piece");
             board->moveSelectedPiece(clicked_square);
-            if(isEndGame())
+            if(board->isCheckmate() || board->isStalemate())
+                is_finished = true;
         }
         MakeChessBoard();
         MakePieces();
