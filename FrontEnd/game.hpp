@@ -137,6 +137,7 @@ private:
         else {
             Out::stdOut("calling move selected piece");
             board->moveSelectedPiece(clicked_square);
+            if(isEndGame())
         }
         MakeChessBoard();
         MakePieces();

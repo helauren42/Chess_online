@@ -393,12 +393,24 @@ bool Board::isCheckmate()
 	Pieces *checker = isCheck();
 	if (!checker)
 		return false;
-	if (isImmobilized(getKing()) && !canUncheck(checker))
+	if (isImmobilized(getKing()) && !canUncheck(checker)) {
+		
 		return true;
+	}
 	return false;
 }
 
-// add is stalemate
+
+bool Board::isStalemate() {
+	for (auto& piece : active_pieces) {
+		if(piece->getColor() == player_turn) {
+			if(!isImmobilized(piece.get()))
+				return false;
+		}
+	}
+	this->is_stalemate = true;
+	return true;
+}
 
 bool Board::isImmobilized(Pieces *piece)
 {

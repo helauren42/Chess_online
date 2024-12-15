@@ -24,6 +24,9 @@ private:
 	std::vector<std::unique_ptr<Pieces>> dead_white_pieces;
 	std::vector<std::unique_ptr<Pieces>> dead_black_pieces;
 
+	short winner = -1;
+	bool is_stalemate = 0;
+
 	const std::array<Move, 8> king_moves = {Move(1, 2), Move(1, -2), Move(-1, 2), Move(-1, -2), Move(2, 1), Move(2, -1), Move(-2, 1), Move(-2, -1)};
 
 public:
@@ -63,11 +66,11 @@ public:
 
 	/* ---------------------------------------------------------------------- End game checks --------------------------------------------------------------------------- */
 
-	// add is stalemate
     Pieces *isCheck(const Pieces *target = nullptr);
     bool canUncheck(Pieces *checker);
-    bool isCheckmate();
     bool isImmobilized(Pieces *piece);
+	bool isStalemate();
+    bool isCheckmate();
 };
 
 #endif
