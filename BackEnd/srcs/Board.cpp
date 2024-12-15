@@ -81,6 +81,9 @@ Pieces *Board::getKing() const
 
 /* ---------------------------------------------------------------------- Validating move --------------------------------------------------------------------------- */
 
+/*
+	starting position is included as an intersection but not the end position
+*/
 std::vector<Pos> Board::intersection(const Pos &start, const Pos &end)  const
 {
 	std::vector<Pos> ret;
@@ -158,6 +161,21 @@ bool Board::foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_c
 	return true;
 }
 
+std::vector<Pos> castlingPos(Pos king_pos, Pos rook_pos) {
+	if(rook_pos.x < king_pos.x) {
+		king_pos.x -= 2;
+		rook_pos.x = king_pos.x + 1;
+	}
+	else {
+		king_pos.x += 2;
+		rook_pos.x = king_pos.x - 1;
+	}
+	std::vector<Pos> ret;
+	ret.push_back(king_pos);
+	ret.push_back(rook_pos);
+    return ret;
+}
+
 // there is a validMove() per piece, where every individual piece checks if the move is valid from their perspective
 // meaning they can move in such a way
 // then the board needs to validate the move by checking that there aren't any obstructions in the way stopping the piece from making the move
@@ -167,8 +185,8 @@ bool Board::validMove(Pos new_pos, const Pieces *piece, const Pieces *target_pie
 	Out::stdOut("validating move");
 	if (target_piece != nullptr && piece->getType() == KING && target_piece->getType() == ROOK && piece->getColor() == target_piece->getColor() && piece->getFirstMove() && target_piece->getFirstMove() && !isCheck())
 	{
-		std::vector<Pos> intersections = intersection(target_piece->getPosition(), piece->getPosition());
-		Out::stdOut("intersections");
+		std::vector<Pos> castling_pos = castlingPos(piece->getPosition(), target_piece->getPosition());
+		std::vector<Pos> intersections = intersection(piece->getPosition(), castling_pos[0]);
 		for (auto &square : intersections)
 		{
 			for (auto &active_piece : active_pieces)
@@ -234,22 +252,6 @@ void Board::makeEnPassant(const Pos &old_pos, const Move &move)
 	Pos pos(old_pos.x, old_pos.y + move.y / 2);
 	active_pieces.push_back(std::make_unique<EnPassant>(pos.x, pos.y, selected_piece->getColor()));
 }
-
-std::vector<Pos> castlingPos(Pos king_pos, Pos rook_pos) {
-	if(rook_pos.x < king_pos.x) {
-		king_pos.x -= 2;
-		rook_pos.x = king_pos.x + 1;
-	}
-	else {
-		king_pos.x += 2;
-		rook_pos.x = king_pos.x - 1;
-	}
-	std::vector<Pos> ret;
-	ret.push_back(king_pos);
-	ret.push_back(rook_pos);
-    return ret;
-}
-
 
 void Board::moveSelectedPiece(const Pos &new_pos)
 {
