@@ -10,7 +10,7 @@
 #include "stdlib.h"
 // #include "Player.hpp"
 
-#include "../INC/MyCppLib/MyCppLib.hpp"
+#include "../MyCppLib/MyCppLib.hpp"
 
 SDL_Window *initWindow(t_dim &dim)
 {
@@ -215,13 +215,13 @@ public:
 		}
 		if (game_end)
 		{
-			out("WINNER is: ");
+			Logger::info("WINNER is: ");
 			if (winner == WHITE)
-				out("WHITE\n");
+				Logger::info("WHITE\n");
 			else if (winner == BLACK)
-				out("BLACK\n");
+				Logger::info("BLACK\n");
 			else
-				out("STALEMATE\n");
+				Logger::info("STALEMATE\n");
 			SDL_Delay(640);
 		}
 	}

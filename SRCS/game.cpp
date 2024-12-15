@@ -1,5 +1,4 @@
 #include "../INC/Game.hpp"
-#include "../INC/MyCppLib/Printer/Printer.hpp"
 
 // add check for check, check mate
 // pawns becoming queens and the special case of eating a jumping pawn
@@ -8,7 +7,7 @@
 int main(int argc, char* argv[]) {
 	Game game;
 
-	game.setLoggerFd(setFoutFd("logger.txt"));
+	Logger::setLoggerFile("log.txt", true);
 	if(game.initSDL())
 		return 1;
 

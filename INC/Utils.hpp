@@ -1,6 +1,7 @@
-#pragma once
+#ifndef UTILS_HPP
+#define UTILS_HPP
+
 #include <iostream>
-#include "MyCppLib/MyCppLib.hpp"
 
 enum PieceType {
 	PAWN,
@@ -138,3 +139,5 @@ bool operator==(const Pos& pos1, const Pos& pos2) {
 bool operator!=(const Pos& pos1, const Pos& pos2) {
 	return pos1.x != pos2.x || pos1.y != pos2.y;
 }
+
+#endif

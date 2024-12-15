@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "Utils.hpp"
-#include "MyCppLib/MyCppLib.hpp"
+#include "../MyCppLib/MyCppLib.hpp"
 #include <iostream>
 
 class Pieces
@@ -48,15 +48,15 @@ public:
 
 	bool validMove(const Pos &new_pos, const Pieces *target) const override
 	{
-		fout("new pos: ", new_pos);
-		fout("pos: ", pos);
+		Logger::info("new pos: ", new_pos);
+		Logger::info("pos: ", pos);
 		Move move = new_pos - pos;
 
-		fout("move: ", move);
+		Logger::info("move: ", move);
 		// first handle special cases
 		if ((move.x == 1 || move.x == -1) && target != nullptr && (move.y == 1 * dir))
 		{
-			fout("pawn move 1 valid\n");
+			Logger::info("pawn move 1 valid\n");
 			return true;
 		}
 		if (target != nullptr || move.x >= 2)
@@ -64,7 +64,7 @@ public:
 
 		if (move.x == 0 && firstMove && move.y == 2 * dir)
 		{
-			fout("pawn move 1 valid\n");
+			Logger::info("pawn move 1 valid\n");
 			return true;
 		}
 
@@ -74,7 +74,7 @@ public:
 			return false;
 		}
 
-		fout("pawn move default true\n");
+		Logger::info("pawn move default true\n");
 		// then it should be true
 		return true;
 	}
@@ -168,9 +168,9 @@ public:
 	bool validMove(const Pos &new_pos, const Pieces *target) const override
 	{
 		Move move = new_pos - pos;
-		fout("new pos: ", new_pos);
-		fout("pos: ", pos);
-		fout("move: ", move);
+		Logger::info("new pos: ", new_pos);
+		Logger::info("pos: ", pos);
+		Logger::info("move: ", move);
 		if ((move.x == 0 && move.y != 0) || (move.y == 0 && move.x != 0))
 			return true;
 		if (abs(move.x) == abs(move.y))

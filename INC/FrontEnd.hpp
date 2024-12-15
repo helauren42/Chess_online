@@ -363,7 +363,7 @@ void Events::clickPiece(const short x, const short y, bool &player_turn)
 			default:
 				break;
 			}
-			fout("click piece selected piece: ", board->getSelectedPiece());
+			Logger::info("click piece selected piece: ", board->getSelectedPiece());
 			return;
 		}
 	}
@@ -395,7 +395,7 @@ void Events::eventHandler(const SDL_Event &e, bool &player_turn, bool &quit)
 		if (board->getSelectedPiece() == nullptr)
 		{
 			std::string msg = player_turn == BLACK ? "Black" : "White";
-			fout("Player turn: ", msg);
+			Logger::info("Player turn: ", msg);
 			clickPiece(e.button.x, e.button.y, player_turn);
 		}
 		else
