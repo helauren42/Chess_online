@@ -95,7 +95,7 @@ private:
         {
             const std::unique_ptr<Pieces>::pointer piece = it->get();
             Pos pos = piece->getPosition();
-            if (piece->getColor() == board->player_turn && pos.x == clicked_square.x && pos.y == clicked_square.y)
+                    if (piece->getColor() == board->player_turn && pos.x == clicked_square.x && pos.y == clicked_square.y)
             {
                 switch (piece->getType())
                 {
