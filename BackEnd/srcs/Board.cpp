@@ -175,7 +175,7 @@ bool Board::validMove(Pos new_pos, const Pieces *piece, const Pieces *target_pie
 			{
 				if (active_piece->getColor() == piece->getColor())
 					continue;
-				if ((square, active_piece.get(), nullptr))
+				if (validMove(square, active_piece.get(), nullptr))
 					return false;
 			}
 		}
@@ -235,6 +235,22 @@ void Board::makeEnPassant(const Pos &old_pos, const Move &move)
 	active_pieces.push_back(std::make_unique<EnPassant>(pos.x, pos.y, selected_piece->getColor()));
 }
 
+std::vector<Pos> castlingPos(Pos king_pos, Pos rook_pos) {
+	if(rook_pos.x < king_pos.x) {
+		king_pos.x -= 2;
+		rook_pos.x = king_pos.x + 1;
+	}
+	else {
+		king_pos.x += 2;
+		rook_pos.x = king_pos.x - 1;
+	}
+	std::vector<Pos> ret;
+	ret.push_back(king_pos);
+	ret.push_back(rook_pos);
+    return ret;
+}
+
+
 void Board::moveSelectedPiece(const Pos &new_pos)
 {
     Out::stdOut("moving selected piece\n");
@@ -273,8 +289,11 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 				if (castling == true)
 				{
                     Out::stdOut("try castling");
-					it->get()->makeMove(new_pos);
-					target_piece->makeMove(old_pos);
+					auto castle_pos = castlingPos(it->get()->getPosition(), target_piece->getPosition());
+					it->get()->makeMove(castle_pos[0]);
+					target_piece->makeMove(castle_pos[1]);
+					selected_piece = nullptr;
+					player_turn = player_turn == WHITE ? BLACK : WHITE;
                     Out::stdOut("castling done");
 					return;
 				}
