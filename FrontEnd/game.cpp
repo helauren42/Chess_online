@@ -72,6 +72,7 @@ void Game::MakePieces() {
             auto cell = cells[row][col];
             if(cell.type == NONE || cell.type == ENPASSANT)
                 continue;
+            qDebug() << "cell" << "[" << row << "]" << "[" << col << "]" << " = " << cell.type;
             int center = 0;
             if(cell.type == ROOK)
                 center = msc * 55 / 100;

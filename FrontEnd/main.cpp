@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
-#include "../MyCppLib/Logger/Logger.hpp"
 
 SharedData  shared_data;
 t_dim       dim;
@@ -10,6 +9,7 @@ t_dim       dim;
 int main(int argc, char *argv[])
 {
     QFile file("../../../FrontEnd/styles.css");
+    Logger::setLoggerFile("../../../FrontEnd/log.txt", true);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Failed to open stylesheet file";
         return -1;

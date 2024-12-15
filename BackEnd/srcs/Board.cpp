@@ -40,11 +40,17 @@ const std::array<std::array<Cell, 8>, 8>& Board::getCellBoard() const { return c
 
 void Board::setBoard()
 {
+	for (int y = 0; y < 8; y++) {
+		for (int x = 0; x < 8; x++) {
+			cell_board[y][x].type = NONE;
+		}
+	}
 	for (auto it = active_pieces.begin(); it != active_pieces.end(); it++)
 	{
 		Pos pos = it->get()->getPosition();
 		PieceType type = it->get()->getType();
 		bool color = it->get()->getColor();
+		Out::stdOut("Piece: ", type, "\n", pos);
         std::string s = color == WHITE ? "WHITE" : "BLACK";
 		cell_board[pos.y][pos.x].type = type;
         cell_board[pos.y][pos.x].color = color;
@@ -158,18 +164,18 @@ bool Board::foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_c
 // so a validMove() per piece and a validMove() for the board
 bool Board::validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 {
-	Out::stdOut("validating move\n");
+	Out::stdOut("validating move");
 	if (target_piece != nullptr && piece->getType() == KING && target_piece->getType() == ROOK && piece->getColor() == target_piece->getColor() && piece->getFirstMove() && target_piece->getFirstMove() && !isCheck())
 	{
 		std::vector<Pos> intersections = intersection(target_piece->getPosition(), piece->getPosition());
-		Out::stdOut("intersections\n");
+		Out::stdOut("intersections");
 		for (auto &square : intersections)
 		{
 			for (auto &active_piece : active_pieces)
 			{
 				if (active_piece->getColor() == piece->getColor())
 					continue;
-				if (validMove(square, active_piece.get(), nullptr))
+				if ((square, active_piece.get(), nullptr))
 					return false;
 			}
 		}
@@ -234,6 +240,8 @@ void Board::moveSelectedPiece(const Pos &new_pos)
     Out::stdOut("moving selected piece\n");
 	castling = false;
 
+	Out::stdOut("start ACTIVE PIECES SIZE: ", active_pieces.size());
+
 	// remove the en_passant temporary piece if match selected_piece color
 	for (auto it = active_pieces.begin(); it != active_pieces.end();)
 		if (it->get()->getType() == ENPASSANT && player_turn == it->get()->getColor())
@@ -271,18 +279,17 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 					return;
 				}
 				bool has_en_passant = it->get()->getType() == PAWN && abs(move.y) == 2 ? true : false;
+				Out::stdOut("PRE MOVE ACTIVE PIECES SIZE: ", active_pieces.size());
 				it->get()->makeMove(new_pos);
-                Out::stdOut("crash");
 				// undo move if king is in check after move
 				if (isCheck(target_piece))
 				{
                     Out::stdOut("king is checked");
 					it->get()->makeMove(old_pos);
-                    Out::stdOut("Failed to move piece, king is checked");
+                    Out::stdOut("Failed to move, move reverted, king is checked");
 					return;
 				}
 
-                Out::stdOut("crash2");
 				if (it->get()->getType() == PAWN && (new_pos.y == 0 || new_pos.y == 7))
 				{
                     Out::stdOut("Pawn becomes Queen");
@@ -290,6 +297,8 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 					// should allow player to pick new piece but for now it's just a queen
 					it->reset(new Queen(new_pos.x, new_pos.y, color));
 				}
+
+				Out::stdOut("POST MOVE ACTIVE PIECES SIZE 1: ", active_pieces.size());
 				if (has_en_passant)
 				{
                     Out::stdOut("creating en passant piece");
@@ -297,12 +306,14 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 				}
 
                 Out::stdOut("Successfully moved piece: ");
+				Out::stdOut("POST MOVE ACTIVE PIECES SIZE 2: ", active_pieces.size());
 				if (target_piece)
 				{
                     removePiece(target_piece);
 				}
 				selected_piece = nullptr;
 				player_turn = player_turn == WHITE ? BLACK : WHITE;
+				Out::stdOut("end ACTIVE PIECES SIZE: ", active_pieces.size());
 				return;
 			}
             Out::stdOut("move can not be done, invalid");
@@ -315,16 +326,12 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 
 Pieces* Board::isCheck(const Pieces *target)
 {
-    Out::stdOut("1");
 	Pieces *king = getKing();
 	Pos king_pos = king->getPosition();
-    Out::stdOut("2");
     for (auto &piece : active_pieces)
 	{
-        Out::stdOut("3");
 		if (target && piece == target)
 			continue;
-        Out::stdOut("3.5");
         if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
 		{
             Out::stdOut("Piece: ", piece->getType());
@@ -333,7 +340,6 @@ Pieces* Board::isCheck(const Pieces *target)
 		    Out::stdOut("ret piece");
 			return piece.get();
 		}
-        Out::stdOut("4");
 	}
     Out::stdOut("ret nullptr");
 	return nullptr;

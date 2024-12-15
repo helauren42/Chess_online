@@ -2654,9 +2654,7 @@ main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdir.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdirlisting.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfileinfo.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtimezone.h \
-		../../../MyCppLib/Logger/Logger.hpp \
-		../../../MyCppLib/Printer/Printer.hpp
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtimezone.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../../FrontEnd/main.cpp
 
 mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp \
