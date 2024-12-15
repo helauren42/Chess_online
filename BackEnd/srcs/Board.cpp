@@ -158,9 +158,11 @@ bool Board::foundObstacle(Pos old_pos, Pos new_pos, PieceType type, bool piece_c
 // so a validMove() per piece and a validMove() for the board
 bool Board::validMove(Pos new_pos, const Pieces *piece, const Pieces *target_piece)
 {
+	Out::stdOut("validating move\n");
 	if (target_piece != nullptr && piece->getType() == KING && target_piece->getType() == ROOK && piece->getColor() == target_piece->getColor() && piece->getFirstMove() && target_piece->getFirstMove() && !isCheck())
 	{
 		std::vector<Pos> intersections = intersection(target_piece->getPosition(), piece->getPosition());
+		Out::stdOut("intersections\n");
 		for (auto &square : intersections)
 		{
 			for (auto &active_piece : active_pieces)
@@ -176,11 +178,11 @@ bool Board::validMove(Pos new_pos, const Pieces *piece, const Pieces *target_pie
 	}
 
 	if (target_piece && piece->getColor() == target_piece->getColor())
-		return info("Target piece is same color\n"), false;
+		return Out::stdOut("Target piece is same color\n"), false;
 	else if (!piece->validMove(new_pos, target_piece))
-		return info("Invalid move for piece\n"), false;
+		return Out::stdOut("Invalid move for piece\n"), false;
 	else if (foundObstacle(piece->getPosition(), new_pos, piece->getType(), piece->getColor()))
-		return info("Found obstacle\n"), false;
+		return Out::stdOut("Found obstacle\n"), false;
 
 	return true;
 }
@@ -322,6 +324,7 @@ Pieces* Board::isCheck(const Pieces *target)
         Out::stdOut("3");
 		if (target && piece == target)
 			continue;
+        Out::stdOut("3.5");
         if (piece->getColor() != king->getColor() && validMove(king_pos, piece.get(), king))
 		{
             Out::stdOut("Piece: ", piece->getType());
