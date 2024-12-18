@@ -2,8 +2,7 @@
 
 int main() {
 	Online online;
-		online.makeRequests("/");
-		cout << online.recvResponse();
+		online.createAccount("test", "test", Date(1, 1, 2000));
 
 	return 0;
 }

@@ -44,28 +44,41 @@ private:
 	bool loggedIn = false;
 	Account account;
 	GameInfo gameInfo;
-    URI uri;
+	URI uri;
 	HTTPClientSession session;
+	HTTPRequest request;
+	HTTPResponse response;
+	void makeRequests(std::string path, std::string body) {
+		request = HTTPRequest(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
+		std::ostream& os = session.sendRequest(request);
+		os << body;
+	}
 
 public:
 	Online() : uri(MY_URI) , session (uri.getHost(), uri.getPort()) {
 		session.setKeepAlive(true);
 	};
 	~Online() {}
-	void makeRequests(std::string path) {
-        HTTPRequest request = HTTPRequest(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
-        session.sendRequest(request);
-    }
-    std::string recvResponse() {
-		HTTPResponse response;
+	std::string recvResponse() {
 		istream& rs = session.receiveResponse(response);
-        std::stringstream ss;
-        ss << rs.rdbuf();
-        return ss.str();
-    }
+		std::stringstream ss;
+		ss << rs.rdbuf();
+		return ss.str();
+	}
+	int getStatus() const {
+		return response.getStatus();
+	}
 
 	void login(const std::string& username, const std::string& password) {}
-	void createAccount(const std::string& username, const std::string& password, const Date& dob) {}
+	std::string accountJson(const std::string& username, const std::string& password, const Date& dob) {
+		std::string ret;
+		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + to_string(dob.day) + "/" + to_string(dob.month) + "/" + to_string(dob.year) + "}";
+		return ret;
+	}
+	std::pair<int, std::string> createAccount(const std::string& username, const std::string& password, const Date& dob) {
+		makeRequests("/signup", accountJson(username, password, dob));
+		return {getStatus(), recvResponse()};
+	}
 	// void logIn() { loggedIn = true; };
 	// void logOut() { loggedIn = false; };
 	bool getLoggedIn() const { return loggedIn; };
