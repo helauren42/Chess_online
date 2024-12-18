@@ -19,6 +19,8 @@ struct Date {
 	int day;
 	int month;
 	int year;
+	Date() {};
+	Date(int _day, int _month, int _year) : day(_day), month(_month), year(_year) {};
 };
 
 struct GameInfo {
@@ -48,13 +50,16 @@ private:
 	HTTPClientSession session;
 	HTTPRequest request;
 	HTTPResponse response;
-	void makeRequests(std::string path, std::string body) {
-		request = HTTPRequest(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
-		std::ostream& os = session.sendRequest(request);
-		os << body;
-	}
 
 public:
+	void makeRequests(std::string method, std::string path, std::string body) {
+		request = HTTPRequest(method, path, HTTPMessage::HTTP_1_1);
+		request.setContentType("application/json");
+        request.setContentLength(body.length());
+		std::ostream& os = session.sendRequest(request);
+		os << body;
+		os.flush();
+	}
 	Online() : uri(MY_URI) , session (uri.getHost(), uri.getPort()) {
 		session.setKeepAlive(true);
 	};
@@ -72,11 +77,11 @@ public:
 	void login(const std::string& username, const std::string& password) {}
 	std::string accountJson(const std::string& username, const std::string& password, const Date& dob) {
 		std::string ret;
-		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + to_string(dob.day) + "/" + to_string(dob.month) + "/" + to_string(dob.year) + "}";
+		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + to_string(dob.day) + "/" + to_string(dob.month) + "/" + to_string(dob.year) + "\"}";
 		return ret;
 	}
 	std::pair<int, std::string> createAccount(const std::string& username, const std::string& password, const Date& dob) {
-		makeRequests("/signup", accountJson(username, password, dob));
+		makeRequests(HTTPRequest::HTTP_POST,"/signup", accountJson(username, password, dob));
 		return {getStatus(), recvResponse()};
 	}
 	// void logIn() { loggedIn = true; };
