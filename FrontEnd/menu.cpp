@@ -15,7 +15,13 @@ Menu::~Menu()
 
 void Menu::on_hotseat_clicked()
 {
-    shared_data.gameInfo->set(GameMode::HOTSEAT, "");
+    // shared_data.gameInfo->set(GameMode::HOTSEAT, "");
     this->sigLauchGame();
+}
+
+
+void Menu::on_logOut_clicked()
+{
+    emit this->sigLogOut();
 }
 

@@ -22,6 +22,7 @@ private slots:
     void on_redirSignUp_clicked();
 
 private:
+    QString error_message;
     QString username;
     QString password;
     Ui::login *ui;
@@ -29,7 +30,6 @@ private:
 signals:
     void sigValidLogin();
     void sigFaultyLogin();
-
     void sigRedirSignup();
 };
 

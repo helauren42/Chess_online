@@ -40,7 +40,9 @@ static constexpr auto qt_meta_stringdata_ZN4MenuE = QtMocHelpers::stringData(
     "Menu",
     "sigLauchGame",
     "",
-    "on_hotseat_clicked"
+    "sigLogOut",
+    "on_hotseat_clicked",
+    "on_logOut_clicked"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -52,23 +54,27 @@ Q_CONSTINIT static const uint qt_meta_data_ZN4MenuE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   26,    2, 0x06,    1 /* Public */,
+       1,    0,   38,    2, 0x06,    1 /* Public */,
+       3,    0,   39,    2, 0x06,    2 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   27,    2, 0x08,    2 /* Private */,
+       4,    0,   40,    2, 0x08,    3 /* Private */,
+       5,    0,   41,    2, 0x08,    4 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
+    QMetaType::Void,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -85,7 +91,11 @@ Q_CONSTINIT const QMetaObject Menu::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<Menu, std::true_type>,
         // method 'sigLauchGame'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'sigLogOut'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_hotseat_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_logOut_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -97,7 +107,9 @@ void Menu::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->sigLauchGame(); break;
-        case 1: _t->on_hotseat_clicked(); break;
+        case 1: _t->sigLogOut(); break;
+        case 2: _t->on_hotseat_clicked(); break;
+        case 3: _t->on_logOut_clicked(); break;
         default: ;
         }
     }
@@ -107,6 +119,13 @@ void Menu::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
             using _q_method_type = void (Menu::*)();
             if (_q_method_type _q_method = &Menu::sigLauchGame; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
+                return;
+            }
+        }
+        {
+            using _q_method_type = void (Menu::*)();
+            if (_q_method_type _q_method = &Menu::sigLogOut; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 1;
                 return;
             }
         }
@@ -132,14 +151,14 @@ int Menu::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 4;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 4;
     }
     return _id;
 }
@@ -148,5 +167,11 @@ int Menu::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void Menu::sigLauchGame()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void Menu::sigLogOut()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 QT_WARNING_POP

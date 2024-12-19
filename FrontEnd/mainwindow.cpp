@@ -78,11 +78,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(stackedWidgets->widSignup, &signup::sigRedirLogin, this, &MainWindow::onSigLogin);
 
     // Menu
-    connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
-
-    // Game
     connect(stackedWidgets->widMenu, &Menu::sigLauchGame, this, &MainWindow::onLaunchGame);
     connect(stackedWidgets->widMenu, &Menu::sigLauchGame, stackedWidgets->widGame, &Game::onStartGame);
+    connect(stackedWidgets->widMenu, &Menu::sigLogOut, this, &MainWindow::onSigLogin);
+
+    // Game
+    connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
     // connect(stackedWidgets->widGame, &Game::sigClickedBoard, stackedWidgets->widGame, &Game::onClickBoard);
 }
 

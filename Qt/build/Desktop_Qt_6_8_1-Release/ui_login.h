@@ -54,7 +54,7 @@ public:
         redirSignUp->setGeometry(QRect(220, 80, 171, 25));
         state = new QLabel(login);
         state->setObjectName("state");
-        state->setGeometry(QRect(230, 290, 141, 17));
+        state->setGeometry(QRect(150, 290, 361, 17));
 
         retranslateUi(login);
 

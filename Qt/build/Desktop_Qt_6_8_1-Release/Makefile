@@ -17,7 +17,7 @@ CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT $(DEFINES)
-INCPATH       = -I../../../FrontEnd -I. -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I. -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../../../FrontEnd -I. -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I. -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/helauren/Qt/6.8.1/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = Qt1.0.0
 DISTDIR = /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/.tmp/Qt1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/helauren/Qt/6.8.1/gcc_64/lib -Wl,-rpath-link,/home/helauren/Qt/6.8.1/gcc_64/lib
-LIBS          = $(SUBLIBS) /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Widgets.so /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Gui.so /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Core.so -lpthread -lGL   
+LIBS          = $(SUBLIBS) -L/usr/lib/x86_64-linux-gnu -lPocoFoundation -lPocoNet -lPocoUtil -lPocoXML -lPocoZip /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Widgets.so /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Gui.so /home/helauren/Qt/6.8.1/gcc_64/lib/libQt6Core.so -lpthread -lGL   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -1056,8 +1056,15 @@ moc_game.cpp: ../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -1066,9 +1073,9 @@ moc_game.cpp: ../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -1080,9 +1087,10 @@ moc_game.cpp: ../../../FrontEnd/game.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
+		../../../BackEnd/inc/Online.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/game.hpp -o moc_game.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/game.hpp -o moc_game.cpp
 
 moc_login.cpp: ../../../FrontEnd/login.hpp \
 		../../../FrontEnd/common.hpp \
@@ -1276,8 +1284,15 @@ moc_login.cpp: ../../../FrontEnd/login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -1286,12 +1301,12 @@ moc_login.cpp: ../../../FrontEnd/login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/login.hpp -o moc_login.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/login.hpp -o moc_login.cpp
 
 moc_mainwindow.cpp: ../../../FrontEnd/mainwindow.hpp \
 		../../../FrontEnd/common.hpp \
@@ -1485,8 +1500,15 @@ moc_mainwindow.cpp: ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -1495,14 +1517,11 @@ moc_mainwindow.cpp: ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
-		../../../FrontEnd/login.hpp \
-		../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../../FrontEnd/login.hpp \
+		../../../FrontEnd/signup.hpp \
 		../../../FrontEnd/menu.hpp \
 		../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
@@ -1516,9 +1535,10 @@ moc_mainwindow.cpp: ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
+		../../../BackEnd/inc/Online.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/mainwindow.hpp -o moc_mainwindow.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/mainwindow.hpp -o moc_mainwindow.cpp
 
 moc_menu.cpp: ../../../FrontEnd/menu.hpp \
 		../../../FrontEnd/common.hpp \
@@ -1712,8 +1732,15 @@ moc_menu.cpp: ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -1722,16 +1749,17 @@ moc_menu.cpp: ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/menu.hpp -o moc_menu.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/menu.hpp -o moc_menu.cpp
 
 moc_signup.cpp: ../../../FrontEnd/signup.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../../FrontEnd/common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
@@ -1783,6 +1811,7 @@ moc_signup.cpp: ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
@@ -1918,15 +1947,16 @@ moc_signup.cpp: ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		../../../FrontEnd/common.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -1934,12 +1964,13 @@ moc_signup.cpp: ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/signup.hpp -o moc_signup.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/signup.hpp -o moc_signup.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -2188,8 +2219,15 @@ game.o: ../../../FrontEnd/game.cpp ../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -2198,9 +2236,9 @@ game.o: ../../../FrontEnd/game.cpp ../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -2212,6 +2250,7 @@ game.o: ../../../FrontEnd/game.cpp ../../../FrontEnd/game.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
+		../../../BackEnd/inc/Online.hpp \
 		ui_game.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../../../FrontEnd/game.cpp
 
@@ -2407,8 +2446,15 @@ login.o: ../../../FrontEnd/login.cpp ../../../FrontEnd/login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -2417,9 +2463,9 @@ login.o: ../../../FrontEnd/login.cpp ../../../FrontEnd/login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		ui_login.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o login.o ../../../FrontEnd/login.cpp
 
@@ -2615,8 +2661,15 @@ main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -2625,14 +2678,11 @@ main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
-		../../../FrontEnd/login.hpp \
-		../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../../FrontEnd/login.hpp \
+		../../../FrontEnd/signup.hpp \
 		../../../FrontEnd/menu.hpp \
 		../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
@@ -2646,6 +2696,7 @@ main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
+		../../../BackEnd/inc/Online.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QFile \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfile.h \
@@ -2849,8 +2900,15 @@ mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp 
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -2859,14 +2917,11 @@ mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp 
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
-		../../../FrontEnd/login.hpp \
-		../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		../../../FrontEnd/login.hpp \
+		../../../FrontEnd/signup.hpp \
 		../../../FrontEnd/menu.hpp \
 		../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QPixmap \
@@ -2880,6 +2935,7 @@ mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp 
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
+		../../../BackEnd/inc/Online.hpp \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../../FrontEnd/mainwindow.cpp
 
@@ -3075,8 +3131,15 @@ menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -3085,15 +3148,16 @@ menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		ui_menu.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu.o ../../../FrontEnd/menu.cpp
 
 signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
+		../../../FrontEnd/common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
@@ -3145,6 +3209,7 @@ signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
@@ -3280,15 +3345,16 @@ signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qinputmethod.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qlocale.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qguiapplication_platform.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		../../../FrontEnd/common.hpp \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
@@ -3296,9 +3362,10 @@ signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
 		ui_signup.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o signup.o ../../../FrontEnd/signup.cpp
 

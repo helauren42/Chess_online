@@ -30,6 +30,7 @@ public:
     QLabel *LDOB;
     QDateEdit *EDOB;
     QPushButton *redirLogIn;
+    QLabel *state;
 
     void setupUi(QWidget *signup)
     {
@@ -60,6 +61,9 @@ public:
         redirLogIn = new QPushButton(signup);
         redirLogIn->setObjectName("redirLogIn");
         redirLogIn->setGeometry(QRect(210, 50, 171, 25));
+        state = new QLabel(signup);
+        state->setObjectName("state");
+        state->setGeometry(QRect(190, 290, 361, 17));
 
         retranslateUi(signup);
 
@@ -75,6 +79,7 @@ public:
         signUpButton->setText(QCoreApplication::translate("signup", "Sign Up", nullptr));
         LDOB->setText(QCoreApplication::translate("signup", "Date of birth", nullptr));
         redirLogIn->setText(QCoreApplication::translate("signup", "click here to log in", nullptr));
+        state->setText(QString());
     } // retranslateUi
 
 };

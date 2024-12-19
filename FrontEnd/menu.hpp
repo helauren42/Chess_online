@@ -18,9 +18,12 @@ public:
 
 signals:
     void sigLauchGame();
+    void sigLogOut();
 
 private slots:
     void on_hotseat_clicked();
+
+    void on_logOut_clicked();
 
 private:
     Ui::Menu *ui;
