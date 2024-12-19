@@ -7,13 +7,38 @@ from fastapi.responses import JSONResponse
 connect = sqlite3.connect("database.db")
 cursor = connect.cursor()
 
-cursor.execute("CREATE TABLE IF NOT EXISTS account ( \
-				id INTEGER PRIMARY KEY AUTOINCREMENT, \
+cursor.execute("CREATE TABLE IF NOT EXISTS accounts ( \
+				id NOT NULL, \
 				username CHAR(25) NOT NULL,\
 				password CHAR(25) NOT NULL, \
 			dob TEXT NOT NULL)")
 
+cursor.execute("CREATE TABLE IF NOT EXISTS online ( \
+				id INTEGER NOT NULL, \
+				username CHAR(25) NOT NULL)")
+
 app = fastapi.FastAPI()
+
+def addOnline(add_id: int, add_user: str):
+	cursor.execute("SELECT username FROM online")
+	usernames = cursor.fetchall()
+	for username in usernames:
+		if username[0] == add_user:
+			print("already online")
+			return
+	print("adding to online table: ", add_user)
+	cursor.execute("INSERT INTO online (id, username) VALUES (?, ?)", (add_id, add_user))
+	connect.commit()
+
+def rmOnline(add_user: str) -> bool:
+	cursor.execute("SELECT username FROM online")
+	usernames = cursor.fetchall()
+	for username in usernames:
+		if username[0] == add_user:
+			cursor.execute("DELETE FROM online WHERE username = ?", (add_user, ))
+			connect.commit()
+			return True
+	return False
 
 class Validate():
 
@@ -30,7 +55,7 @@ class Validate():
 	
 	def findUserId(search : str) -> int:
 		print("find user id")
-		cursor.execute("SELECT username FROM account")
+		cursor.execute("SELECT username FROM accounts")
 		usernames = cursor.fetchall()
 		id:int = 1
 		for user in usernames:
@@ -42,18 +67,26 @@ class Validate():
 
 	def loginValidPassword(search : str, id : int) -> bool:
 		print("valid password")
-		cursor.execute("SELECT password FROM account")
+		cursor.execute("SELECT password FROM accounts")
 		passwords = cursor.fetchall()
 		if(passwords[id -1][0] == search):
 			return True
 		return False
 
-@app.get("/")
-async def home(request: fastapi.Request):
-	return {"message": "GET Hello World Your Home Baby"}
+@app.post("/logout")
+async def logout(request: fastapi.Request, response: Response):
+	body = await request.json()
+	print("logout BODY: ", body)
+	username = body.get("username")
+
+	if not rmOnline(username):
+		print("Could not log out: ", username)
+		return {"message": "Log out failed"}
+	print("Logged out successful")
+	return {"message": "Log out successful"}
 
 @app.post("/login")
-async def home(request: fastapi.Request, response: Response):
+async def login(request: fastapi.Request, response: Response):
 
 	body = await request.json()
 	print("!!!BODY: ", body)
@@ -61,6 +94,7 @@ async def home(request: fastapi.Request, response: Response):
 	id = Validate.findUserId(username) # verifies user is in db and retrieves his id
 	print("id: ", id)
 	if(id < 0):
+		print("user could not be found")
 		return JSONResponse(
 			status_code=401,
 			content={"message": "Wrong Credentials"}
@@ -69,11 +103,15 @@ async def home(request: fastapi.Request, response: Response):
 	password = body.get("password")
 
 	if not Validate.loginValidPassword(password, id):
+		print("password does not match username")
 		return JSONResponse(
 			status_code=401,
 			content={"message": "Wrong Credentials"}
 		)
-	return {"message": "Login successful"}
+	
+	addOnline(id, username)
+	print("Logging in successful")
+	return {"id:": f"{id}", "message": "Login successful"}
 
 @app.post("/signup")
 async def signup(request: fastapi.Request):
@@ -85,16 +123,19 @@ async def signup(request: fastapi.Request):
 		password = body.get("password")
 		dob = body.get("dob")
 		if not Validate.correctLength(username) or not Validate.correctLength(password):
+			print("length not correct")
 			return JSONResponse(
 				status_code=401,
 				content={"message": "Lengths must be between 5 and 25"}
 			)
 		if not Validate.userValidCharacters(username):
+			print("user unvalid characters found")
 			return JSONResponse(
 				status_code=401,
 				content={"message": "Username allows a-z, A-Z, 0-9, _ and -."}
 			)
 		if Validate.findUserId(username) >= 0:
+			print("user nane already taken")
 			return JSONResponse(
 					status_code=401,
 					content={"message": "Username already taken"}
@@ -105,10 +146,10 @@ async def signup(request: fastapi.Request):
 
 	# insertion to db
 	try:
-		cursor.execute("SELECT COUNT(*) FROM account")
+		cursor.execute("SELECT COUNT(*) FROM accounts")
 		result = cursor.fetchone()
 		id = str(result[0])
-		cursor.execute("INSERT INTO account (id, username, password, dob) VALUES (?, ?, ?, ?)", (id, username, password, dob))
+		cursor.execute("INSERT INTO accounts (id, username, password, dob) VALUES (?, ?, ?, ?)", (id, username, password, dob))
 		connect.commit()
 		print("id", f"{id}", "message", "Signup successful")
 		return {"id": f"{id}", "message": "Signup successful"}
