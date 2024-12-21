@@ -34,7 +34,7 @@ void login::on_loginButton_clicked()
 	try {
 		response = online.login(username.toStdString(), this->password.toStdString());
 	}
-	catch (Exception e) {
+    catch (const Exception& e) {
         qDebug() << "Caught login error: " << e.what();
         error_message = "Could not connect to servers";
         emit this->sigFaultyLogin();
