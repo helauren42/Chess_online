@@ -25,20 +25,38 @@ void login::setFaultyState() {
 
 void login::on_loginButton_clicked()
 {
+	std::pair<std::string, int> response;
 	this->username = this->ui->EUsername->text();
 	this->password = this->ui->EPassword->text();
 	qDebug() << "username: " << this->username << "\n";
 	qDebug() << "password: " << this->password << "\n";
-	std::pair<std::string, int> response = online.login(username.toStdString(), this->password.toStdString());
+	
+	try {
+		response = online.login(username.toStdString(), this->password.toStdString());
+	}
+	catch (Exception e) {
+        qDebug() << "Caught login error: " << e.what();
+        error_message = "Could not connect to servers";
+        emit this->sigFaultyLogin();
+        return;
+	}
 
 	qDebug() << "status code: " << response.second;
 	qDebug() << response.first;
-    if(response.second == 200)
+    if(response.second == 200) {
+        error_message = "";
+		emit this->sigFaultyLogin();
 		emit this->sigValidLogin();
-	else {
-		std::string message = response.first;
-        error_message = QString(message.substr(12, message.size() - 14).c_str());
-		qDebug() << "extracted error message: " << error_message;
+    }
+    else {
+		if(response.second == 0 || response.first == "") {
+            error_message = "Could not connect to servers, maybe try again";
+		}
+		else {
+			std::string message = response.first;
+			error_message = QString(message.substr(12, message.size() - 14).c_str());
+			qDebug() << "extracted error message: " << error_message;
+		}
 		emit this->sigFaultyLogin();
 	}
 }

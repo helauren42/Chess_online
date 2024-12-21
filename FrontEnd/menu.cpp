@@ -22,6 +22,7 @@ void Menu::on_hotseat_clicked()
 
 void Menu::on_logOut_clicked()
 {
+    online.logout();
     emit this->sigLogOut();
 }
 

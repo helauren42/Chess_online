@@ -61,6 +61,7 @@ struct Account {
     std::string username;
     std::string password;
     std::string dob;
+    int id;
     Account	() {};
     Account(const std::string& _username, const std::string& _password) : username(_username), password(_password) {};
     Account(const std::string& _username, const std::string& _password, const std::string& _dob) : username(_username), password(_password), dob(_dob) {};
@@ -81,7 +82,9 @@ private:
      */
     std::string accountJson(const std::string& username, const std::string& password, const std::string& dob) {
         std::string ret;
-        ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + dob + "\"}";
+        static std::string msg = "a";
+        msg += msg;
+        ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + dob + "\",\"msg\":\"" + msg + "\"}";
         return ret;
     }
     /**
@@ -94,7 +97,7 @@ private:
     }
     std::string recvResponse() {
         std::stringstream ss;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 6; i++) {
             try {
                 istream& rs = session.receiveResponse(response);
                 ss << rs.rdbuf();
@@ -102,7 +105,7 @@ private:
             }
             catch (const Exception& e){
                 qDebug() << e.what();
-                Poco::Thread::sleep(50);
+                Poco::Thread::sleep(80);
             }
         }
         return ss.str();
@@ -127,9 +130,15 @@ public:
         session.setKeepAlive(true);
     };
     ~Online() {}
-
-    std::pair<std::string, int> login(const std::string& username, const std::string& password) {
-        makeRequests(HTTPRequest::HTTP_POST,"/login", accountJson(username, password));
+    
+    std::pair<std::string, int> logout() {
+        makeRequests(HTTPRequest::HTTP_POST,"/logout", accountJson(this->account.username, this->account.password));
+        return {recvResponse(), getStatus()};
+    }
+    std::pair<std::string, int> login(const std::string& _username, const std::string& _password) {
+        makeRequests(HTTPRequest::HTTP_POST,"/login", accountJson(_username, _password));
+        this->account.username = _username;
+        this->account.password = _password;
         return {recvResponse(), getStatus()};
     }
     std::pair<std::string, int> createAccount(const std::string& username, const std::string& password, const std::string& dob) {

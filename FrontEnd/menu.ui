@@ -29,7 +29,7 @@
   <widget class="QLabel" name="Llocal">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>290</x>
      <y>120</y>
      <width>41</width>
      <height>31</height>
@@ -42,7 +42,7 @@
   <widget class="QLabel" name="Lonline">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>290</x>
      <y>330</y>
      <width>71</width>
      <height>31</height>
@@ -55,7 +55,7 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>370</x>
      <y>390</y>
      <width>151</width>
      <height>25</height>
@@ -68,7 +68,7 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>100</x>
      <y>390</y>
      <width>141</width>
      <height>25</height>
@@ -117,9 +117,9 @@
   <widget class="QPushButton" name="logOut">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>560</x>
      <y>30</y>
-     <width>101</width>
+     <width>61</width>
      <height>25</height>
     </rect>
    </property>
