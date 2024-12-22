@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=lb_hess
+Exec=AppRun %U
+Type=Application
+# Icon=chessApp
+Categories=Game;
+

@@ -2251,7 +2251,8 @@ game.o: ../../../FrontEnd/game.cpp ../../../FrontEnd/game.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
 		../../../BackEnd/inc/Online.hpp \
-		ui_game.h
+		ui_game.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../../../FrontEnd/game.cpp
 
 login.o: ../../../FrontEnd/login.cpp ../../../FrontEnd/login.hpp \
@@ -2466,7 +2467,21 @@ login.o: ../../../FrontEnd/login.cpp ../../../FrontEnd/login.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		ui_login.h
+		ui_login.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLineEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextcursor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o login.o ../../../FrontEnd/login.cpp
 
 main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
@@ -2936,7 +2951,13 @@ mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp 
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
 		../../../BackEnd/inc/Online.hpp \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMenuBar \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmenu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStatusBar \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstatusbar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../../FrontEnd/mainwindow.cpp
 
 menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
@@ -3151,7 +3172,22 @@ menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		ui_menu.h
+		ui_menu.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QFrame \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLineEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextcursor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu.o ../../../FrontEnd/menu.cpp
 
 signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
@@ -3366,7 +3402,27 @@ signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
-		ui_signup.h
+		ui_signup.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QDateEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdatetimeedit.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qtimezone.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qvalidator.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qregularexpression.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QLineEdit \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextcursor.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qpen.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o signup.o ../../../FrontEnd/signup.cpp
 
 moc_game.o: moc_game.cpp 
