@@ -10,6 +10,8 @@ inline namespace Global {
 
 int main(int argc, char *argv[])
 {
+    QDir dir = dir.current();
+    qDebug() << dir.absolutePath();
 	QFile file("../../../FrontEnd/styles.css");
 	Logger::setLoggerFile("../../../FrontEnd/log.txt", true);
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
