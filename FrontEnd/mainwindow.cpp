@@ -45,6 +45,8 @@ void    MainWindow::onSigSignup() {
 void MainWindow::onOpenMenu() {
     stackedWidgets->setCurrentWidget(stackedWidgets->widMenu);
     this->setWindowTitle("Menu");
+    stackedWidgets->widMenu->getOnlinePlayers();
+    stackedWidgets->widMenu->updateOnlinePlayers();
     qDebug() << "on open menu";
 }
 

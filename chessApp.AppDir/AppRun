@@ -1,10 +1,10 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "$0")")"
-export APPDIR="$HERE"
+export APPDIR="$HERE/usr/bin"
 
 # Add the lib directory to LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$APPDIR/usr/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$HERE/usr/lib:$LD_LIBRARY_PATH"
 
 # Execute the application
-exec "$APPDIR/usr/bin/a.out" "$@"
+exec "$Here/usr/bin/a.out" "$@"
 

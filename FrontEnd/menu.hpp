@@ -15,6 +15,9 @@ class Menu : public QWidget
 public:
     explicit Menu(QWidget *parent = nullptr);
     ~Menu();
+    void getOnlinePlayers();
+    void updateOnlinePlayers();
+    void on_onlineInvite_clicked();
 
 signals:
     void sigLauchGame();
@@ -27,6 +30,7 @@ private slots:
 
 private:
     Ui::Menu *ui;
+    std::map<std::string, std::string> players;
 };
 
 #endif // MENU_H

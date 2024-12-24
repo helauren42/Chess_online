@@ -45,7 +45,7 @@ void login::on_loginButton_clicked()
 	qDebug() << response.first;
     if(response.second == 200) {
         error_message = "";
-		emit this->sigFaultyLogin();
+		emit this->sigFaultyLogin(); // it is set to empty string not faulty
 		emit this->sigValidLogin();
     }
     else {

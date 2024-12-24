@@ -1,7 +1,7 @@
 import sqlite3
 import fastapi
 from pydantic import BaseModel
-from fastapi import Response
+from fastapi import Response, WebSocket
 from fastapi.responses import JSONResponse
 
 connect = sqlite3.connect("database.db")
@@ -41,7 +41,6 @@ def rmOnline(add_user: str) -> bool:
 	return False
 
 class Validate():
-
 	def correctLength(s: str) -> bool:
 		if len(s) < 5 or len(s) > 25:
 			return False
@@ -52,7 +51,7 @@ class Validate():
 			if not c.isalnum() and c != "_" and c != "-":
 				return False
 		return True
-	
+
 	def findUserId(search : str) -> int:
 		print("find user id")
 		cursor.execute("SELECT username FROM accounts")
@@ -108,10 +107,25 @@ async def login(request: fastapi.Request, response: Response):
 			status_code=401,
 			content={"message": "Wrong Credentials"}
 		)
-	
+
 	addOnline(id, username)
 	print("Logging in successful")
 	return {"id:": f"{id}", "message": "Login successful"}
+
+@app.get("/menu")
+async def menu(request: fastapi.Request):
+	cursor.execute("SELECT * FROM online")
+	all = cursor.fetchall()
+	i = 1
+	ret = {}
+	for account in all:
+		ret[str(i)] = account[1] # account name at pos 1, pos 0 is id
+		i+=1
+	ret[0] = i-1
+	return JSONResponse(
+		status_code=200,
+		content = ret
+	)
 
 @app.post("/signup")
 async def signup(request: fastapi.Request):
@@ -142,7 +156,10 @@ async def signup(request: fastapi.Request):
 			)
 	except Exception as e:
 		print(f"Signup failed invalid request: {e}")
-		return {"message": "invalid request"}
+		return JSONResponse(
+			status_code=404,
+			content = {"message": "sign up invalid request"}
+		)
 
 	# insertion to db
 	try:
@@ -155,7 +172,43 @@ async def signup(request: fastapi.Request):
 		return {"id": f"{id}", "message": "Signup successful"}
 	except Exception as e:
 		print("!!!!", e)
-		return {"message": "Failed connecting to db"}
+		return JSONResponse(
+			status_code=404,
+			content={"message": "Failed connecting to db"}
+		)
+
+@app.post("/challenge")
+async def challenge(request: fastapi.Request):
+	body = await request.json()
+	challenger = body.get("challenger")
+	challenged = body.get("challenged")
+	challenged_id = Validate.findUserId(challenged)
+	if challenged_id < 0:
+		return JSONResponse(
+			status_code=401,
+			content={"message":"Challenged player not online"}
+		)
+
+	return JSONResponse(
+		status_code=200,
+		content={"message":"Challenge sent to player"}
+	)
+
+@app.get("/ws/{user}")
+async def WebsocketConnection(ws : WebSocket, user : str):
+	await ws.accept()
+	print("ws User: ", user, "accepted connection")
+	if Validate.findUserId(user) < 0:
+		print("user not registered")
+		return JSONResponse(
+			status_code=401,
+			content={"message":"user not registered"}
+		)
+
+	while True:
+		data = ws.receive_text()
+		print("ws received: ", data)
+		print("from: ", user)
 
 # @app.delete("delete_account")
 # async def delete_account(request: fastapi.Request):

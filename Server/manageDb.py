@@ -18,6 +18,7 @@ def listOnline():
 	all = cursor.fetchall()
 	for account in all:
 		print(account)
+		print(account[1])
 
 def listDb():
 	cursor.execute("SELECT * FROM accounts")
