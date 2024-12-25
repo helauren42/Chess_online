@@ -31,6 +31,7 @@ def addOnline(add_id: int, add_user: str):
 	connect.commit()
 
 def rmOnline(add_user: str) -> bool:
+	print("rm online: ", add_user)
 	cursor.execute("SELECT username FROM online")
 	usernames = cursor.fetchall()
 	for username in usernames:
@@ -72,46 +73,6 @@ class Validate():
 			return True
 		return False
 
-@app.post("/logout")
-async def logout(request: fastapi.Request, response: Response):
-	body = await request.json()
-	print("logout BODY: ", body)
-	username = body.get("username")
-
-	if not rmOnline(username):
-		print("Could not log out: ", username)
-		return {"message": "Log out failed"}
-	print("Logged out successful")
-	return {"message": "Log out successful"}
-
-@app.post("/login")
-async def login(request: fastapi.Request, response: Response):
-
-	body = await request.json()
-	print("!!!BODY: ", body)
-	username = body.get("username")
-	id = Validate.findUserId(username) # verifies user is in db and retrieves his id
-	print("id: ", id)
-	if(id < 0):
-		print("user could not be found")
-		return JSONResponse(
-			status_code=401,
-			content={"message": "Wrong Credentials"}
-		)
-
-	password = body.get("password")
-
-	if not Validate.loginValidPassword(password, id):
-		print("password does not match username")
-		return JSONResponse(
-			status_code=401,
-			content={"message": "Wrong Credentials"}
-		)
-
-	addOnline(id, username)
-	print("Logging in successful")
-	return {"id:": f"{id}", "message": "Login successful"}
-
 @app.get("/menu")
 async def menu(request: fastapi.Request):
 	cursor.execute("SELECT * FROM online")
@@ -125,6 +86,13 @@ async def menu(request: fastapi.Request):
 	return JSONResponse(
 		status_code=200,
 		content = ret
+	)
+
+@app.get("/")
+async def home(request: fastapi.Request):
+	return JSONResponse(
+		status_code=200,
+		content = {"message": "you are at home"}
 	)
 
 @app.post("/signup")
@@ -188,27 +156,72 @@ async def challenge(request: fastapi.Request):
 			status_code=401,
 			content={"message":"Challenged player not online"}
 		)
-
 	return JSONResponse(
 		status_code=200,
 		content={"message":"Challenge sent to player"}
 	)
 
-@app.get("/ws/{user}")
-async def WebsocketConnection(ws : WebSocket, user : str):
-	await ws.accept()
-	print("ws User: ", user, "accepted connection")
-	if Validate.findUserId(user) < 0:
-		print("user not registered")
+@app.post("/logout")
+async def logout(request: fastapi.Request, response: Response):
+	body = await request.json()
+	print("logout BODY: ", body)
+	username = body.get("username")
+
+	if not rmOnline(username):
+		print("Could not log out: ", username)
+		return {"message": "Log out failed"}
+	print("Logged out successful")
+	return {"message": "Log out successful"}
+
+@app.post("/login")
+async def login(request: fastapi.Request, response: Response):
+	body = await request.json()
+	print("response body: ", body)
+	username = body.get("username")
+	id = Validate.findUserId(username) # verifies user is in db and retrieves his id
+	print("id: ", id)
+	if(id < 0):
+		print("user could not be found")
 		return JSONResponse(
 			status_code=401,
-			content={"message":"user not registered"}
+			content={"message": "Wrong Credentials"}
 		)
+	cursor.execute("SELECT username FROM online")
+	names = cursor.fetchall()
+	for name in names:
+		if name[0] == username:
+			print("Login failed: User already logged in")
+			return JSONResponse(
+				status_code=401,
+				content={"message": "User already logged in"}
+			)
+		
+	password = body.get("password")
+	if not Validate.loginValidPassword(password, id):
+		print("password does not match username")
+		return JSONResponse(
+			status_code=401,
+			content={"message": "Wrong Credentials"}
+		)
+	print("Logging in successful")
+	return {"id:": f"{id}", "message": "Login successful"}
 
-	while True:
-		data = ws.receive_text()
-		print("ws received: ", data)
-		print("from: ", user)
+@app.websocket("/ws/{user}")
+async def WebsocketConnection(ws : WebSocket, user : str):
+	print("websocketconnections 1")
+	await ws.accept()
+	print("ws User: ", user, "accepted connection")
+	id = Validate.findUserId(user) # verifies user is in db and retrieves his id
+	addOnline(id, user)
+	try:
+		while True:
+			data = await ws.receive_text()
+			print("ws received: ", data)
+			print("from: ", user)
+			await ws.send_text(f"Message received: {data}")
+	except Exception as e:
+		print(f"{user} disconnected")
+		rmOnline(user)
 
 # @app.delete("delete_account")
 # async def delete_account(request: fastapi.Request):

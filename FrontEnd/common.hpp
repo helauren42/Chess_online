@@ -19,8 +19,6 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/URI.h>
 
-#include "../MyCppLib/Printer/Printer.hpp"
-
 #include <strings.h>
 #include <iostream>
 #include <sstream>
@@ -93,10 +91,10 @@ inline std::map<std::string, std::string> jsonToMap(const std::string& json) noe
 struct GameInfo {
 	GameMode mode;
 	std::string opponent;
-    void set(const GameMode &_mode, const std::string _opponent = "") {
-        mode = _mode;
-        opponent = _opponent;
-    };
+	void set(const GameMode &_mode, const std::string _opponent = "") {
+		mode = _mode;
+		opponent = _opponent;
+	};
 };
 
 struct Account {
@@ -110,34 +108,42 @@ struct Account {
 };
 
 class WebSocketClient : public QObject {
-    Q_OBJECT
+	Q_OBJECT
 private:
-    QWebSocket *socket;
+	QWebSocket *socket;
 public:
-    WebSocketClient(QObject *parent = nullptr) : QObject(parent) {
-        socket = new QWebSocket("My WebSocket Client", QWebSocketProtocol::VersionLatest, this);
-        connect(socket, &QWebSocket::connected, this, &WebSocketClient::onConnected);
-        connect(socket, &QWebSocket::textMessageReceived, this, &WebSocketClient::onTextMessageReceived);
-        connect(socket, &QWebSocket::disconnected, this, &WebSocketClient::onDisconnected);
-        socket->open(QUrl("ws://localhost:8000"));
-    }
+	WebSocketClient(QString username, QObject *parent = nullptr) : QObject(parent) {
+		socket = new QWebSocket("My WebSocket Client", QWebSocketProtocol::VersionLatest, this);
+		connect(socket, &QWebSocket::connected, this, &WebSocketClient::onConnected);
+		connect(socket, &QWebSocket::textMessageReceived, this, &WebSocketClient::onTextMessageReceived);
+		connect(socket, &QWebSocket::disconnected, this, &WebSocketClient::onDisconnected);
+        QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
+        qDebug() <<  "qurl: " << qurl;
+		socket->open(qurl);
+
+        QEventLoop loop;
+        connect(socket, &QWebSocket::connected, &loop, &QEventLoop::quit);
+        connect(socket, QOverload<QAbstractSocket::SocketError>::of(&QWebSocket::error),
+                &loop, &QEventLoop::quit);
+        loop.exec();  // Blocks until the connection is established or an error occurs
+	}
 
 public slots:
-    void onConnected() {
-        qDebug() << "Connected to server";
-    }
+	void onConnected() {
+		qDebug() << "Connected to server";
+	}
 
-    void onTextMessageReceived(QString message) {
-        qDebug() << "Received message from server:" << message;
-    }
+	void onTextMessageReceived(QString message) {
+		qDebug() << "Received message from server:" << message;
+	}
 
-    void onDisconnected() {
-        qDebug() << "Disconnected from server";
-    }
+	void onDisconnected() {
+		qDebug() << "Disconnected from server";
+	}
 
-    void sendMessage(QString message) {
-        socket->sendTextMessage(message);
-    }
+	void sendMessage(QString message) {
+		socket->sendTextMessage(message);
+	}
 
 };
 
@@ -208,7 +214,10 @@ public:
 	std::map<std::string, std::string> players;
 
 	std::pair<std::string, int> logout() {
+		qDebug() << "sending log out request";
 		makeRequests(HTTPRequest::HTTP_POST, "/logout", accountJson(this->account.username, this->account.password));
+		ws.reset();
+		ws = nullptr;
 		return {recvResponse(), getStatus()};
 	}
 	std::pair<std::string, int> login(const std::string& _username, const std::string& _password) {
@@ -216,9 +225,11 @@ public:
 		this->account.username = _username;
 		this->account.password = _password;
 		std::string message = recvResponse();
+		qDebug() << "response message: " << message;
 		int status = getStatus();
 		if(status == 200)
-            ws = std::make_unique<WebSocketClient>();
+            ws = std::make_unique<WebSocketClient>(this->account.username.c_str(), nullptr);
+		qDebug() << "websocket made: ";
 		return {message, status};
 	}
 	std::pair<std::string, int> createAccount(const std::string& username, const std::string& password, const std::string& dob) {
@@ -237,10 +248,10 @@ public:
 		return {players, getStatus()};
 	}
 
-    void sendChallenge(const std::string& challenger, const std::string& challenged) {
+	void sendChallenge(const std::string& challenger, const std::string& challenged) {
 		std::string msg = "{\"challenger\": \"" + challenger + "\", \"challenged\": \"" + challenged + "\"" + "}";
-        ws->sendMessage(msg.c_str());
-    }
+		ws->sendMessage(msg.c_str());
+	}
 
 	bool getLoggedIn() const { return loggedIn; };
 };

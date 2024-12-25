@@ -2,7 +2,6 @@
 #include "ui_login.h"
 #include <iostream>
 
-
 login::login(QWidget *parent)
 	: QWidget(parent)
 	, ui(new Ui::login)
@@ -30,7 +29,7 @@ void login::on_loginButton_clicked()
 	this->password = this->ui->EPassword->text();
 	qDebug() << "username: " << this->username << "\n";
 	qDebug() << "password: " << this->password << "\n";
-	
+
 	try {
 		response = online.login(username.toStdString(), this->password.toStdString());
 	}
