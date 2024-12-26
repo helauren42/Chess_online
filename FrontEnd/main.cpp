@@ -4,8 +4,13 @@
 #include <QDir>
 
 t_dim       dim;
+
 inline namespace Global {
-	Online online;  // Actual definition
+	Online online;
+}
+
+inline namespace Global {
+std::unique_ptr<WebSocketClient> my_ws = std::make_unique<WebSocketClient>();
 }
 
 int main(int argc, char *argv[])

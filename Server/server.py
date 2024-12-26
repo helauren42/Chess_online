@@ -7,6 +7,8 @@ from fastapi.responses import JSONResponse
 connect = sqlite3.connect("database.db")
 cursor = connect.cursor()
 
+connections = {}
+
 cursor.execute("CREATE TABLE IF NOT EXISTS accounts ( \
 				id NOT NULL, \
 				username CHAR(25) NOT NULL,\
@@ -19,24 +21,27 @@ cursor.execute("CREATE TABLE IF NOT EXISTS online ( \
 
 app = fastapi.FastAPI()
 
-def addOnline(add_id: int, add_user: str):
+def addOnline(add_id: int, add_user: str, ws: WebSocket):
 	cursor.execute("SELECT username FROM online")
 	usernames = cursor.fetchall()
 	for username in usernames:
 		if username[0] == add_user:
 			print("already online")
 			return
+	connections[add_user] = ws
 	print("adding to online table: ", add_user)
 	cursor.execute("INSERT INTO online (id, username) VALUES (?, ?)", (add_id, add_user))
 	connect.commit()
+	connections
 
-def rmOnline(add_user: str) -> bool:
-	print("rm online: ", add_user)
+def rmOnline(rm_user: str) -> bool:
+	print("rm online: ", rm_user)
 	cursor.execute("SELECT username FROM online")
 	usernames = cursor.fetchall()
 	for username in usernames:
-		if username[0] == add_user:
-			cursor.execute("DELETE FROM online WHERE username = ?", (add_user, ))
+		if username[0] == rm_user:
+			connections.pop(rm_user)
+			cursor.execute("DELETE FROM online WHERE username = ?", (rm_user, ))
 			connect.commit()
 			return True
 	return False
@@ -73,20 +78,18 @@ class Validate():
 			return True
 		return False
 
-@app.get("/menu")
+@app.get("/online_players")
 async def menu(request: fastapi.Request):
-	cursor.execute("SELECT * FROM online")
-	all = cursor.fetchall()
-	i = 1
 	ret = {}
-	for account in all:
-		ret[str(i)] = account[1] # account name at pos 1, pos 0 is id
+	i = 0
+	for username in connections.keys():
+		ret[i] = username
 		i+=1
-	ret[0] = i-1
 	return JSONResponse(
 		status_code=200,
 		content = ret
 	)
+
 
 @app.get("/")
 async def home(request: fastapi.Request):
@@ -145,7 +148,7 @@ async def signup(request: fastapi.Request):
 			content={"message": "Failed connecting to db"}
 		)
 
-@app.post("/challenge")
+@app.post("/challenge")	
 async def challenge(request: fastapi.Request):
 	body = await request.json()
 	challenger = body.get("challenger")
@@ -170,6 +173,7 @@ async def logout(request: fastapi.Request, response: Response):
 	if not rmOnline(username):
 		print("Could not log out: ", username)
 		return {"message": "Log out failed"}
+	await updateOnlinePlayersClientSide()
 	print("Logged out successful")
 	return {"message": "Log out successful"}
 
@@ -195,7 +199,7 @@ async def login(request: fastapi.Request, response: Response):
 				status_code=401,
 				content={"message": "User already logged in"}
 			)
-		
+
 	password = body.get("password")
 	if not Validate.loginValidPassword(password, id):
 		print("password does not match username")
@@ -206,13 +210,26 @@ async def login(request: fastapi.Request, response: Response):
 	print("Logging in successful")
 	return {"id:": f"{id}", "message": "Login successful"}
 
+async def messageAll(message: str):
+	print("message all: ", message)
+	for ws in connections.values():
+		print("ws: ", ws)
+		await ws.send_text(message)
+
+async def updateOnlinePlayersClientSide():
+	print("update online players client side: ", connections)
+	await messageAll("update connections")
+	# for ws in connections.values():
+	# 	ws.send_text("update connection")
+
 @app.websocket("/ws/{user}")
 async def WebsocketConnection(ws : WebSocket, user : str):
 	print("websocketconnections 1")
 	await ws.accept()
 	print("ws User: ", user, "accepted connection")
-	id = Validate.findUserId(user) # verifies user is in db and retrieves his id
-	addOnline(id, user)
+	id = Validate.findUserId(user)
+	await updateOnlinePlayersClientSide()
+	addOnline(id, user, ws)
 	try:
 		while True:
 			data = await ws.receive_text()
@@ -222,6 +239,7 @@ async def WebsocketConnection(ws : WebSocket, user : str):
 	except Exception as e:
 		print(f"{user} disconnected")
 		rmOnline(user)
+		await updateOnlinePlayersClientSide()
 
 # @app.delete("delete_account")
 # async def delete_account(request: fastapi.Request):

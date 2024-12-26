@@ -95,11 +95,3 @@ MainWindow::~MainWindow()
     delete stackedWidgets;
 }
 
-
-
-
-
-
-
-
-

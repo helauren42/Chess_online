@@ -29,6 +29,7 @@ HEADERS += \
     ../BackEnd/inc/Utils.hpp \
     ../BackEnd/inc/Board.hpp \
     ../BackEnd/inc/Pieces.hpp \
+    WebSocketClient.hpp \
     common.hpp \
     game.hpp \
     login.hpp \
