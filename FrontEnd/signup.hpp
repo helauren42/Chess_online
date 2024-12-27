@@ -14,14 +14,20 @@ class signup : public QWidget
 public:
 	explicit signup(QWidget *parent = nullptr);
 	~signup();
-    void setFaultyState();
+    void setState();
+
+public slots:
+    void onUpdateState(const QString& msg) {
+        state_message = msg;
+		setState();
+    };
 
 private slots:
 	void on_signUpButton_clicked();
 	void on_redirLogIn_clicked();
 
 private:
-	QString error_message;
+	QString state_message;
 	QString username;
 	QString password;
 	QDate dob;
@@ -29,6 +35,7 @@ private:
 
 signals:
 	void sigRedirLogin();
+	void sigCreateAccount(const std::string& username, const std::string& password, const std::string& dob);
 };
 
 #endif // SIGNUP_H

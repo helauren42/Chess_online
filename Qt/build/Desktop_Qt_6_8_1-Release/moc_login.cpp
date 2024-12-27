@@ -40,8 +40,11 @@ static constexpr auto qt_meta_stringdata_ZN5loginE = QtMocHelpers::stringData(
     "login",
     "sigValidLogin",
     "",
-    "sigFaultyLogin",
     "sigRedirSignup",
+    "sigUpdateLogin",
+    "std::string",
+    "username",
+    "password",
     "on_loginButton_clicked",
     "on_redirSignUp_clicked"
 );
@@ -65,16 +68,16 @@ Q_CONSTINIT static const uint qt_meta_data_ZN5loginE[] = {
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
        1,    0,   44,    2, 0x06,    1 /* Public */,
        3,    0,   45,    2, 0x06,    2 /* Public */,
-       4,    0,   46,    2, 0x06,    3 /* Public */,
+       4,    2,   46,    2, 0x06,    3 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       5,    0,   47,    2, 0x08,    4 /* Private */,
-       6,    0,   48,    2, 0x08,    5 /* Private */,
+       8,    0,   51,    2, 0x08,    6 /* Private */,
+       9,    0,   52,    2, 0x08,    7 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 5, 0x80000000 | 5,    6,    7,
 
  // slots: parameters
     QMetaType::Void,
@@ -94,10 +97,12 @@ Q_CONSTINIT const QMetaObject login::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<login, std::true_type>,
         // method 'sigValidLogin'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'sigFaultyLogin'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'sigRedirSignup'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'sigUpdateLogin'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>,
         // method 'on_loginButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_redirSignUp_clicked'
@@ -112,8 +117,8 @@ void login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->sigValidLogin(); break;
-        case 1: _t->sigFaultyLogin(); break;
-        case 2: _t->sigRedirSignup(); break;
+        case 1: _t->sigRedirSignup(); break;
+        case 2: _t->sigUpdateLogin((*reinterpret_cast< std::add_pointer_t<std::string>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<std::string>>(_a[2]))); break;
         case 3: _t->on_loginButton_clicked(); break;
         case 4: _t->on_redirSignUp_clicked(); break;
         default: ;
@@ -130,14 +135,14 @@ void login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         }
         {
             using _q_method_type = void (login::*)();
-            if (_q_method_type _q_method = &login::sigFaultyLogin; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            if (_q_method_type _q_method = &login::sigRedirSignup; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _q_method_type = void (login::*)();
-            if (_q_method_type _q_method = &login::sigRedirSignup; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            using _q_method_type = void (login::*)(const std::string & , const std::string & );
+            if (_q_method_type _q_method = &login::sigUpdateLogin; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 2;
                 return;
             }
@@ -183,14 +188,15 @@ void login::sigValidLogin()
 }
 
 // SIGNAL 1
-void login::sigFaultyLogin()
+void login::sigRedirSignup()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
-void login::sigRedirSignup()
+void login::sigUpdateLogin(const std::string & _t1, const std::string & _t2)
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_WARNING_POP

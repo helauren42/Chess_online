@@ -2,7 +2,6 @@
 #define LOGIN_H
 
 #include "common.hpp"
-#include <QWidget>
 
 namespace Ui {
 class login;
@@ -15,7 +14,7 @@ class login : public QWidget
 public:
     explicit login(QWidget *parent = nullptr);
     ~login();
-    void setFaultyState();
+    void setFaultyState(const QString& msg);
 
 private slots:
     void on_loginButton_clicked();
@@ -29,8 +28,8 @@ private:
 
 signals:
     void sigValidLogin();
-    void sigFaultyLogin();
     void sigRedirSignup();
+    void sigUpdateLogin(const std::string& username, const std::string& password);
 };
 
 #endif // LOGIN_H

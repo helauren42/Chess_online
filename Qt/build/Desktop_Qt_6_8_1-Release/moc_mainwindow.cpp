@@ -45,6 +45,7 @@ static constexpr auto qt_meta_stringdata_ZN10MainWindowE = QtMocHelpers::stringD
     "onSigLogin",
     "onValidLogin",
     "onFaultyLogin",
+    "msg",
     "onSigSignup",
     "onOpenMenu",
     "onLaunchGame"
@@ -73,10 +74,10 @@ Q_CONSTINIT static const uint qt_meta_data_ZN10MainWindowE[] = {
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
        4,    0,   64,    2, 0x08,    3 /* Private */,
        5,    0,   65,    2, 0x08,    4 /* Private */,
-       6,    0,   66,    2, 0x08,    5 /* Private */,
-       7,    0,   67,    2, 0x08,    6 /* Private */,
-       8,    0,   68,    2, 0x08,    7 /* Private */,
-       9,    0,   69,    2, 0x08,    8 /* Private */,
+       6,    1,   66,    2, 0x08,    5 /* Private */,
+       8,    0,   69,    2, 0x08,    7 /* Private */,
+       9,    0,   70,    2, 0x08,    8 /* Private */,
+      10,    0,   71,    2, 0x08,    9 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -85,7 +86,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN10MainWindowE[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    7,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -112,6 +113,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onFaultyLogin'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
         // method 'onSigSignup'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onOpenMenu'
@@ -131,7 +133,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->sigStartGame(); break;
         case 2: _t->onSigLogin(); break;
         case 3: _t->onValidLogin(); break;
-        case 4: _t->onFaultyLogin(); break;
+        case 4: _t->onFaultyLogin((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 5: _t->onSigSignup(); break;
         case 6: _t->onOpenMenu(); break;
         case 7: _t->onLaunchGame(); break;

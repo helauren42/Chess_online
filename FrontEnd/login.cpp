@@ -1,6 +1,6 @@
 #include "login.hpp"
 #include "ui_login.h"
-#include <iostream>
+#include <Exception.h>
 
 login::login(QWidget *parent)
 	: QWidget(parent)
@@ -14,7 +14,8 @@ login::~login()
 	delete ui;
 }
 
-void login::setFaultyState() {
+void login::setFaultyState(const QString& msg) {
+	error_message = msg;
 	this->ui->state->setText(this->error_message);
 
 	QPalette palette = this->ui->state->palette();
@@ -30,34 +31,7 @@ void login::on_loginButton_clicked()
 	qDebug() << "username: " << this->username << "\n";
 	qDebug() << "password: " << this->password << "\n";
 
-	try {
-		response = online.login(username.toStdString(), this->password.toStdString());
-	}
-    catch (const Exception& e) {
-        qDebug() << "Caught login error: " << e.what();
-        error_message = "Could not connect to servers";
-        emit this->sigFaultyLogin();
-        return;
-	}
-
-	qDebug() << "status code: " << response.second;
-	qDebug() << response.first;
-    if(response.second == 200) {
-        error_message = "";
-		emit this->sigFaultyLogin(); // it is set to empty string not faulty
-		emit this->sigValidLogin();
-    }
-    else {
-		if(response.second == 0 || response.first == "") {
-            error_message = "Could not connect to servers, maybe try again";
-		}
-		else {
-			std::string message = response.first;
-			error_message = QString(message.substr(12, message.size() - 14).c_str());
-			qDebug() << "extracted error message: " << error_message;
-		}
-		emit this->sigFaultyLogin();
-	}
+    emit sigUpdateLogin(username.toStdString(), this->password.toStdString());
 }
 
 void login::on_redirSignUp_clicked()

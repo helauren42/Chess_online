@@ -1,4 +1,5 @@
 #include "mainwindow.hpp"
+#include "online.hpp"
 #include <QDebug>
 #include <QFile>
 #include <QDir>
@@ -7,10 +8,6 @@ t_dim       dim;
 
 inline namespace Global {
 	Online online;
-}
-
-inline namespace Global {
-std::unique_ptr<WebSocketClient> my_ws = std::make_unique<WebSocketClient>();
 }
 
 int main(int argc, char *argv[])
@@ -28,7 +25,8 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 	app.setStyleSheet(stylesheet);
-	MainWindow window(nullptr);
+    MainWindow window(nullptr);
+    // online.window = &window;
 	window.show();
 
 	app.exec();

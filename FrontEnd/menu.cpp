@@ -14,23 +14,7 @@ Menu::~Menu()
     delete ui;
 }
 
-void Menu::getOnlinePlayers() {
-    auto response = online.fetchOnlinePlayers();
-    if(response.second != 200)
-        qDebug() << "Could not fetch online players: " << response.second;
-    else {
-        qDebug() << "Fetched online players: ";
-        Out::stdOut(response.first);
-    }
-    players = response.first;
-}
-
-void Menu::updateOnlinePlayers() {
-    QString text;
-    for (auto it = players.begin(); it != players.end(); it++) {
-        text += it->second.c_str();
-        text += "\n";
-    }
+void Menu::onUpdateOnlinePlayers(QString text) {
     this->ui->onlinePlayersList->setText(text);
 }
 
@@ -41,15 +25,11 @@ void Menu::on_hotseat_clicked()
 
 void Menu::on_logOut_clicked()
 {
-    online.logout();
     emit this->sigLogOut();
 }
 
 void Menu::on_onlineInvite_clicked()
 {
-    QString challenged = this->ui->onlineForm->text();
-    qDebug() << "challenger: " << online.account.username;
-    qDebug() << "challenged: " << challenged;
-    online.sendChallenge(online.account.username, challenged.toStdString());
+    // emit this->sigSendChallenge(this->ui->onlineForm->text());
     this->ui->onlineForm->clear();
 }

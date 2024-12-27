@@ -1,11 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "common.hpp"
 #include "login.hpp"
 #include "signup.hpp"
 #include "menu.hpp"
 #include "game.hpp"
+
+#include <QStackedWidget>
+#include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,7 +41,7 @@ signals:
 private slots:
     void onSigLogin();
     void onValidLogin();
-    void onFaultyLogin();
+    void onFaultyLogin(const QString& msg);
 
     void onSigSignup();
 

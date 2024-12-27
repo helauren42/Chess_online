@@ -1,7 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "common.hpp"
 #include <QWidget>
 #include <QPixmap>
 #include <QLabel>

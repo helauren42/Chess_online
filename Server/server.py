@@ -11,7 +11,7 @@ connections = {}
 
 cursor.execute("CREATE TABLE IF NOT EXISTS accounts ( \
 				id NOT NULL, \
-				username CHAR(25) NOT NULL,\
+				username CHAR(25) NOT NULL, \
 				password CHAR(25) NOT NULL, \
 			dob TEXT NOT NULL)")
 
@@ -89,7 +89,6 @@ async def menu(request: fastapi.Request):
 		status_code=200,
 		content = ret
 	)
-
 
 @app.get("/")
 async def home(request: fastapi.Request):
@@ -220,7 +219,7 @@ async def updateOnlinePlayersClientSide():
 	print("update online players client side: ", connections)
 	await messageAll("update connections")
 	# for ws in connections.values():
-	# 	ws.send_text("update connection")
+		# ws.send_text("update connection")
 
 @app.websocket("/ws/{user}")
 async def WebsocketConnection(ws : WebSocket, user : str):

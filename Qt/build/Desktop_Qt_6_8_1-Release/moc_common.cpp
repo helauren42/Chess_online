@@ -40,7 +40,11 @@ static constexpr auto qt_meta_stringdata_ZN6OnlineE = QtMocHelpers::stringData(
     "Online",
     "sigPlayerConnection",
     "",
-    "onNewPlayerConnection"
+    "onNewPlayerConnection",
+    "onConnected",
+    "onMessageReceived",
+    "message",
+    "onDisconnected"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -52,7 +56,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN6OnlineE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -60,15 +64,21 @@ Q_CONSTINIT static const uint qt_meta_data_ZN6OnlineE[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   26,    2, 0x06,    1 /* Public */,
+       1,    0,   44,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   27,    2, 0x0a,    2 /* Public */,
+       3,    0,   45,    2, 0x0a,    2 /* Public */,
+       4,    0,   46,    2, 0x0a,    3 /* Public */,
+       5,    1,   47,    2, 0x0a,    4 /* Public */,
+       7,    0,   50,    2, 0x0a,    6 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
 
  // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    6,
     QMetaType::Void,
 
        0        // eod
@@ -86,6 +96,13 @@ Q_CONSTINIT const QMetaObject Online::staticMetaObject = { {
         // method 'sigPlayerConnection'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onNewPlayerConnection'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onConnected'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onMessageReceived'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'onDisconnected'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -98,6 +115,9 @@ void Online::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         switch (_id) {
         case 0: _t->sigPlayerConnection(); break;
         case 1: _t->onNewPlayerConnection(); break;
+        case 2: _t->onConnected(); break;
+        case 3: _t->onMessageReceived((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 4: _t->onDisconnected(); break;
         default: ;
         }
     }
@@ -132,14 +152,14 @@ int Online::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 5;
     }
     return _id;
 }
