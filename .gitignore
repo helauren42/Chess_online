@@ -7,3 +7,7 @@ Qt/build/Desktop_Qt_6_8_1-Debug/*.cpp
 Qt/build/Desktop_Qt_6_8_1-Debug/*.o
 Qt/build/Desktop_Qt_6_8_1-Debug/.qtc_clangd/.cache/*
 *.idx
+
+Qt/build/Desktop_Qt_6_8_1-Release/*.h
+Qt/build/Desktop_Qt_6_8_1-Release/*.cpp
+Qt/build/Desktop_Qt_6_8_1-Release/*.o
