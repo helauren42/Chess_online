@@ -17,7 +17,7 @@ enum PieceType {
 	NONE
 };
 
-enum WINNER {
+enum PLAYER_COLOR {
 	BLACK,
 	WHITE,
 	COLOR_NONE,

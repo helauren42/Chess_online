@@ -31,6 +31,14 @@ void Menu::on_logOut_clicked()
 void Menu::on_onlineInvite_clicked()
 {
     qDebug() << "clicked invite";
-    emit this->sigSendChallenge(online.account.username.c_str(), this->ui->onlineForm->text());
+    const QString opponent = this->ui->onlineForm->text();
+
+    qDebug() << "opponent: " << opponent;
+    emit this->sigSendChallenge(online.account.username.c_str(), opponent);
     this->ui->onlineForm->clear();
+
+    QMessageBox *msgBox = new QMessageBox(this);
+    msgBox->setWindowTitle(online.account.username.c_str());
+    msgBox->setText(QString("You have invited " + opponent + " to a game of chess"));
+    msgBox->exec();
 }

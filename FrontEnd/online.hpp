@@ -15,12 +15,15 @@
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPMessage.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/URI.h>
+
+#include <nlohmann/json.hpp>
 
 #include <strings.h>
 #include <iostream>
@@ -36,93 +39,22 @@ using namespace std;
 class Online : public QObject{
 	Q_OBJECT
 private:
-	GameInfo gameInfo;
 	URI uri;
 	HTTPClientSession session;
 	HTTPRequest request;
 	HTTPResponse response;
 	QWebSocket *socket = nullptr;
 
-    void connectSock(QString username) {
-        if(!socket) {
-			delete socket;
-			socket = nullptr;
-		}
-		socket = new QWebSocket();
-		connect(socket, &QWebSocket::connected, this, &Online::onConnected);
-		connect(socket, &QWebSocket::textMessageReceived, this, &Online::onMessageReceived);
-		connect(socket, &QWebSocket::disconnected, this, &Online::onDisconnected);
-		QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
-		qDebug() <<  "qurl: " << qurl;
-		socket->open(qurl);
-
-		QEventLoop loop;
-		connect(socket, &QWebSocket::connected, &loop, [&loop]() {
-			qDebug() << "Connected!";
-			loop.quit();
-		});
-		connect(socket, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
-			qDebug() << "Error occurred:" << error;
-			loop.quit();
-		});
-		loop.exec();  // Blocks until the connection is established or an error occurs
-	}
-
-	/**
-	 * @brief accountJson creates a json string for the account
-	 */
-	std::string accountJson(const std::string& username, const std::string& password, const std::string& dob) {
-		std::string ret;
-		static std::string msg = "a";
-		msg += msg;
-		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + dob + "\",\"msg\":\"" + msg + "\"}";
-		return ret;
-	}
-
-	/**
-	 * @brief accountJson creates a json string for the account
-	 */
-	std::string accountJson(const std::string& username, const std::string& password) {
-		std::string ret;
-		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
-		return ret;
-	}
-	std::string recvResponse() {
-		std::stringstream ss;
-		for (int i = 0; i < 6; i++) {
-			try {
-				istream& rs = session.receiveResponse(response);
-				ss << rs.rdbuf();
-				break;
-			}
-            catch (const Exception& e) {
-				qDebug() << e.what();
-				Poco::Thread::sleep(80);
-			}
-		}
-		return ss.str();
-	}
-	int getStatus() const {
-		return response.getStatus();
-	}
-	void makeRequests(std::string method, std::string path, std::string body="") {
-		qDebug() << "Make request: " << path;
-		request = HTTPRequest(method, path, HTTPMessage::HTTP_1_1);
-		request.setContentType("application/json");
-		request.setContentLength(body.length());
-		std::ostream& os = session.sendRequest(request);
-		os << body;
-		os.flush();
-		session.setTimeout(Poco::Timespan(10, 0));
-	}
 
 signals:
 
-    void    sigPlayerConnection();
-    void    sigUpdateOnlinePlayers(const QString& text);
-    void    sigSignupState(QString msg);
-    void	sigMakeLogin();
+	void    sigPlayerConnection();
+	void    sigUpdateOnlinePlayers(const QString& text);
+	void    sigSignupState(QString msg);
+	void	sigMakeLogin();
 	void	sigFaultyLogin(const QString& msg);
+	void	sigInvite();
+	void	sigLaunchOnlineGame();
 
 public slots:
 
@@ -139,35 +71,56 @@ public slots:
 		if(message == "update connections") {
 			this->sigMakeLogin();
 		}
+
+		try {
+            nlohmann::json jsonObject = nlohmann::json::parse(message.toStdString());
+			if(jsonObject["type"] == "challenge") {
+				std::string opponent = jsonObject["from"];
+				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
+				gameInfo.set(GAMEMODE::ONLINE, opponent, color);
+				emit sigInvite();
+			}
+			if(jsonObject["type"] == "start online game") {
+				std::string opponent = jsonObject["opponent"];
+				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
+				gameInfo.set(GAMEMODE::ONLINE, opponent, color);
+				// emit sigInvite();
+                emit sigLaunchOnlineGame();
+			}
+		}
+		catch (...) {
+			qDebug() << "message received not json format";
+		}
 		qDebug() << "Received message from server:" << message;
 	}
 
-    void onDisconnected() const {
+	void onDisconnected() const {
 		qDebug() << "Disconnected from server";
 		socket->close();
 	}
 
-    void onSendChallenge(const QString& challenger, const QString& challenged) {
-        qDebug() << "on send challenge";
-        QJsonObject json;
-        json["type"] = "challenge";
-        json["challenger"] = challenger;
-        json["challenged"] = challenged;
+	void onSendChallenge(const QString& challenger, const QString& challenged) {
+		qDebug() << "on send challenge";
+		QJsonObject json;
+		json["type"] = "challenge";
+		json["challenger"] = challenger;
+		json["challenged"] = challenged;
 
-        QJsonDocument doc(json);
-        QString jsonString = doc.toJson();
+		QJsonDocument doc(json);
+		QString jsonString = doc.toJson();
         sendMessage(jsonString);
-    }
+        // QMessageBox::information("Invite sent, waiting for response");
+	}
 
 // widgets
 
 	// try to login
 	void onUpdateLogin(const std::string& username, const std::string& password) {
-        std::pair<std::string, int> resp = login(username, password);
-        if(resp.second == 200)
-            emit this->sigMakeLogin();
-        else
-            emit this->sigFaultyLogin(resp.first.c_str());
+		std::pair<std::string, int> resp = login(username, password);
+		if(resp.second == 200)
+			emit this->sigMakeLogin();
+		else
+			emit this->sigFaultyLogin(resp.first.c_str());
 	}
 
 	void onLogout() {
@@ -176,7 +129,7 @@ public slots:
 
 	void onGetOnlinePlayers() {
 		std::pair<std::map<std::string, std::string>, int> resp = fetchOnlinePlayers();
-        if(resp.second != 200) {
+		if(resp.second != 200) {
 			qDebug() << "could not fetch online players";
 			return;
 		}
@@ -203,8 +156,8 @@ public slots:
 		std::string body = resp.first;
 		qDebug() << "status code: " << code;
 		if(code == 200) {
-            this->sigSignupState("");
-        }
+			this->sigSignupState("");
+		}
 		else {
 			if(body == "") {
 				this->sigSignupState("failed to connect to server, try again");
@@ -219,8 +172,84 @@ public slots:
 	}
 
 public:
+
+    void connectSock(QString username) {
+        if(!socket) {
+            delete socket;
+            socket = nullptr;
+        }
+        socket = new QWebSocket();
+        connect(socket, &QWebSocket::connected, this, &Online::onConnected);
+        connect(socket, &QWebSocket::textMessageReceived, this, &Online::onMessageReceived);
+        connect(socket, &QWebSocket::disconnected, this, &Online::onDisconnected);
+        QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
+        qDebug() <<  "qurl: " << qurl;
+        socket->open(qurl);
+
+        QEventLoop loop;
+        connect(socket, &QWebSocket::connected, &loop, [&loop]() {
+            qDebug() << "Connected!";
+            loop.quit();
+        });
+        connect(socket, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
+            qDebug() << "Error occurred:" << error;
+            loop.quit();
+        });
+        loop.exec();  // Blocks until the connection is established or an error occurs
+    }
+
+    /**
+     * @brief accountJson creates a json string for the account
+     */
+    std::string accountJson(const std::string& username, const std::string& password, const std::string& dob) {
+        std::string ret;
+        static std::string msg = "a";
+        msg += msg;
+        ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + dob + "\",\"msg\":\"" + msg + "\"}";
+        return ret;
+    }
+
+    /**
+     * @brief accountJson creates a json string for the account
+     */
+    std::string accountJson(const std::string& username, const std::string& password) {
+        std::string ret;
+        ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
+        return ret;
+    }
+    std::string recvResponse() {
+        std::stringstream ss;
+        for (int i = 0; i < 6; i++) {
+            try {
+                istream& rs = session.receiveResponse(response);
+                ss << rs.rdbuf();
+                break;
+            }
+            catch (const Exception& e) {
+                qDebug() << e.what();
+                Poco::Thread::sleep(80);
+            }
+        }
+        return ss.str();
+    }
+    int getStatus() const {
+        return response.getStatus();
+    }
+    void makeRequests(std::string method, std::string path, std::string body="") {
+        qDebug() << "Make request: " << path;
+        request = HTTPRequest(method, path, HTTPMessage::HTTP_1_1);
+        request.setContentType("application/json");
+        request.setContentLength(body.length());
+        std::ostream& os = session.sendRequest(request);
+        os << body;
+        os.flush();
+        session.setTimeout(Poco::Timespan(10, 0));
+    }
+
+public:
 	// MainWindow *window;
 	Account account;
+    GameInfo gameInfo;
 	Online() : uri(MY_URI), session(uri.getHost(), uri.getPort()) {
 		session.setKeepAlive(true);
 	};
@@ -230,7 +259,7 @@ public:
 	std::map<std::string, std::string> players;
 
 	void sendMessage(QString message) {
-        qDebug() << "sending message";
+        qDebug() << "sending message: " << message;
 		socket->sendTextMessage(message);
 	}
 
@@ -262,7 +291,7 @@ public:
 		makeRequests(HTTPRequest::HTTP_POST, "/signup", accountJson(username, password, dob));
 		return {recvResponse(), getStatus()};
 	}
-	// getMenu basically
+
 	std::pair<std::map<std::string, std::string>, int> fetchOnlinePlayers() {
 		makeRequests(HTTPRequest::HTTP_GET, "/online_players");
 		auto json = recvResponse();

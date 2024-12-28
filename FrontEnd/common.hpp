@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include "../BackEnd/inc/Utils.hpp"
+
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QApplication>
@@ -21,7 +23,7 @@
 
 #include <strings.h>
 
-enum GameMode {
+enum class GAMEMODE {
 	HOTSEAT,
 	AI,
 	ONLINE,
@@ -78,11 +80,13 @@ inline std::map<std::string, std::string> jsonToMap(const std::string& json) noe
 }
 
 struct GameInfo {
-    GameMode mode;
+    GAMEMODE mode;
     std::string opponent;
-    void set(const GameMode &_mode, const std::string _opponent = "") {
+    bool color;
+    void set(const GAMEMODE &_mode, const std::string& _opponent = "", const bool& _color = false) {
         mode = _mode;
         opponent = _opponent;
+        color = _color;
     };
 };
 

@@ -61,18 +61,18 @@ private:
     QList<QLabel*> squares;
     std::vector<std::unique_ptr<QLabel>> square_pieces;
     const std::map<std::pair<PieceType, bool>, QPixmap> images = {
-        {std::make_pair(PAWN, WHITE), QPixmap("../../../IMG/USE/w_pawn.png")},
-        {std::make_pair(BISHOP, WHITE), QPixmap("../../../IMG/USE/w_bishop.png")},
-        {std::make_pair(KNIGHT, WHITE), QPixmap("../../../IMG/USE/w_knight.png")},
-        {std::make_pair(ROOK, WHITE), QPixmap("../../../IMG/USE/w_rook.png")},
-        {std::make_pair(QUEEN, WHITE), QPixmap("../../../IMG/USE/w_queen.png")},
-        {std::make_pair(KING, WHITE), QPixmap("../../../IMG/USE/w_king.png")},
-        {std::make_pair(PAWN, BLACK), QPixmap("../../../IMG/USE/b_pawn.png")},
-        {std::make_pair(BISHOP, BLACK), QPixmap("../../../IMG/USE/b_bishop.png")},
-        {std::make_pair(KNIGHT, BLACK), QPixmap("../../../IMG/USE/b_knight.png")},
-        {std::make_pair(ROOK, BLACK), QPixmap("../../../IMG/USE/b_rook.png")},
-        {std::make_pair(QUEEN, BLACK), QPixmap("../../../IMG/USE/b_queen.png")},
-        {std::make_pair(KING, BLACK), QPixmap("../../../IMG/USE/b_king.png")}
+        {std::make_pair(PAWN, PLAYER_COLOR::WHITE), QPixmap("../../../IMG/USE/w_pawn.png")},
+        {std::make_pair(BISHOP, PLAYER_COLOR::WHITE), QPixmap("../../../IMG/USE/w_bishop.png")},
+        {std::make_pair(KNIGHT, PLAYER_COLOR::WHITE), QPixmap("../../../IMG/USE/w_knight.png")},
+        {std::make_pair(ROOK, PLAYER_COLOR::WHITE), QPixmap("../../../IMG/USE/w_rook.png")},
+        {std::make_pair(QUEEN, PLAYER_COLOR::WHITE), QPixmap("../../../IMG/USE/w_queen.png")},
+        {std::make_pair(KING, PLAYER_COLOR::WHITE), QPixmap("../../../IMG/USE/w_king.png")},
+        {std::make_pair(PAWN, PLAYER_COLOR::BLACK), QPixmap("../../../IMG/USE/b_pawn.png")},
+        {std::make_pair(BISHOP, PLAYER_COLOR::BLACK), QPixmap("../../../IMG/USE/b_bishop.png")},
+        {std::make_pair(KNIGHT, PLAYER_COLOR::BLACK), QPixmap("../../../IMG/USE/b_knight.png")},
+        {std::make_pair(ROOK, PLAYER_COLOR::BLACK), QPixmap("../../../IMG/USE/b_rook.png")},
+        {std::make_pair(QUEEN, PLAYER_COLOR::BLACK), QPixmap("../../../IMG/USE/b_queen.png")},
+        {std::make_pair(KING, PLAYER_COLOR::BLACK), QPixmap("../../../IMG/USE/b_king.png")}
     };
 
     void MakeChessBoard();

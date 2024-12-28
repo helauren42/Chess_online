@@ -53,7 +53,7 @@ void Board::setBoard()
 		PieceType type = it->get()->getType();
 		bool color = it->get()->getColor();
 		Out::stdOut("Piece: ", type, "\n", pos);
-        std::string s = color == WHITE ? "WHITE" : "BLACK";
+        std::string s = color == PLAYER_COLOR::WHITE ? "WHITE" : "BLACK";
 		cell_board[pos.y][pos.x].type = type;
         cell_board[pos.y][pos.x].color = color;
 	}
@@ -294,7 +294,7 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 					it->get()->makeMove(castle_pos[0]);
 					target_piece->makeMove(castle_pos[1]);
 					selected_piece = nullptr;
-					player_turn = player_turn == WHITE ? BLACK : WHITE;
+					player_turn = player_turn == PLAYER_COLOR::WHITE ? PLAYER_COLOR::BLACK : PLAYER_COLOR::WHITE;
                     Out::stdOut("castling done");
 					return;
 				}
@@ -313,7 +313,7 @@ void Board::moveSelectedPiece(const Pos &new_pos)
 				if (it->get()->getType() == PAWN && (new_pos.y == 0 || new_pos.y == 7))
 				{
                     Out::stdOut("Pawn becomes Queen");
-					bool color = new_pos.y == 0 ? BLACK : WHITE;
+					bool color = new_pos.y == 0 ? PLAYER_COLOR::BLACK : PLAYER_COLOR::WHITE;
 					// should allow player to pick new piece but for now it's just a queen
 					it->reset(new Queen(new_pos.x, new_pos.y, color));
 				}
@@ -332,7 +332,7 @@ void Board::moveSelectedPiece(const Pos &new_pos)
                     removePiece(target_piece);
 				}
 				selected_piece = nullptr;
-				player_turn = player_turn == WHITE ? BLACK : WHITE;
+				player_turn = player_turn == PLAYER_COLOR::WHITE ? PLAYER_COLOR::BLACK : PLAYER_COLOR::WHITE;
 				Out::stdOut("end ACTIVE PIECES SIZE: ", active_pieces.size());
 				return;
 			}
@@ -392,7 +392,7 @@ bool Board::isCheckmate()
 	if (!checker)
 		return false;
 	if (isImmobilized(getKing()) && !canUncheck(checker)) {
-		winner = player_turn == BLACK ? WHITE : BLACK;
+		winner = player_turn == PLAYER_COLOR::BLACK ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
 		return true;
 	}
 	return false;

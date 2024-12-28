@@ -14,16 +14,15 @@ signup::~signup()
 }
 
 void signup::setState() {
-    if(state_message == "") {
-        QMessageBox::information(this, "Signup", "Account created successfully!");
-    }
-    else {
-        QMessageBox::information(this, "Signup", "Account creation failed, check your internet and try again");
-    }
-	this->ui->state->setText(this->state_message);
 	QPalette palette = this->ui->state->palette();
 	palette.setColor(QPalette::WindowText, Qt::red);
+	if(state_message == "") {
+        palette.setColor(QPalette::WindowText, Qt::green);
+		state_message == "Account created successfully!";
+	}
+	
 	this->ui->state->setPalette(palette);
+	this->ui->state->setText(this->state_message);
 }
 
 void signup::on_signUpButton_clicked()
@@ -34,7 +33,7 @@ void signup::on_signUpButton_clicked()
 	qDebug() << "username: " << this->username;
 	qDebug() << "password: " << this->password;
 	qDebug() << "dob: " << this->dob;
-    this->sigCreateAccount(username.toStdString(), password.toStdString(), dob.toString().toStdString());
+	this->sigCreateAccount(username.toStdString(), password.toStdString(), dob.toString().toStdString());
 }
 
 void signup::on_redirLogIn_clicked()

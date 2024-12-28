@@ -1,6 +1,7 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 #include "online.hpp"
+#include <QPushButton>
 
 MStackedWidgets::MStackedWidgets() {
 	widLogin = new login();
@@ -57,6 +58,58 @@ void MainWindow::onLaunchGame() {
 	qDebug() << "launching game widget";
 }
 
+void MainWindow::onLaunchOnlineGame() {
+    qDebug() << "pre launch online game vs " << online.gameInfo.opponent.c_str();
+
+    this->setWindowTitle(QString("Vs ") + online.gameInfo.opponent.c_str());
+    stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
+
+	qDebug() << "pre launching online game widget";
+}
+
+void MainWindow::onInviteAccept() {
+    qDebug() << "on invite accept";
+
+    QJsonObject json;
+    json["type"] = "invite answer";
+    json["answer"] = "accept";
+    json["challenger"] = online.gameInfo.opponent.c_str();
+    json["challenged"] = online.account.username.c_str();
+    json["color"] = online.gameInfo.color;
+
+    QJsonDocument doc(json);
+    QString jsonString = doc.toJson();
+    online.sendMessage(jsonString);
+	online.sigLaunchOnlineGame();
+}
+
+void MainWindow::onInviteReject() {
+    QJsonObject json;
+    json["type"] = "invite answer";
+    json["answer"] = "reject";
+
+    QJsonDocument doc(json);
+    QString jsonString = doc.toJson();
+    online.sendMessage(jsonString);
+}
+
+void MainWindow::onInvite() {
+    QMessageBox* msgBox = new QMessageBox(this);
+    msgBox->setWindowTitle("Invitation");
+    msgBox->setText(online.gameInfo.opponent.c_str() + QString(" has invited you to a game"));
+
+    QPushButton *acceptButton = msgBox->addButton("Accept", QMessageBox::AcceptRole);
+    QPushButton *rejectButton = msgBox->addButton("Decline", QMessageBox::RejectRole);
+
+    connect(acceptButton, &QPushButton::released, this, &MainWindow::onInviteAccept);
+    connect(rejectButton, &QPushButton::released, this, &MainWindow::onInviteReject);
+
+    connect(acceptButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
+    connect(rejectButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
+
+    msgBox->show();
+}
+
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 	, ui(new Ui::MainWindow)
@@ -86,11 +139,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(stackedWidgets->widMenu, &Menu::sigLogOut, &online, &Online::onLogout);
 	connect(stackedWidgets->widMenu, &Menu::sigLogOut, this, &MainWindow::onSigLogin);
     connect(stackedWidgets->widMenu, &Menu::getOnlinePlayers, &online, &Online::onGetOnlinePlayers);
-	
+
 	// Online
     connect(&online, &Online::sigUpdateOnlinePlayers, stackedWidgets->widMenu, &Menu::onUpdateOnlinePlayers);
     connect(&online, &Online::sigSignupState, stackedWidgets->widSignup, &signup::onUpdateState);
     connect(stackedWidgets->widMenu, &Menu::sigSendChallenge, &online, &Online::onSendChallenge);
+    connect(&online, &Online::sigInvite, this, &MainWindow::onInvite);
+    connect(&online, &Online::sigLaunchOnlineGame, this, &MainWindow::onLaunchOnlineGame);
 
     // Game
 	connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);

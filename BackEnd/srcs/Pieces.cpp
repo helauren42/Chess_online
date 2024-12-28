@@ -2,7 +2,7 @@
 
 Pieces::Pieces(short _x, short _y, PieceType _type) : pos(_x, _y), type(_type)
 {
-	color = pos.y <= 1 ? WHITE : BLACK;
+	color = pos.y <= 1 ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
 }
 
 Pieces::Pieces(short _x, short _y, PieceType _type, bool _color) : pos(_x, _y), color(_color), type(_type) {}

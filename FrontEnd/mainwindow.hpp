@@ -42,11 +42,14 @@ private slots:
     void onSigLogin();
     void onValidLogin();
     void onFaultyLogin(const QString& msg);
-
     void onSigSignup();
-
     void onOpenMenu();
+
     void onLaunchGame();
+    void onLaunchOnlineGame();
+    void onInvite();
+    void onInviteAccept();
+    void onInviteReject();
 
 private:
     Ui::MainWindow *ui;

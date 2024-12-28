@@ -30,7 +30,7 @@ private:
 	const std::array<Move, 8> king_moves = {Move(1, 2), Move(1, -2), Move(-1, 2), Move(-1, -2), Move(2, 1), Move(2, -1), Move(-2, 1), Move(-2, -1)};
 
 public:
-	bool player_turn = WHITE;
+	bool player_turn = PLAYER_COLOR::WHITE;
     Board() {};
 	~Board() {};
 

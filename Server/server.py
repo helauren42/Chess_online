@@ -6,6 +6,7 @@ from fastapi import Response, WebSocket
 from fastapi.responses import JSONResponse
 from asyncio import Queue
 import asyncio
+import random
 
 connect = sqlite3.connect("database.db")
 cursor = connect.cursor()
@@ -224,6 +225,8 @@ async def updateOnlinePlayersClientSide():
 	# for ws in connections.values():
 		# ws.send_text("update connection")
 
+
+
 message_queues = {}
 
 @app.websocket("/ws/{user}")
@@ -257,12 +260,22 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 			
 			if type == "challenge":
 				challenged_user = jsonData.get("challenged")
-				if challenged_user in connections:
+				if challenged_user in connections and challenged_user != user:
 					print(f"I {challenged_user} have been challenged by {jsonData.get('challenger')}")
 					# Add the challenge message to the challenged user's queue
+					rand = random.choice([True, False])
+					color = "white" if rand == True else "black"
 					await message_queues[challenged_user].put(
-						json.dumps({"type": "challenge", "from": user})
+						json.dumps({"type": "challenge", "from": user, "color": color})
 					)
+			if type == "invite answer" and jsonData.get("answer") == "accept":
+				challenged = jsonData.get("challenged")
+				challenger = jsonData.get("challenger")
+				color = "white" if jsonData.get("color") else "black"
+				await message_queues[challenger].put(
+					json.dumps({"type": "start online game", "opponent": challenged, "color": color})
+				)
+
 	except Exception as e:
 		print(f"{user} disconnected")
 		print("Exception: ", e)
