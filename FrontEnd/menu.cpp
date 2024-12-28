@@ -1,6 +1,6 @@
 #include "menu.hpp"
 #include "ui_menu.h"
-#include "../MyCppLib/Printer/Printer.hpp"
+#include "online.hpp"
 
 Menu::Menu(QWidget *parent)
     : QWidget(parent)
@@ -30,6 +30,7 @@ void Menu::on_logOut_clicked()
 
 void Menu::on_onlineInvite_clicked()
 {
-    // emit this->sigSendChallenge(this->ui->onlineForm->text());
+    qDebug() << "clicked invite";
+    emit this->sigSendChallenge(online.account.username.c_str(), this->ui->onlineForm->text());
     this->ui->onlineForm->clear();
 }

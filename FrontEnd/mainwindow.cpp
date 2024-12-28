@@ -66,9 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
 	// this->setFixedSize(this->size());
 
 	stackedWidgets = new MStackedWidgets();
-
 	setCentralWidget(stackedWidgets);
-
 	stackedWidgets->setCurrentWidget(stackedWidgets->widLogin);
 
 	// Login
@@ -92,11 +90,12 @@ MainWindow::MainWindow(QWidget *parent)
 	// Online
     connect(&online, &Online::sigUpdateOnlinePlayers, stackedWidgets->widMenu, &Menu::onUpdateOnlinePlayers);
     connect(&online, &Online::sigSignupState, stackedWidgets->widSignup, &signup::onUpdateState);
+    connect(stackedWidgets->widMenu, &Menu::sigSendChallenge, &online, &Online::onSendChallenge);
 
     // Game
 	connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
 	// connect(stackedWidgets->widGame, &Game::sigClickedBoard, stackedWidgets->widGame, &Game::onClickBoard);
-}
+    }
 
 MainWindow::~MainWindow()
 {

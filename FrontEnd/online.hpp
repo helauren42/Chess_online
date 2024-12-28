@@ -13,6 +13,8 @@
 #include <QWebSocket>
 #include <QString>
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPMessage.h>
@@ -31,67 +33,6 @@ using namespace std;
 #define MY_URI "http://127.0.0.1:8000"
 #define PORT 8000
 
-/**
- * @brief parses json formatted string into a map with key and value of strings, json string must be a valid dictionnary of strings of strings or behaviour is undefined
- * @param json the json formatted string as const reference
- */
-inline std::map<std::string, std::string> jsonToMap(const std::string& json) noexcept {
-	std::map<std::string, std::string> ret;
-	size_t pos = 0;
-	while (true)
-	{
-		std::string key;
-		std::string value;
-		if(pos >= json.size())
-			break;
-
-		size_t key_start = json.find_first_of("\"", pos);
-		if(key_start == std::string::npos) {
-			break;
-		}
-
-		size_t key_end = json.find_first_of("\"", key_start +1);
-		if(key_end == std::string::npos) {
-			break;
-		}
-
-		size_t value_start = json.find_first_of("\"", key_end +1);
-		if(value_start == std::string::npos) {
-			break;
-		}
-
-		size_t value_end = json.find_first_of("\"", value_start +1);
-		if(value_end == std::string::npos) {
-			break;
-		}
-
-		key = json.substr(key_start +1, key_end - key_start -1);
-		value = json.substr(value_start +1, value_end - value_start -1);
-		ret[key] = value;
-		pos = json.find_first_of(",", value_end);
-	}
-	return ret;
-}
-
-struct GameInfo {
-	GameMode mode;
-	std::string opponent;
-	void set(const GameMode &_mode, const std::string _opponent = "") {
-		mode = _mode;
-		opponent = _opponent;
-	};
-};
-
-struct Account {
-	std::string username;
-	std::string password;
-	std::string dob;
-	int id;
-	Account	() {};
-	Account(const std::string& _username, const std::string& _password) : username(_username), password(_password) {};
-	Account(const std::string& _username, const std::string& _password, const std::string& _dob) : username(_username), password(_password), dob(_dob) {};
-};
-
 class Online : public QObject{
 	Q_OBJECT
 private:
@@ -102,10 +43,8 @@ private:
 	HTTPResponse response;
 	QWebSocket *socket = nullptr;
 
-// socket stuff
-
-	void connectSock(QString username) {
-		if(!socket) {
+    void connectSock(QString username) {
+        if(!socket) {
 			delete socket;
 			socket = nullptr;
 		}
@@ -128,8 +67,6 @@ private:
 		});
 		loop.exec();  // Blocks until the connection is established or an error occurs
 	}
-
-// non socket
 
 	/**
 	 * @brief accountJson creates a json string for the account
@@ -180,6 +117,7 @@ private:
 	}
 
 signals:
+
     void    sigPlayerConnection();
     void    sigUpdateOnlinePlayers(const QString& text);
     void    sigSignupState(QString msg);
@@ -199,27 +137,27 @@ public slots:
 
 	void onMessageReceived(QString message) {
 		if(message == "update connections") {
-			// std::pair<std::map<std::string, std::string>, int> resp = fetchOnlinePlayers();
-			// if(resp.second != 200) {
-			// 	qDebug() << "could not fetch online players";
-			// 	return;
-			// }
-			// auto players = resp.first;
-			// QString text;
-			// for (auto it = players.begin(); it != players.end(); it++) {
-			// 	text += it->second.c_str();
-			// 	text += "\n";
-			// }
-			// this->sigUpdateOnlinePlayers(text);
 			this->sigMakeLogin();
 		}
 		qDebug() << "Received message from server:" << message;
 	}
 
-	void onDisconnected() {
+    void onDisconnected() const {
 		qDebug() << "Disconnected from server";
 		socket->close();
 	}
+
+    void onSendChallenge(const QString& challenger, const QString& challenged) {
+        qDebug() << "on send challenge";
+        QJsonObject json;
+        json["type"] = "challenge";
+        json["challenger"] = challenger;
+        json["challenged"] = challenged;
+
+        QJsonDocument doc(json);
+        QString jsonString = doc.toJson();
+        sendMessage(jsonString);
+    }
 
 // widgets
 
@@ -244,10 +182,17 @@ public slots:
 		}
 		auto players = resp.first;
 		QString text;
+		qDebug() << "on get online players text1: " << text;
 		for (auto it = players.begin(); it != players.end(); it++) {
-			text += it->second.c_str();
-			text += "\n";
+			auto player = it->second.c_str();
+			qDebug() << "this->account.username: " << this->account.username;
+			qDebug() << "player: " << player;
+			if(player != this->account.username) {
+				text += player;
+				text += "\n";
+			}
 		}
+		qDebug() << "on get online players text2: " << text;
 		emit sigUpdateOnlinePlayers(text);
 	}
 
@@ -261,10 +206,15 @@ public slots:
             this->sigSignupState("");
         }
 		else {
-			std::string message = resp.first;
-            QString state_message = QString(message.substr(12, message.size() - 14).c_str());
-			qDebug() << "extracted error message: " << state_message;
-            this->sigSignupState(state_message);
+			if(body == "") {
+				this->sigSignupState("failed to connect to server, try again");
+			}
+			else {
+				std::string message = resp.first;
+				QString state_message = QString(message.substr(12, message.size() - 14).c_str());
+				qDebug() << "extracted error message: " << state_message;
+				this->sigSignupState(state_message);
+			}
 		}
 	}
 
@@ -280,6 +230,7 @@ public:
 	std::map<std::string, std::string> players;
 
 	void sendMessage(QString message) {
+        qDebug() << "sending message";
 		socket->sendTextMessage(message);
 	}
 
@@ -288,6 +239,7 @@ public:
 		makeRequests(HTTPRequest::HTTP_POST, "/logout", accountJson(this->account.username, this->account.password));
 		return {recvResponse(), getStatus()};
 	}
+	
 	std::pair<std::string, int> login(const std::string& _username, const std::string& _password) {
 		try {
 			makeRequests(HTTPRequest::HTTP_POST, "/login", accountJson(_username, _password));
@@ -316,7 +268,7 @@ public:
 		auto json = recvResponse();
 		qDebug() << "JSON ONLINE PLAYERS FETCH:" << json.c_str();
 		players = jsonToMap(json);
-		qDebug() << "players: ";
+		qDebug() << "playersss: ";
 		for(auto it = players.begin(); it != players.end(); it++) {
 			qDebug() << it->second;
 		}

@@ -1,8 +1,11 @@
 import sqlite3
 import fastapi
 from pydantic import BaseModel
+import json
 from fastapi import Response, WebSocket
 from fastapi.responses import JSONResponse
+from asyncio import Queue
+import asyncio
 
 connect = sqlite3.connect("database.db")
 cursor = connect.cursor()
@@ -221,30 +224,52 @@ async def updateOnlinePlayersClientSide():
 	# for ws in connections.values():
 		# ws.send_text("update connection")
 
+message_queues = {}
+
 @app.websocket("/ws/{user}")
-async def WebsocketConnection(ws : WebSocket, user : str):
+async def WebsocketConnection(ws: WebSocket, user: str):
 	print("websocketconnections 1")
 	await ws.accept()
 	print("ws User: ", user, "accepted connection")
 	id = Validate.findUserId(user)
 	await updateOnlinePlayersClientSide()
+	connections[user] = ws
+	message_queues[user] = Queue()
+	
 	addOnline(id, user, ws)
+
+	async def send_messages():
+		"""Background task to send messages from the queue to the WebSocket."""
+		while True:
+			message = await message_queues[user].get()
+			print("sending message to: ", user)
+			await ws.send_text(message)
+
+	send_task = asyncio.create_task(send_messages())
+
 	try:
 		while True:
 			data = await ws.receive_text()
 			print("ws received: ", data)
 			print("from: ", user)
-			await ws.send_text(f"Message received: {data}")
+			jsonData = json.loads(data)
+			type = jsonData.get("type")
+			
+			if type == "challenge":
+				challenged_user = jsonData.get("challenged")
+				if challenged_user in connections:
+					print(f"I {challenged_user} have been challenged by {jsonData.get('challenger')}")
+					# Add the challenge message to the challenged user's queue
+					await message_queues[challenged_user].put(
+						json.dumps({"type": "challenge", "from": user})
+					)
 	except Exception as e:
 		print(f"{user} disconnected")
+		print("Exception: ", e)
+	finally:
+		# Clean up resources
 		rmOnline(user)
 		await updateOnlinePlayersClientSide()
-
-# @app.delete("delete_account")
-# async def delete_account(request: fastapi.Request):
-# 	try:
-# 		body = await request.json()
-# 		#  use id to delete account I guess
-# 	except Exception as e:
-# 		print(e)
-# 		return {"message": "Invalid request"}
+		connections.pop(user, None)
+		message_queues.pop(user, None)
+		send_task.cancel()

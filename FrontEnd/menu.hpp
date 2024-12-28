@@ -15,15 +15,16 @@ class Menu : public QWidget
 public:
     explicit Menu(QWidget *parent = nullptr);
     ~Menu();
-    void on_onlineInvite_clicked();
 
 signals:
     void getOnlinePlayers();
     void sigLauchGame();
     void sigLogOut();
+    void sigSendChallenge(const QString& challenger, const QString& challenged);
 
 public slots:
     void onUpdateOnlinePlayers(QString text);
+    void on_onlineInvite_clicked();
 
 private slots:
     void on_hotseat_clicked();
