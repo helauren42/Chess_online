@@ -25,6 +25,7 @@ std::unique_ptr<Pieces> Board::initPiece(const short &x, const short &y)
 
 void Board::init()
 {
+	Out::stdOut("Initializing board!!!");
 	for (short y = 0; y < 8; y++)
 		for (short x = 0; x < 8; x++)
 			if (y <= 1 || y >= 6)
@@ -52,7 +53,6 @@ void Board::setBoard()
 		Pos pos = it->get()->getPosition();
 		PieceType type = it->get()->getType();
 		bool color = it->get()->getColor();
-		Out::stdOut("Piece: ", type, "\n", pos);
         std::string s = color == PLAYER_COLOR::WHITE ? "WHITE" : "BLACK";
 		cell_board[pos.y][pos.x].type = type;
         cell_board[pos.y][pos.x].color = color;

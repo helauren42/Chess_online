@@ -20,9 +20,9 @@ void Pieces::makeMove(const Pos &new_pos)
 	firstMove = false;
 }
 
-Pawn::Pawn(short _x, short _y) : Pieces(_x, _y, PAWN), dir(color == BLACK ? -1 : 1) {}
+Pawn::Pawn(short _x, short _y) : Pieces(_x, _y, PAWN), dir(color == PLAYER_COLOR::BLACK ? -1 : 1) {}
 
-Pawn::Pawn(short _x, short _y, bool _color) : Pieces(_x, _y, PAWN, _color), dir(_color == BLACK ? -1 : 1) {}
+Pawn::Pawn(short _x, short _y, bool _color) : Pieces(_x, _y, PAWN, _color), dir(_color == PLAYER_COLOR::BLACK ? -1 : 1) {}
 
 Pawn::~Pawn() {}
 

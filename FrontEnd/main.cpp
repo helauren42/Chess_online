@@ -1,5 +1,5 @@
 #include "mainwindow.hpp"
-#include "online.hpp"
+#include "session.hpp"
 #include <QDebug>
 #include <QFile>
 #include <QDir>
@@ -7,7 +7,7 @@
 t_dim       dim;
 
 inline namespace Global {
-	Online online;
+	SessionManager session;
 }
 
 int main(int argc, char *argv[])
@@ -26,10 +26,10 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 	app.setStyleSheet(stylesheet);
     MainWindow window(nullptr);
-    // online.window = &window;
+    // session.window = &window;
 	window.show();
 
 	app.exec();
-    online.logout();
+    session.logout();
 	return 0;
 }

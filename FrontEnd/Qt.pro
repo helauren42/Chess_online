@@ -34,7 +34,7 @@ HEADERS += \
     login.hpp \
     mainwindow.hpp \
     menu.hpp \
-    online.hpp \
+    session.hpp \
     signup.hpp
 
 FORMS += \

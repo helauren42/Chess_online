@@ -83,7 +83,7 @@ public:
         Menu->setWindowTitle(QCoreApplication::translate("Menu", "Form", nullptr));
         AI->setText(QCoreApplication::translate("Menu", "Single Player(vs AI)", nullptr));
         Llocal->setText(QCoreApplication::translate("Menu", "Local", nullptr));
-        Lonline->setText(QCoreApplication::translate("Menu", "Online", nullptr));
+        Lonline->setText(QCoreApplication::translate("Menu", "SessionManager", nullptr));
         onlineInvite->setText(QCoreApplication::translate("Menu", "invite", nullptr));
         hotseat->setText(QCoreApplication::translate("Menu", "2 player(hotseat)", nullptr));
         logOut->setText(QCoreApplication::translate("Menu", "logout", nullptr));

@@ -9,7 +9,7 @@
 #include "../BackEnd/inc/Board.hpp"
 #include "../BackEnd/inc/Pieces.hpp"
 #include "../BackEnd/inc/Utils.hpp"
-#include "../BackEnd/inc/Online.hpp"
+#include "session.hpp"
 
 #include <memory>
 
@@ -24,6 +24,8 @@ class Game : public QWidget
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override {
         Out::stdOut("start x: ", start_x);
+        if((session.game_info.mode == GAMEMODE::ONLINE || session.game_info.mode == GAMEMODE::AI)
+            && session.game_info.color)
         if (event->button() == Qt::LeftButton) {
             const auto click_pos = event->pos();
             if(click_pos.x() >= start_x && click_pos.x() <= start_x + _width
@@ -94,7 +96,6 @@ private:
 
     void selectPiece(const Pos clicked_square) {
         const std::vector<std::unique_ptr<Pieces>> &active_pieces = board->getActivePieces();
-
         for (auto it = active_pieces.cbegin(); it != active_pieces.cend(); it++)
         {
             const std::unique_ptr<Pieces>::pointer piece = it->get();
@@ -129,6 +130,7 @@ private:
         }
     }
     void handleClick(const int clicked_x, const int clicked_y) {
+        // 
         Pos clicked_square = getClickedSquare(clicked_x, clicked_y);
         if(!board->getSelectedPiece()) {
             selectPiece(clicked_square);

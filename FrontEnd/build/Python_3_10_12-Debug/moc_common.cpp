@@ -37,7 +37,7 @@ struct qt_meta_tag_ZN6OnlineE_t {};
 
 #ifdef QT_MOC_HAS_STRINGDATA
 static constexpr auto qt_meta_stringdata_ZN6OnlineE = QtMocHelpers::stringData(
-    "Online",
+    "SessionManager",
     "sigPlayerConnection",
     "",
     "onNewPlayerConnection"
@@ -74,7 +74,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN6OnlineE[] = {
        0        // eod
 };
 
-Q_CONSTINIT const QMetaObject Online::staticMetaObject = { {
+Q_CONSTINIT const QMetaObject SessionManager::staticMetaObject = { {
     QMetaObject::SuperData::link<QObject::staticMetaObject>(),
     qt_meta_stringdata_ZN6OnlineE.offsetsAndSizes,
     qt_meta_data_ZN6OnlineE,
@@ -82,7 +82,7 @@ Q_CONSTINIT const QMetaObject Online::staticMetaObject = { {
     nullptr,
     qt_incomplete_metaTypeArray<qt_meta_tag_ZN6OnlineE_t,
         // Q_OBJECT / Q_GADGET
-        QtPrivate::TypeAndForceComplete<Online, std::true_type>,
+        QtPrivate::TypeAndForceComplete<SessionManager, std::true_type>,
         // method 'sigPlayerConnection'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onNewPlayerConnection'
@@ -91,9 +91,9 @@ Q_CONSTINIT const QMetaObject Online::staticMetaObject = { {
     nullptr
 } };
 
-void Online::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void SessionManager::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    auto *_t = static_cast<Online *>(_o);
+    auto *_t = static_cast<SessionManager *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->sigPlayerConnection(); break;
@@ -104,8 +104,8 @@ void Online::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (Online::*)();
-            if (_q_method_type _q_method = &Online::sigPlayerConnection; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            using _q_method_type = void (SessionManager::*)();
+            if (_q_method_type _q_method = &SessionManager::sigPlayerConnection; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
             }
@@ -113,12 +113,12 @@ void Online::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
     }
 }
 
-const QMetaObject *Online::metaObject() const
+const QMetaObject *SessionManager::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *Online::qt_metacast(const char *_clname)
+void *SessionManager::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_ZN6OnlineE.stringdata0))
@@ -126,7 +126,7 @@ void *Online::qt_metacast(const char *_clname)
     return QObject::qt_metacast(_clname);
 }
 
-int Online::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int SessionManager::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -145,7 +145,7 @@ int Online::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Online::sigPlayerConnection()
+void SessionManager::sigPlayerConnection()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }

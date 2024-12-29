@@ -1,6 +1,6 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
-#include "online.hpp"
+#include "session.hpp"
 #include <QPushButton>
 
 MStackedWidgets::MStackedWidgets() {
@@ -34,7 +34,7 @@ void	MainWindow::onValidLogin() {
 
 void	MainWindow::onFaultyLogin(const QString& msg) {
 	stackedWidgets->setCurrentWidget(stackedWidgets->widLogin);
-    this->stackedWidgets->widLogin->setFaultyState(msg);
+	this->stackedWidgets->widLogin->setFaultyState(msg);
 	qDebug() << "login failed";
 }
 
@@ -45,9 +45,10 @@ void	MainWindow::onSigSignup() {
 }
 
 void MainWindow::onOpenMenu() {
+	session.game_info.reset();
 	stackedWidgets->setCurrentWidget(stackedWidgets->widMenu);
 	this->setWindowTitle("Menu");
-    emit stackedWidgets->widMenu->getOnlinePlayers(); // online object then sends signal with players to updateOnlinePlayers
+	emit stackedWidgets->widMenu->getOnlinePlayers(); // session object then sends signal with players to updateOnlinePlayers
 	qDebug() << "on open menu";
 }
 
@@ -59,55 +60,55 @@ void MainWindow::onLaunchGame() {
 }
 
 void MainWindow::onLaunchOnlineGame() {
-    qDebug() << "pre launch online game vs " << online.gameInfo.opponent.c_str();
+	qDebug() << "pre launch session game vs " << session.game_info.opponent.c_str();
+	session.game_info = session.game_info_temp;
+	this->setWindowTitle(QString("Vs ") + session.game_info.opponent.c_str());
+	stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
 
-    this->setWindowTitle(QString("Vs ") + online.gameInfo.opponent.c_str());
-    stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
-
-	qDebug() << "pre launching online game widget";
+	qDebug() << "pre launching session game widget";
 }
 
 void MainWindow::onInviteAccept() {
-    qDebug() << "on invite accept";
+	qDebug() << "on invite accept";
 
-    QJsonObject json;
-    json["type"] = "invite answer";
-    json["answer"] = "accept";
-    json["challenger"] = online.gameInfo.opponent.c_str();
-    json["challenged"] = online.account.username.c_str();
-    json["color"] = online.gameInfo.color;
+	QJsonObject json;
+	json["type"] = "invite answer";
+	json["answer"] = "accept";
+	json["challenger"] = session.game_info.opponent.c_str();
+	json["challenged"] = session.account.username.c_str();
+	json["color"] = session.game_info.color;
 
-    QJsonDocument doc(json);
-    QString jsonString = doc.toJson();
-    online.sendMessage(jsonString);
-	online.sigLaunchOnlineGame();
+	QJsonDocument doc(json);
+	QString jsonString = doc.toJson();
+	session.sendMessage(jsonString);
+	session.sigLaunchOnlineGame();
 }
 
 void MainWindow::onInviteReject() {
-    QJsonObject json;
-    json["type"] = "invite answer";
-    json["answer"] = "reject";
+	QJsonObject json;
+	json["type"] = "invite answer";
+	json["answer"] = "reject";
 
-    QJsonDocument doc(json);
-    QString jsonString = doc.toJson();
-    online.sendMessage(jsonString);
+	QJsonDocument doc(json);
+	QString jsonString = doc.toJson();
+	session.sendMessage(jsonString);
 }
 
 void MainWindow::onInvite() {
-    QMessageBox* msgBox = new QMessageBox(this);
-    msgBox->setWindowTitle("Invitation");
-    msgBox->setText(online.gameInfo.opponent.c_str() + QString(" has invited you to a game"));
+	QMessageBox* msgBox = new QMessageBox(this);
+	msgBox->setWindowTitle("Invitation");
+	msgBox->setText(session.game_info.opponent.c_str() + QString(" has invited you to a game"));
 
-    QPushButton *acceptButton = msgBox->addButton("Accept", QMessageBox::AcceptRole);
-    QPushButton *rejectButton = msgBox->addButton("Decline", QMessageBox::RejectRole);
+	QPushButton *acceptButton = msgBox->addButton("Accept", QMessageBox::AcceptRole);
+	QPushButton *rejectButton = msgBox->addButton("Decline", QMessageBox::RejectRole);
 
-    connect(acceptButton, &QPushButton::released, this, &MainWindow::onInviteAccept);
-    connect(rejectButton, &QPushButton::released, this, &MainWindow::onInviteReject);
+	connect(acceptButton, &QPushButton::released, this, &MainWindow::onInviteAccept);
+	connect(rejectButton, &QPushButton::released, this, &MainWindow::onInviteReject);
 
-    connect(acceptButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
-    connect(rejectButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
+	connect(acceptButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
+	connect(rejectButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
 
-    msgBox->show();
+	msgBox->show();
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -123,34 +124,36 @@ MainWindow::MainWindow(QWidget *parent)
 	stackedWidgets->setCurrentWidget(stackedWidgets->widLogin);
 
 	// Login
-	connect(stackedWidgets->widLogin, &login::sigUpdateLogin, &online, &Online::onUpdateLogin);
+	connect(stackedWidgets->widLogin, &login::sigUpdateLogin, &session, &SessionManager::onUpdateLogin);
 	connect(stackedWidgets->widLogin, &login::sigRedirSignup, this, &MainWindow::onSigSignup);
 	connect(stackedWidgets->widLogin, &login::sigValidLogin, this, &MainWindow::onValidLogin);
-    connect(&online, &Online::sigMakeLogin, this, &MainWindow::onOpenMenu);
-    connect(&online, &Online::sigFaultyLogin, this, &MainWindow::onFaultyLogin);
+	connect(&session, &SessionManager::sigMakeLogin, this, &MainWindow::onOpenMenu);
+	connect(&session, &SessionManager::sigFaultyLogin, this, &MainWindow::onFaultyLogin);
 
 	// Signup
 	connect(stackedWidgets->widSignup, &signup::sigRedirLogin, this, &MainWindow::onSigLogin);
-    connect(stackedWidgets->widSignup, &signup::sigCreateAccount, &online, &Online::onCreateAccount);
+	connect(stackedWidgets->widSignup, &signup::sigCreateAccount, &session, &SessionManager::onCreateAccount);
 
 	// Menu
+	connect(stackedWidgets->widMenu, &Menu::sigLogOut, &session, &SessionManager::onLogout);
+	connect(stackedWidgets->widMenu, &Menu::sigLogOut, this, &MainWindow::onSigLogin);
+	connect(stackedWidgets->widMenu, &Menu::getOnlinePlayers, &session, &SessionManager::onGetOnlinePlayers);
+	connect(&session, &SessionManager::sigGetOnlinePlayers, &session, &SessionManager::onGetOnlinePlayers);
+
+	// SessionManager
+	connect(&session, &SessionManager::sigUpdateOnlinePlayers, stackedWidgets->widMenu, &Menu::onUpdateOnlinePlayers);
+	connect(&session, &SessionManager::sigSignupState, stackedWidgets->widSignup, &signup::onUpdateState);
+	connect(stackedWidgets->widMenu, &Menu::sigSendChallenge, &session, &SessionManager::onSendChallenge);
+	connect(&session, &SessionManager::sigInvite, this, &MainWindow::onInvite);
+
+	// Game
+	connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
 	connect(stackedWidgets->widMenu, &Menu::sigLauchGame, this, &MainWindow::onLaunchGame);
 	connect(stackedWidgets->widMenu, &Menu::sigLauchGame, stackedWidgets->widGame, &Game::onStartGame);
-    connect(stackedWidgets->widMenu, &Menu::sigLogOut, &online, &Online::onLogout);
-	connect(stackedWidgets->widMenu, &Menu::sigLogOut, this, &MainWindow::onSigLogin);
-    connect(stackedWidgets->widMenu, &Menu::getOnlinePlayers, &online, &Online::onGetOnlinePlayers);
-
-	// Online
-    connect(&online, &Online::sigUpdateOnlinePlayers, stackedWidgets->widMenu, &Menu::onUpdateOnlinePlayers);
-    connect(&online, &Online::sigSignupState, stackedWidgets->widSignup, &signup::onUpdateState);
-    connect(stackedWidgets->widMenu, &Menu::sigSendChallenge, &online, &Online::onSendChallenge);
-    connect(&online, &Online::sigInvite, this, &MainWindow::onInvite);
-    connect(&online, &Online::sigLaunchOnlineGame, this, &MainWindow::onLaunchOnlineGame);
-
-    // Game
-	connect(this, &MainWindow::sigOpenMenu, this, &MainWindow::onOpenMenu);
+	connect(&session, &SessionManager::sigLaunchOnlineGame, this, &MainWindow::onLaunchOnlineGame);
+	connect(&session, &SessionManager::sigLaunchOnlineGame, stackedWidgets->widGame, &Game::onStartGame);
 	// connect(stackedWidgets->widGame, &Game::sigClickedBoard, stackedWidgets->widGame, &Game::onClickBoard);
-    }
+	}
 
 MainWindow::~MainWindow()
 {

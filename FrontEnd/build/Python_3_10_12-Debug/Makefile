@@ -1633,7 +1633,7 @@ moc_game.cpp: ../../game.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../BackEnd/inc/SessionManager.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Python_3_10_12-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../game.hpp -o moc_game.cpp
@@ -2147,7 +2147,7 @@ moc_mainwindow.cpp: ../../mainwindow.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../BackEnd/inc/SessionManager.hpp \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/FrontEnd/build/Python_3_10_12-Debug/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../mainwindow.hpp -o moc_mainwindow.cpp
@@ -2961,7 +2961,7 @@ game.o: ../../game.cpp ../../game.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../BackEnd/inc/SessionManager.hpp \
 		ui_game.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../../game.cpp
 
@@ -3473,7 +3473,7 @@ main.o: ../../main.cpp ../../mainwindow.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../BackEnd/inc/SessionManager.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QFile \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfile.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qfiledevice.h \
@@ -3744,7 +3744,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../BackEnd/inc/SessionManager.hpp \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 

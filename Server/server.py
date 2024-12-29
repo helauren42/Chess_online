@@ -225,8 +225,6 @@ async def updateOnlinePlayersClientSide():
 	# for ws in connections.values():
 		# ws.send_text("update connection")
 
-
-
 message_queues = {}
 
 @app.websocket("/ws/{user}")
@@ -238,15 +236,17 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 	await updateOnlinePlayersClientSide()
 	connections[user] = ws
 	message_queues[user] = Queue()
-	
+
 	addOnline(id, user, ws)
 
 	async def send_messages():
 		"""Background task to send messages from the queue to the WebSocket."""
 		while True:
 			message = await message_queues[user].get()
-			print("sending message to: ", user)
+			print("sending message: ", message) 
+			print("to: ", user)
 			await ws.send_text(message)
+			print("sent")
 
 	send_task = asyncio.create_task(send_messages())
 
@@ -259,12 +259,12 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 			type = jsonData.get("type")
 			
 			if type == "challenge":
+				print("is challenge")
 				challenged_user = jsonData.get("challenged")
 				if challenged_user in connections and challenged_user != user:
 					print(f"I {challenged_user} have been challenged by {jsonData.get('challenger')}")
 					# Add the challenge message to the challenged user's queue
-					rand = random.choice([True, False])
-					color = "white" if rand == True else "black"
+					color = "white" if random.choice([True, False]) else "black"
 					await message_queues[challenged_user].put(
 						json.dumps({"type": "challenge", "from": user, "color": color})
 					)

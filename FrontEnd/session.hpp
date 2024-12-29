@@ -36,7 +36,7 @@ using namespace std;
 #define MY_URI "http://127.0.0.1:8000"
 #define PORT 8000
 
-class Online : public QObject{
+class SessionManager : public QObject{
 	Q_OBJECT
 private:
 	URI uri;
@@ -49,6 +49,7 @@ private:
 signals:
 
 	void    sigPlayerConnection();
+    void    sigGetOnlinePlayers();
 	void    sigUpdateOnlinePlayers(const QString& text);
 	void    sigSignupState(QString msg);
 	void	sigMakeLogin();
@@ -69,7 +70,8 @@ public slots:
 
 	void onMessageReceived(QString message) {
 		if(message == "update connections") {
-			this->sigMakeLogin();
+			this->sigGetOnlinePlayers();
+			return;
 		}
 
 		try {
@@ -77,13 +79,13 @@ public slots:
 			if(jsonObject["type"] == "challenge") {
 				std::string opponent = jsonObject["from"];
 				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
-				gameInfo.set(GAMEMODE::ONLINE, opponent, color);
+				game_info.set(GAMEMODE::ONLINE, opponent, color);
 				emit sigInvite();
 			}
-			if(jsonObject["type"] == "start online game") {
+            if(jsonObject["type"] == "start online game") {
 				std::string opponent = jsonObject["opponent"];
 				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
-				gameInfo.set(GAMEMODE::ONLINE, opponent, color);
+				game_info.set(GAMEMODE::ONLINE, opponent, color);
 				// emit sigInvite();
                 emit sigLaunchOnlineGame();
 			}
@@ -130,12 +132,12 @@ public slots:
 	void onGetOnlinePlayers() {
 		std::pair<std::map<std::string, std::string>, int> resp = fetchOnlinePlayers();
 		if(resp.second != 200) {
-			qDebug() << "could not fetch online players";
+			qDebug() << "could not fetch session players";
 			return;
 		}
 		auto players = resp.first;
 		QString text;
-		qDebug() << "on get online players text1: " << text;
+		qDebug() << "on get session players text1: " << text;
 		for (auto it = players.begin(); it != players.end(); it++) {
 			auto player = it->second.c_str();
 			qDebug() << "this->account.username: " << this->account.username;
@@ -145,7 +147,7 @@ public slots:
 				text += "\n";
 			}
 		}
-		qDebug() << "on get online players text2: " << text;
+		qDebug() << "on get session players text2: " << text;
 		emit sigUpdateOnlinePlayers(text);
 	}
 
@@ -179,9 +181,9 @@ public:
             socket = nullptr;
         }
         socket = new QWebSocket();
-        connect(socket, &QWebSocket::connected, this, &Online::onConnected);
-        connect(socket, &QWebSocket::textMessageReceived, this, &Online::onMessageReceived);
-        connect(socket, &QWebSocket::disconnected, this, &Online::onDisconnected);
+        connect(socket, &QWebSocket::connected, this, &SessionManager::onConnected);
+        connect(socket, &QWebSocket::textMessageReceived, this, &SessionManager::onMessageReceived);
+        connect(socket, &QWebSocket::disconnected, this, &SessionManager::onDisconnected);
         QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
         qDebug() <<  "qurl: " << qurl;
         socket->open(qurl);
@@ -249,11 +251,12 @@ public:
 public:
 	// MainWindow *window;
 	Account account;
-    GameInfo gameInfo;
-	Online() : uri(MY_URI), session(uri.getHost(), uri.getPort()) {
+    GameInfo game_info_temp;
+	GameInfo game_info;
+	SessionManager() : uri(MY_URI), session(uri.getHost(), uri.getPort()) {
 		session.setKeepAlive(true);
 	};
-	~Online() {
+	~SessionManager() {
 		delete socket;
 	}
 	std::map<std::string, std::string> players;
@@ -312,7 +315,7 @@ public:
 };
 
 inline namespace Global {
-   extern Online online;
+   extern SessionManager session;
 }
 
 #endif

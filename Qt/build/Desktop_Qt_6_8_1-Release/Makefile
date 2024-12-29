@@ -64,7 +64,7 @@ SOURCES       = ../../../BackEnd/srcs/Utils.cpp \
 		moc_login.cpp \
 		moc_mainwindow.cpp \
 		moc_menu.cpp \
-		moc_online.cpp \
+		moc_session.cpp \
 		moc_signup.cpp
 OBJECTS       = Utils.o \
 		Board.o \
@@ -79,7 +79,7 @@ OBJECTS       = Utils.o \
 		moc_login.o \
 		moc_mainwindow.o \
 		moc_menu.o \
-		moc_online.o \
+		moc_session.o \
 		moc_signup.o
 DIST          = /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/helauren/Qt/6.8.1/gcc_64/mkspecs/common/unix.conf \
@@ -323,7 +323,7 @@ DIST          = /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../FrontEnd/login.hpp \
 		../../../FrontEnd/mainwindow.hpp \
 		../../../FrontEnd/menu.hpp \
-		../../../FrontEnd/online.hpp \
+		../../../FrontEnd/session.hpp \
 		../../../FrontEnd/signup.hpp ../../../BackEnd/srcs/Utils.cpp \
 		../../../BackEnd/srcs/Board.cpp \
 		../../../BackEnd/srcs/Pieces.cpp \
@@ -840,7 +840,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../../BackEnd/inc/Utils.hpp ../../../BackEnd/inc/Board.hpp ../../../BackEnd/inc/Pieces.hpp ../../../FrontEnd/common.hpp ../../../FrontEnd/game.hpp ../../../FrontEnd/login.hpp ../../../FrontEnd/mainwindow.hpp ../../../FrontEnd/menu.hpp ../../../FrontEnd/online.hpp ../../../FrontEnd/signup.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../BackEnd/inc/Utils.hpp ../../../BackEnd/inc/Board.hpp ../../../BackEnd/inc/Pieces.hpp ../../../FrontEnd/common.hpp ../../../FrontEnd/game.hpp ../../../FrontEnd/login.hpp ../../../FrontEnd/mainwindow.hpp ../../../FrontEnd/menu.hpp ../../../FrontEnd/session.hpp ../../../FrontEnd/signup.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../BackEnd/srcs/Utils.cpp ../../../BackEnd/srcs/Board.cpp ../../../BackEnd/srcs/Pieces.cpp ../../../FrontEnd/game.cpp ../../../FrontEnd/login.cpp ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/menu.cpp ../../../FrontEnd/signup.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../FrontEnd/game.ui ../../../FrontEnd/login.ui ../../../FrontEnd/mainwindow.ui ../../../FrontEnd/menu.ui ../../../FrontEnd/signup.ui $(DISTDIR)/
 
@@ -874,9 +874,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++1z -Wall -Wextra -fPIC -dM -E -o moc_predefs.h /home/helauren/Qt/6.8.1/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_game.cpp moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_online.cpp moc_signup.cpp
+compiler_moc_header_make_all: moc_game.cpp moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_session.cpp moc_signup.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_game.cpp moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_online.cpp moc_signup.cpp
+	-$(DEL_FILE) moc_game.cpp moc_login.cpp moc_mainwindow.cpp moc_menu.cpp moc_session.cpp moc_signup.cpp
 moc_game.cpp: ../../../FrontEnd/game.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
@@ -1078,13 +1078,79 @@ moc_game.cpp: ../../../FrontEnd/game.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../FrontEnd/session.hpp \
+		../../../FrontEnd/common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/QWebSocket \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QUrl \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QAbstractSocket \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtnetworkexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qhostaddress.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QNetworkRequest \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qhttpheaders.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QSharedDataPointer \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QString \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q26numeric.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QNetworkProxy \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qnetworkproxy.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QSslError \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslerror.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcryptographichash.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qssl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QFlags \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QSslConfiguration \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsockets_global.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qtwebsocketsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsocketprotocol.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonObject \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonobject.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonvalue.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcborvalue.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcborcommon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qregularexpression.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/quuid.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonDocument \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsondocument.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/game.hpp -o moc_game.cpp
 
 moc_login.cpp: ../../../FrontEnd/login.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1334,6 +1400,9 @@ moc_login.cpp: ../../../FrontEnd/login.hpp \
 moc_mainwindow.cpp: ../../../FrontEnd/mainwindow.hpp \
 		../../../FrontEnd/login.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1586,17 +1655,26 @@ moc_mainwindow.cpp: ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
 		../../../BackEnd/inc/Board.hpp \
-		../../../BackEnd/inc/Utils.hpp \
-		/home/helauren/MyCppLib/Logger/Logger.hpp \
-		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../FrontEnd/session.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonObject \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonobject.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonvalue.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcborvalue.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcborcommon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qregularexpression.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/quuid.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonDocument \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsondocument.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/mainwindow.hpp -o moc_mainwindow.cpp
 
 moc_menu.cpp: ../../../FrontEnd/menu.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1843,8 +1921,11 @@ moc_menu.cpp: ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
 	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/menu.hpp -o moc_menu.cpp
 
-moc_online.cpp: ../../../FrontEnd/online.hpp \
+moc_session.cpp: ../../../FrontEnd/session.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2098,10 +2179,13 @@ moc_online.cpp: ../../../FrontEnd/online.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsondocument.h \
 		moc_predefs.h \
 		/home/helauren/Qt/6.8.1/gcc_64/libexec/moc
-	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/online.hpp -o moc_online.cpp
+	/home/helauren/Qt/6.8.1/gcc_64/libexec/moc $(DEFINES) --include /home/helauren/Desktop/chess_online/Qt/build/Desktop_Qt_6_8_1-Release/moc_predefs.h -I/home/helauren/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -I/home/helauren/Desktop/chess_online/FrontEnd -I/usr/include/Poco -I/home/helauren/Qt/6.8.1/gcc_64/include -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtGui -I/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets -I/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork -I/home/helauren/Qt/6.8.1/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../../FrontEnd/session.hpp -o moc_session.cpp
 
 moc_signup.cpp: ../../../FrontEnd/signup.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2604,12 +2688,78 @@ game.o: ../../../FrontEnd/game.cpp ../../../FrontEnd/game.hpp \
 		/home/helauren/MyCppLib/Logger/Logger.hpp \
 		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
+		../../../FrontEnd/session.hpp \
+		../../../FrontEnd/common.hpp \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QApplication \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QScreen \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QWindow \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurface.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qsurfaceformat.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDate \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcalendar.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/QWebSocket \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QUrl \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QAbstractSocket \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtnetworkexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qhostaddress.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QNetworkRequest \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qhttpheaders.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QSharedDataPointer \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QString \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QVariant \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/q26numeric.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QNetworkProxy \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qnetworkproxy.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QSslError \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslerror.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcryptographichash.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qssl.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QFlags \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/QSslConfiguration \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qsslsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsockets_global.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qtwebsocketsexports.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsocketprotocol.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonObject \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonobject.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonvalue.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcborvalue.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qcborcommon.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qregularexpression.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/quuid.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonDocument \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsondocument.h \
 		ui_game.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../../../FrontEnd/game.cpp
 
 login.o: ../../../FrontEnd/login.cpp ../../../FrontEnd/login.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2858,6 +3008,9 @@ login.o: ../../../FrontEnd/login.cpp ../../../FrontEnd/login.hpp \
 main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 		../../../FrontEnd/login.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -3110,12 +3263,8 @@ main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
 		../../../BackEnd/inc/Board.hpp \
-		../../../BackEnd/inc/Utils.hpp \
-		/home/helauren/MyCppLib/Logger/Logger.hpp \
-		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
-		../../../FrontEnd/online.hpp \
+		../../../FrontEnd/session.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonObject \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonobject.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonvalue.h \
@@ -3138,6 +3287,9 @@ main.o: ../../../FrontEnd/main.cpp ../../../FrontEnd/mainwindow.hpp \
 mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp \
 		../../../FrontEnd/login.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -3390,13 +3542,8 @@ mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp 
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtGui/QResizeEvent \
 		../../../BackEnd/inc/Board.hpp \
-		../../../BackEnd/inc/Utils.hpp \
-		/home/helauren/MyCppLib/Logger/Logger.hpp \
-		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		../../../BackEnd/inc/Pieces.hpp \
-		../../../BackEnd/inc/Online.hpp \
-		ui_mainwindow.h \
-		../../../FrontEnd/online.hpp \
+		../../../FrontEnd/session.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonObject \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonobject.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonvalue.h \
@@ -3405,11 +3552,18 @@ mainwindow.o: ../../../FrontEnd/mainwindow.cpp ../../../FrontEnd/mainwindow.hpp 
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qregularexpression.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/quuid.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonDocument \
-		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsondocument.h
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsondocument.h \
+		ui_mainwindow.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../../FrontEnd/mainwindow.cpp
 
 menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -3653,7 +3807,7 @@ menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWebSockets/qwebsocketprotocol.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
 		ui_menu.h \
-		../../../FrontEnd/online.hpp \
+		../../../FrontEnd/session.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/QJsonObject \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonobject.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtCore/qjsonvalue.h \
@@ -3667,6 +3821,9 @@ menu.o: ../../../FrontEnd/menu.cpp ../../../FrontEnd/menu.hpp \
 
 signup.o: ../../../FrontEnd/signup.cpp ../../../FrontEnd/signup.hpp \
 		../../../FrontEnd/common.hpp \
+		../../../BackEnd/inc/Utils.hpp \
+		/home/helauren/MyCppLib/Logger/Logger.hpp \
+		/home/helauren/MyCppLib/Printer/Printer.hpp \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 		/home/helauren/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -3924,8 +4081,8 @@ moc_mainwindow.o: moc_mainwindow.cpp
 moc_menu.o: moc_menu.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menu.o moc_menu.cpp
 
-moc_online.o: moc_online.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_online.o moc_online.cpp
+moc_session.o: moc_session.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_session.o moc_session.cpp
 
 moc_signup.o: moc_signup.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_signup.o moc_signup.cpp

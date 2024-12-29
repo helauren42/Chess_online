@@ -41,11 +41,11 @@
 // 	Account(const std::string& _username, const std::string& _password, const Date& _dob) : username(_username), password(_password), dob(_dob) {};
 // };
 
-// class Online{
+// class SessionManager{
 // private:
 // 	bool loggedIn = false;
 // 	Account account;
-// 	GameInfo gameInfo;
+// 	GameInfo game_info;
 // 	URI uri;
 // 	HTTPClientSession session;
 // 	HTTPRequest request;
@@ -60,10 +60,10 @@
 // 		os << body;
 // 		os.flush();
 // 	}
-// 	Online() : uri(MY_URI) , session (uri.getHost(), uri.getPort()) {
+// 	SessionManager() : uri(MY_URI) , session (uri.getHost(), uri.getPort()) {
 // 		session.setKeepAlive(true);
 // 	};
-// 	~Online() {}
+// 	~SessionManager() {}
 // 	std::string recvResponse() {
 // 		istream& rs = session.receiveResponse(response);
 // 		std::stringstream ss;
