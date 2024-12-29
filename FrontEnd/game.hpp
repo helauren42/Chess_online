@@ -25,7 +25,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override {
         Out::stdOut("start x: ", start_x);
         if((session.game_info.mode == GAMEMODE::ONLINE || session.game_info.mode == GAMEMODE::AI)
-            && session.game_info.color)
+            && session.game_info.color != this->board->player_turn)
+            return;
         if (event->button() == Qt::LeftButton) {
             const auto click_pos = event->pos();
             if(click_pos.x() >= start_x && click_pos.x() <= start_x + _width

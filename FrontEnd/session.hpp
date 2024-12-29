@@ -79,13 +79,13 @@ public slots:
 			if(jsonObject["type"] == "challenge") {
 				std::string opponent = jsonObject["from"];
 				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
-				game_info.set(GAMEMODE::ONLINE, opponent, color);
+				game_info_temp.set(GAMEMODE::ONLINE, opponent, color);
 				emit sigInvite();
 			}
             if(jsonObject["type"] == "start online game") {
 				std::string opponent = jsonObject["opponent"];
 				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
-				game_info.set(GAMEMODE::ONLINE, opponent, color);
+				game_info_temp.set(GAMEMODE::ONLINE, opponent, color);
 				// emit sigInvite();
                 emit sigLaunchOnlineGame();
 			}

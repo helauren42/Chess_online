@@ -74,7 +74,7 @@ void MainWindow::onInviteAccept() {
 	QJsonObject json;
 	json["type"] = "invite answer";
 	json["answer"] = "accept";
-	json["challenger"] = session.game_info.opponent.c_str();
+	json["challenger"] = session.game_info_temp.opponent.c_str();
 	json["challenged"] = session.account.username.c_str();
 	json["color"] = session.game_info.color;
 
@@ -87,6 +87,7 @@ void MainWindow::onInviteAccept() {
 void MainWindow::onInviteReject() {
 	QJsonObject json;
 	json["type"] = "invite answer";
+	json["challenger"] = session.game_info_temp.opponent.c_str();
 	json["answer"] = "reject";
 
 	QJsonDocument doc(json);
