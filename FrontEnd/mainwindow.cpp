@@ -74,9 +74,9 @@ void MainWindow::onInviteAccept() {
 	QJsonObject json;
 	json["type"] = "invite answer";
 	json["answer"] = "accept";
-	json["challenger"] = session.game_info_temp.opponent.c_str();
-	json["challenged"] = session.account.username.c_str();
-	json["color"] = session.game_info.color;
+	json["challenger"] = session.game_info_temp.challenger.c_str();
+	json["challenged"] = session.game_info_temp.challenged.c_str();
+    json["color"] = session.game_info_temp.color == static_cast<bool>(PLAYER_COLOR::BLACK) ? "black" : "white";
 
 	QJsonDocument doc(json);
 	QString jsonString = doc.toJson();
@@ -153,6 +153,8 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(stackedWidgets->widMenu, &Menu::sigLauchGame, stackedWidgets->widGame, &Game::onStartGame);
 	connect(&session, &SessionManager::sigLaunchOnlineGame, this, &MainWindow::onLaunchOnlineGame);
 	connect(&session, &SessionManager::sigLaunchOnlineGame, stackedWidgets->widGame, &Game::onStartGame);
+    connect(&session, &SessionManager::sigLaunchOnlineGame, &session, &SessionManager::onConnectGameSock);
+    connect(&session, &SessionManager::sigHandleClick, stackedWidgets->widGame, &Game::onHandleClick);
 	// connect(stackedWidgets->widGame, &Game::sigClickedBoard, stackedWidgets->widGame, &Game::onClickBoard);
 	}
 

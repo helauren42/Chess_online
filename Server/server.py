@@ -225,6 +225,53 @@ async def updateOnlinePlayersClientSide():
 	# for ws in connections.values():
 		# ws.send_text("update connection")
 
+opponents = {}
+active_games = []
+game_ws = {}
+game_message_queues = {}
+
+@app.websocket("/ws/game/{id}/{user}")
+async def gameConnection(ws: WebSocket, id: str, user: str):
+	print("game websocket connection: ", id)
+	await ws.accept()
+	game_ws[user] = ws
+	game_list = id.split("-")
+	challenger = game_list[0]
+	challenged = game_list[1]
+	game = (challenger, challenged)
+	game_message_queues[user] = Queue()
+	if game not in active_games:
+		print("appending game")
+		print("challenger: ", challenger)
+		print("challenged: ", challenged)
+		active_games.append(game)
+	print("connection accepted")
+
+	async def game_send_messages():
+		while True:
+			message = await game_message_queues[user].get()
+			print("game sending message: ", message)
+			print("to: ", user)
+			await ws.send_text(message)
+			print("sent")
+
+	asyncio.create_task(game_send_messages())
+
+	try:
+		while True:
+			data = await ws.receive_text()
+			jsonData = json.loads(data)
+			type: str = jsonData.get("type")
+			if type == "click":
+				sender = jsonData["from"]
+				receiver = challenger if challenged == sender else challenged
+				print("game message to: ", receiver)
+				await game_message_queues[receiver].put(
+					json.dumps({"type": "make click", "x": jsonData.get("x"), "y": jsonData.get("y")})
+				)
+	except Exception as e:
+		print("disconnected from game: ", e)
+
 message_queues = {}
 
 @app.websocket("/ws/{user}")
@@ -243,7 +290,7 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 		"""Background task to send messages from the queue to the WebSocket."""
 		while True:
 			message = await message_queues[user].get()
-			print("sending message: ", message) 
+			print("sending message: ", message)
 			print("to: ", user)
 			await ws.send_text(message)
 			print("sent")
@@ -257,7 +304,7 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 			print("from: ", user)
 			jsonData = json.loads(data)
 			type = jsonData.get("type")
-			
+
 			if type == "challenge":
 				print("is challenge")
 				challenged_user = jsonData.get("challenged")
@@ -271,7 +318,7 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 			if type == "invite answer" and jsonData.get("answer") == "accept":
 				challenged = jsonData.get("challenged")
 				challenger = jsonData.get("challenger")
-				color = "white" if jsonData.get("color") else "black"
+				color = "white" if jsonData.get("color") == "black" else "black"
 				await message_queues[challenger].put(
 					json.dumps({"type": "start online game", "opponent": challenged, "color": color})
 				)

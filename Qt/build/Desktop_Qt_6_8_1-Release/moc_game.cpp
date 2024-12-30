@@ -41,7 +41,10 @@ static constexpr auto qt_meta_stringdata_ZN4GameE = QtMocHelpers::stringData(
     "Game",
     "sigClickedBoard",
     "",
-    "onStartGame"
+    "onStartGame",
+    "onHandleClick",
+    "Pos",
+    "clicked_square"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -53,7 +56,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN4GameE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,16 +64,18 @@ Q_CONSTINIT static const uint qt_meta_data_ZN4GameE[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   26,    2, 0x06,    1 /* Public */,
+       1,    0,   32,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   27,    2, 0x0a,    2 /* Public */,
+       3,    0,   33,    2, 0x0a,    2 /* Public */,
+       4,    1,   34,    2, 0x0a,    3 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 5,    6,
 
        0        // eod
 };
@@ -87,7 +92,10 @@ Q_CONSTINIT const QMetaObject Game::staticMetaObject = { {
         // method 'sigClickedBoard'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onStartGame'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onHandleClick'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const Pos &, std::false_type>
     >,
     nullptr
 } };
@@ -99,6 +107,7 @@ void Game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
         switch (_id) {
         case 0: _t->sigClickedBoard(); break;
         case 1: _t->onStartGame(); break;
+        case 2: _t->onHandleClick((*reinterpret_cast< std::add_pointer_t<Pos>>(_a[1]))); break;
         default: ;
         }
     }
@@ -133,14 +142,14 @@ int Game::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 3)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }

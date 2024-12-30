@@ -44,18 +44,19 @@ private:
 	HTTPRequest request;
 	HTTPResponse response;
 	QWebSocket *socket = nullptr;
-
+	QWebSocket *socket_game = nullptr;
 
 signals:
 
 	void    sigPlayerConnection();
-    void    sigGetOnlinePlayers();
+	void    sigGetOnlinePlayers();
 	void    sigUpdateOnlinePlayers(const QString& text);
 	void    sigSignupState(QString msg);
 	void	sigMakeLogin();
 	void	sigFaultyLogin(const QString& msg);
 	void	sigInvite();
 	void	sigLaunchOnlineGame();
+    void    sigHandleClick(const Pos& clicked_square);
 
 public slots:
 
@@ -75,19 +76,18 @@ public slots:
 		}
 
 		try {
-            nlohmann::json jsonObject = nlohmann::json::parse(message.toStdString());
+			nlohmann::json jsonObject = nlohmann::json::parse(message.toStdString());
 			if(jsonObject["type"] == "challenge") {
 				std::string opponent = jsonObject["from"];
 				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
-				game_info_temp.set(GAMEMODE::ONLINE, opponent, color);
+				game_info_temp.set(GAMEMODE::ONLINE, opponent, this->account.username, opponent, color);
 				emit sigInvite();
 			}
-            if(jsonObject["type"] == "start online game") {
+			if(jsonObject["type"] == "start online game") {
 				std::string opponent = jsonObject["opponent"];
 				bool color = jsonObject["color"] == "white" ? PLAYER_COLOR::WHITE : PLAYER_COLOR::BLACK;
-				game_info_temp.set(GAMEMODE::ONLINE, opponent, color);
-				// emit sigInvite();
-                emit sigLaunchOnlineGame();
+				game_info_temp.set(GAMEMODE::ONLINE, this->account.username, opponent, opponent, color);
+				emit sigLaunchOnlineGame();
 			}
 		}
 		catch (...) {
@@ -110,8 +110,45 @@ public slots:
 
 		QJsonDocument doc(json);
 		QString jsonString = doc.toJson();
-        sendMessage(jsonString);
-        // QMessageBox::information("Invite sent, waiting for response");
+		sendMessage(jsonString);
+		// QMessageBox::information("Invite sent, waiting for response");
+	}
+
+	void gameConnected() {
+		qDebug() << "Connected to game port";
+	}
+
+    void gameMessageReceived(const QString& message) {
+		try {
+            QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
+
+            QJsonObject jsonObject = doc.object();
+            if (jsonObject["type"].toString() == "make click") {
+                QString xc = jsonObject["x"].toString();
+                QString yc = jsonObject["y"].toString();
+                int x = xc.toInt();
+                int y = yc.toInt();
+				qDebug() << "x: " << x;
+				qDebug() << "y: " << y;
+                Pos clicked_square(x, y);
+				qDebug() << "emitting sig handle click";
+                emit sigHandleClick(clicked_square);
+            }
+        }
+		catch (...) {
+			qDebug() << "message received not json format";
+		}
+		qDebug() << "Received message from game port:" << message;
+	}
+
+	void gameDisconnected() const {
+		qDebug() << "Disconnected from game port";
+		socket->close();
+	}
+
+	void onConnectGameSock() {
+		qDebug() << "On connected game socket";
+		connectGameSock();
 	}
 
 // widgets
@@ -174,84 +211,8 @@ public slots:
 	}
 
 public:
-
-    void connectSock(QString username) {
-        if(!socket) {
-            delete socket;
-            socket = nullptr;
-        }
-        socket = new QWebSocket();
-        connect(socket, &QWebSocket::connected, this, &SessionManager::onConnected);
-        connect(socket, &QWebSocket::textMessageReceived, this, &SessionManager::onMessageReceived);
-        connect(socket, &QWebSocket::disconnected, this, &SessionManager::onDisconnected);
-        QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
-        qDebug() <<  "qurl: " << qurl;
-        socket->open(qurl);
-
-        QEventLoop loop;
-        connect(socket, &QWebSocket::connected, &loop, [&loop]() {
-            qDebug() << "Connected!";
-            loop.quit();
-        });
-        connect(socket, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
-            qDebug() << "Error occurred:" << error;
-            loop.quit();
-        });
-        loop.exec();  // Blocks until the connection is established or an error occurs
-    }
-
-    /**
-     * @brief accountJson creates a json string for the account
-     */
-    std::string accountJson(const std::string& username, const std::string& password, const std::string& dob) {
-        std::string ret;
-        static std::string msg = "a";
-        msg += msg;
-        ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + dob + "\",\"msg\":\"" + msg + "\"}";
-        return ret;
-    }
-
-    /**
-     * @brief accountJson creates a json string for the account
-     */
-    std::string accountJson(const std::string& username, const std::string& password) {
-        std::string ret;
-        ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
-        return ret;
-    }
-    std::string recvResponse() {
-        std::stringstream ss;
-        for (int i = 0; i < 6; i++) {
-            try {
-                istream& rs = session.receiveResponse(response);
-                ss << rs.rdbuf();
-                break;
-            }
-            catch (const Exception& e) {
-                qDebug() << e.what();
-                Poco::Thread::sleep(80);
-            }
-        }
-        return ss.str();
-    }
-    int getStatus() const {
-        return response.getStatus();
-    }
-    void makeRequests(std::string method, std::string path, std::string body="") {
-        qDebug() << "Make request: " << path;
-        request = HTTPRequest(method, path, HTTPMessage::HTTP_1_1);
-        request.setContentType("application/json");
-        request.setContentLength(body.length());
-        std::ostream& os = session.sendRequest(request);
-        os << body;
-        os.flush();
-        session.setTimeout(Poco::Timespan(10, 0));
-    }
-
-public:
-	// MainWindow *window;
 	Account account;
-    GameInfo game_info_temp;
+	GameInfo game_info_temp;
 	GameInfo game_info;
 	SessionManager() : uri(MY_URI), session(uri.getHost(), uri.getPort()) {
 		session.setKeepAlive(true);
@@ -260,11 +221,6 @@ public:
 		delete socket;
 	}
 	std::map<std::string, std::string> players;
-
-	void sendMessage(QString message) {
-        qDebug() << "sending message: " << message;
-		socket->sendTextMessage(message);
-	}
 
 	std::pair<std::string, int> logout() {
 		qDebug() << "sending log out request";
@@ -307,11 +263,133 @@ public:
 		return {players, getStatus()};
 	}
 
+	void sendMessage(QString message) {
+		qDebug() << "sending message: " << message;
+		socket->sendTextMessage(message);
+	}
+
 	void sendChallenge(const std::string& challenger, const std::string& challenged) {
 		std::string msg = "{\"challenger\": \"" + challenger + "\", \"challenged\": \"" + challenged + "\"" + "}";
 		sendMessage(msg.c_str());
 	}
 
+    void sendGameMessage(QString message) {
+		qDebug() << "sending message: " << message;
+		socket_game->sendTextMessage(message);
+	}
+
+	void sendClickedSquare(int x, int y) {
+		qDebug() << "sending clicked square";
+		QJsonObject jsonObject;
+		jsonObject["type"] = "click";
+        jsonObject["from"] = this->account.username.c_str();
+		jsonObject["x"] = to_string(x).c_str();
+		jsonObject["y"] = to_string(y).c_str();
+
+		QJsonDocument doc(jsonObject);
+		sendGameMessage(doc.toJson());
+	}
+
+private:
+
+	void connectGameSock() {
+		if(!socket_game) {
+            delete socket_game;
+            socket_game = nullptr;
+        }
+        socket_game = new QWebSocket();
+		auto gameId = this->game_info.challenger + "-" + this->game_info.challenged;
+		connect(socket_game, &QWebSocket::connected, this, &SessionManager::gameConnected);
+		connect(socket_game, &QWebSocket::textMessageReceived, this, &SessionManager::gameMessageReceived);
+		connect(socket_game, &QWebSocket::disconnected, this, &SessionManager::gameDisconnected);
+        QUrl qurl = QUrl(QString("ws://localhost:8000/ws/game/") + QString(gameId.c_str()) + QString("/") + QString(this->account.username.c_str()));
+
+        socket_game->open(qurl);
+
+		QEventLoop loop;
+		connect(socket_game, &QWebSocket::connected, &loop, [&loop]() {
+			qDebug() << "Connected game socket!";
+			loop.quit();
+		});
+		connect(socket_game, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
+			qDebug() << "Game socket error:" << error;
+			loop.quit();
+		});
+		loop.exec();
+	}
+
+	void connectSock(QString username) {
+		if(!socket) {
+			delete socket;
+			socket = nullptr;
+		}
+		socket = new QWebSocket();
+		connect(socket, &QWebSocket::connected, this, &SessionManager::onConnected);
+		connect(socket, &QWebSocket::textMessageReceived, this, &SessionManager::onMessageReceived);
+		connect(socket, &QWebSocket::disconnected, this, &SessionManager::onDisconnected);
+
+		QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
+		socket->open(qurl);
+
+		QEventLoop loop;
+		connect(socket, &QWebSocket::connected, &loop, [&loop]() {
+			qDebug() << "Connected!";
+			loop.quit();
+		});
+		connect(socket, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
+			qDebug() << "Error occurred:" << error;
+			loop.quit();
+		});
+		loop.exec();  // Blocks until the connection is established or an error occurs
+	}
+
+	/**
+	 * @brief accountJson creates a json string for the account
+	 */
+	std::string accountJson(const std::string& username, const std::string& password, const std::string& dob) {
+		std::string ret;
+		static std::string msg = "a";
+		msg += msg;
+		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\",\"dob\":\"" + dob + "\",\"msg\":\"" + msg + "\"}";
+		return ret;
+	}
+
+	/**
+	 * @brief accountJson creates a json string for the account
+	 */
+	std::string accountJson(const std::string& username, const std::string& password) {
+		std::string ret;
+		ret = std::string("{") + "\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
+		return ret;
+	}
+	std::string recvResponse() {
+		std::stringstream ss;
+		for (int i = 0; i < 6; i++) {
+			try {
+				istream& rs = session.receiveResponse(response);
+				ss << rs.rdbuf();
+				break;
+			}
+			catch (const Exception& e) {
+				qDebug() << e.what();
+				Poco::Thread::sleep(80);
+			}
+		}
+		return ss.str();
+	}
+	int getStatus() const {
+		return response.getStatus();
+	}
+	void makeRequests(std::string method, std::string path, std::string body="") {
+		qDebug() << "Make request: " << path;
+		request = HTTPRequest(method, path, HTTPMessage::HTTP_1_1);
+		request.setContentType("application/json");
+		request.setContentLength(body.length());
+		std::ostream& os = session.sendRequest(request);
+		os << body;
+		os.flush();
+		session.setTimeout(Poco::Timespan(10, 0));
+	}
 };
 
 inline namespace Global {

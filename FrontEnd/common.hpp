@@ -81,20 +81,26 @@ inline std::map<std::string, std::string> jsonToMap(const std::string& json) noe
 
 struct GameInfo {
 	GAMEMODE mode;
+	std::string challenger;
+	std::string challenged;
 	std::string opponent;
 	bool color;
 	void reset() {
 		mode = GAMEMODE::OFF;
+		challenger = "";
+		challenged = "";
 		opponent = "";
 		color = false;
 	}
-	void set(const GAMEMODE &_mode, const std::string& _opponent = "", const bool& _color = false) {
+	void set(const GAMEMODE &_mode, const std::string& _challenger = "", const std::string& _challenged = "", const std::string& _opponent = "", const bool& _color = false) {
 		mode = _mode;
+		challenger = _challenger;
+		challenged = _challenged;
 		opponent = _opponent;
 		color = _color;
 	};
 	GameInfo& operator=(const GameInfo& rhs) {
-        this->set(rhs.mode, rhs.opponent, rhs.color);
+        this->set(rhs.mode, rhs.challenger, rhs.challenged, rhs.opponent, rhs.color);
 		return *this;
 	}
 };
