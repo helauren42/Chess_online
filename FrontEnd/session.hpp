@@ -62,6 +62,7 @@ signals:
 public slots:
 
 // Websockets
+
 	void onNewPlayerConnection() {
 		emit sigPlayerConnection();
 	};
@@ -218,6 +219,12 @@ public slots:
 			}
 		}
 	}
+
+    void closeOnlineGame() {
+        if(socket_game) {
+            socket_game->close();
+        }
+    }
 
 public:
 	Account account;

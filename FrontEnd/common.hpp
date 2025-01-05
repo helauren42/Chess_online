@@ -85,6 +85,10 @@ struct GameInfo {
 	std::string challenged;
 	std::string opponent;
 	bool color;
+	void makeHotseat() {
+		this->reset();
+		mode = GAMEMODE::HOTSEAT;
+	}
 	void reset() {
 		mode = GAMEMODE::OFF;
 		challenger = "";

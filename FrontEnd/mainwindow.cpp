@@ -55,7 +55,8 @@ void MainWindow::onOpenMenu() {
 void MainWindow::onLaunchGame() {
 	qDebug() << "pre launch game widget";
 	this->setWindowTitle("Game");
-	stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
+    session.game_info.makeHotseat();
+    stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
 	qDebug() << "launching game widget";
 }
 

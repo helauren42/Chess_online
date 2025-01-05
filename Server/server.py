@@ -180,40 +180,6 @@ async def logout(request: fastapi.Request, response: Response):
 	print("Logged out successful")
 	return {"message": "Log out successful"}
 
-# @app.websocket("/login")
-# async def login(request: fastapi.Request, response: Response):
-	# body = await request.json()
-	# print("response body: ", body)
-	# username = body.get("username")
-	# id = Validate.findUserId(username) # verifies user is in db and retrieves his id
-	# print("id: ", id)
-	# if(id < 0):
-	# 	print("user could not be found")
-	# 	return JSONResponse(
-	# 		status_code=401,
-	# 		content={"message": "Wrong Credentials"}
-	# 	)
-	# cursor.execute("SELECT username FROM online")
-	# names = cursor.fetchall()
-	# for name in names:
-	# 	if name[0] == username:
-	# 		print("Login failed: User already logged in")
-			
-	# 		return JSONResponse(
-	# 			status_code=401,
-	# 			content={"message": "User already logged in"}
-	# 		)
-
-	# password = body.get("password")
-	# if not Validate.loginValidPassword(password, id):
-	# 	print("password does not match username")
-	# 	return JSONResponse(
-	# 		status_code=401,
-	# 		content={"message": "Wrong Credentials"}
-	# 	)
-	# print("Logging in successful")
-	# return {"id:": f"{id}", "message": "Login successful"}
-
 async def messageAll(message: str):
 	print("message all: ", message)
 	for ws in connections.values():
@@ -223,8 +189,6 @@ async def messageAll(message: str):
 async def updateOnlinePlayersClientSide():
 	print("update online players client side: ", connections)
 	await messageAll("update connections")
-	# for ws in connections.values():
-		# ws.send_text("update connection")
 
 opponents = {}
 active_games = []

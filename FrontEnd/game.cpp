@@ -140,3 +140,22 @@ Game::~Game()
 	delete ui;
 	emptySquares();
 }
+
+void Game::on_MenuButton_clicked()
+{
+    qDebug("on menu button clicked");
+    if(session.game_info.mode != GAMEMODE::ONLINE) {
+        emit this->sigRedirMenu();
+        return;
+    }
+    QMessageBox *msgBox = new QMessageBox(this);
+    msgBox->setWindowTitle("Leave Game");
+    msgBox->setText(QString("Are you sure you want to leave the game? You will lose by forfeit"));
+    QPushButton *leaveButton = msgBox->addButton("Yes", QMessageBox::AcceptRole);
+
+	connect(leaveButton, &QPushButton::released, msgBox, &QMessageBox::deleteLater);
+    connect(leaveButton, &QPushButton::released, this, &Game::onLeaveGame);
+
+    msgBox->exec();
+}
+

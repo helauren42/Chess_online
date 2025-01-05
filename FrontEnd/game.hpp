@@ -24,6 +24,17 @@ class Game : public QWidget
 protected:
 	void mouseReleaseEvent(QMouseEvent *event) override {
 		Out::stdOut("Mouse release event");
+        qDebug() << "game mode: " << (int)session.game_info.mode;
+		if(session.game_info.mode == GAMEMODE::HOTSEAT) {
+			const auto click_pos = event->pos();
+			if(click_pos.x() >= start_x && click_pos.x() <= start_x + _width
+				&& click_pos.y() >= 0 && click_pos.y() <= _height) {
+					Pos clicked_square = getClickedSquare(click_pos.x(), click_pos.y());
+					handleClick(clicked_square);
+				}
+			Out::stdOut("Mouse Released at:", event->pos().x(), " ", event->pos().y());
+			return;
+		}
 		qDebug() << "player turn: " << this->board->player_turn;
 		qDebug() << "player color: " << session.game_info.color;
 		if((session.game_info.mode == GAMEMODE::ONLINE || session.game_info.mode == GAMEMODE::AI)
@@ -64,6 +75,17 @@ public slots:
         msgBox->exec();
         emit sigRedirMenu();
     }
+
+    void onLeaveGame() {
+        qDebug("on leave game");
+        if(session.game_info.mode == GAMEMODE::ONLINE) {
+            session.closeOnlineGame();
+        }
+        session.game_info.reset();
+        emit sigRedirMenu();
+    }
+
+    void on_MenuButton_clicked();
 
 private:
 	Ui::Game *ui;
