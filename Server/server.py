@@ -198,6 +198,7 @@ async def logout(request: fastapi.Request, response: Response):
 	# for name in names:
 	# 	if name[0] == username:
 	# 		print("Login failed: User already logged in")
+			
 	# 		return JSONResponse(
 	# 			status_code=401,
 	# 			content={"message": "User already logged in"}
@@ -272,58 +273,77 @@ async def gameConnection(ws: WebSocket, id: str, user: str):
 	except Exception as e:
 		print("disconnected from game: ", e)
 
+
 message_queues = {}
 
-@app.websocket("/ws/login/{user}")
-async def WebsocketConnection(ws: WebSocket, user: str):
+@app.websocket("/ws/login/{user}/{password}")
+async def WebsocketConnection(ws: WebSocket, user: str, password: str):
 	print("websocketconnections")
 	await ws.accept()
+
+	message_queues[user] = Queue()
+	connections[user] = ws
+	login_failed_sent = False
+
+
+	async def send_messages():
+		"""Background task to send messages from the queue to the WebSocket."""
+		while True:
+			try:
+				message = await message_queues[user].get()
+				print("sending message: ", message)
+				print("to: ", user)
+				await ws.send_text(message)
+				print("sent")
+				if(json.loads(message)["type"] == "login") and json.loads(message)["status"] != "success":
+					login_failed_sent = True
+			except Exception as e:
+				print("!!!couldn't send message")
+
+	send_task = asyncio.create_task(send_messages())
+
 	print("ws User: ", user, "accepted connection")
 	id = Validate.findUserId(user)
 	print("id: ", id)
 	if(id < 0):
 		print("user could not be found")
-		# return JSONResponse(
-		# 	status_code=401,
-		# 	content={"message": "Wrong Credentials"}
-		# )
-	await updateOnlinePlayersClientSide()
-	connections[user] = ws
-	message_queues[user] = Queue()
+		await message_queues[user].put(
+			json.dumps({"type": "login", "status": "failed login: wrong credentials"})
+		)
+		while not login_failed_sent:
+			await asyncio.sleep(1)
+		print("returning1")
+		return
+	
+	if not Validate.loginValidPassword(password, id):
+		print("password does not match username")
+		await message_queues[user].put(
+			json.dumps({"type": "login", "status": "failed login: wrong credentials"})
+		)
+		while not login_failed_sent:
+			await asyncio.sleep(1)
+		print("returning1")
+		return
 
-	# cursor.execute("SELECT username FROM online")
-	# names = cursor.fetchall()
-	# for name in names:
-	# 	if name[0] == username:
-	# 		print("Login failed: User already logged in")
-	# 		return JSONResponse(
-	# 			status_code=401,
-	# 			content={"message": "User already logged in"}
-	# 		)
+	cursor.execute("SELECT username FROM online")
+	names = cursor.fetchall()
+	for name in names:
+		if name[0] == user:
+			await message_queues[user].put(
+				json.dumps({"type": "login", "status": "failed login: User already logged in"})
+			)
+			while not login_failed_sent:
+				await asyncio.sleep(1)
+			print("returning1")
+			return
 
-	# password = body.get("password")
-	# if not Validate.loginValidPassword(password, id):
-	# 	print("password does not match username")
-	# 	return JSONResponse(
-	# 		status_code=401,
-	# 		content={"message": "Wrong Credentials"}
-	# 	)
-	# print("Logging in successful")
-	# return {"id:": f"{id}", "message": "Login successful"}
-
+	await message_queues[user].put(
+		json.dumps({"type": "login", "status": "success"})
+	)
+	print("Logging in successful")
 
 	addOnline(id, user, ws)
-
-	async def send_messages():
-		"""Background task to send messages from the queue to the WebSocket."""
-		while True:
-			message = await message_queues[user].get()
-			print("sending message: ", message)
-			print("to: ", user)
-			await ws.send_text(message)
-			print("sent")
-
-	send_task = asyncio.create_task(send_messages())
+	await updateOnlinePlayersClientSide()
 
 	try:
 		while True:
@@ -355,7 +375,6 @@ async def WebsocketConnection(ws: WebSocket, user: str):
 		print(f"{user} disconnected")
 		print("Exception: ", e)
 	finally:
-		# Clean up resources
 		rmOnline(user)
 		await updateOnlinePlayersClientSide()
 		connections.pop(user, None)

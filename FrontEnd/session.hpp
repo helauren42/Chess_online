@@ -70,7 +70,9 @@ public slots:
 	}
 
 	void onMessageReceived(QString message) {
-		if(message == "update connections") {
+        qDebug() << "received message: " << message;
+
+        if(message == "update connections") {
 			this->sigGetOnlinePlayers();
 			return;
 		}
@@ -90,11 +92,12 @@ public slots:
 				emit sigLaunchOnlineGame();
 			}
 			if(jsonObject["type"] == "login") {
-				if(jsonObject["status"] == "success") {
+                std::string status = jsonObject["status"];
+                if(status == "success") {
 					emit this->sigMakeLogin();
 				}
 				else
-					emit this->sigFaultyLogin(jsonObject["status"]);
+                    emit this->sigFaultyLogin(status.c_str());
 			}
 		}
 		catch (...) {
@@ -118,7 +121,6 @@ public slots:
 		QJsonDocument doc(json);
 		QString jsonString = doc.toJson();
 		sendMessage(jsonString);
-		// QMessageBox::information("Invite sent, waiting for response");
 	}
 
 	void gameConnected() {
@@ -234,9 +236,8 @@ public:
 	void login(const std::string& _username, const std::string& _password) {
 		this->account.username = _username;
 		this->account.password = _password;
-		connectSock(this->account.username.c_str());
+        connectSock(this->account.username.c_str(), this->account.password.c_str());
 		qDebug() << "websocket connection attempt: ";
-		return {message, status};
 	}
 	std::pair<std::string, int> createAccount(const std::string& username, const std::string& password, const std::string& dob) {
 		makeRequests(HTTPRequest::HTTP_POST, "/signup", accountJson(username, password, dob));
@@ -310,7 +311,7 @@ private:
 		loop.exec();
 	}
 
-	void connectSock(QString username) {
+    void connectSock(QString username, QString password) {
 		if(!socket) {
 			delete socket;
 			socket = nullptr;
@@ -320,7 +321,7 @@ private:
 		connect(socket, &QWebSocket::textMessageReceived, this, &SessionManager::onMessageReceived);
 		connect(socket, &QWebSocket::disconnected, this, &SessionManager::onDisconnected);
 
-		QUrl qurl = QUrl("ws://localhost:8000/ws/" + username);
+        QUrl qurl = QUrl("ws://localhost:8000/ws/login/" + username + "/" + password);
 		socket->open(qurl);
 
 		QEventLoop loop;
