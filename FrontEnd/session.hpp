@@ -89,6 +89,13 @@ public slots:
 				game_info_temp.set(GAMEMODE::ONLINE, this->account.username, opponent, opponent, color);
 				emit sigLaunchOnlineGame();
 			}
+			if(jsonObject["type"] == "login") {
+				if(jsonObject["status"] == "success") {
+					emit this->sigMakeLogin();
+				}
+				else
+					emit this->sigFaultyLogin(jsonObject["status"]);
+			}
 		}
 		catch (...) {
 			qDebug() << "message received not json format";
@@ -155,11 +162,7 @@ public slots:
 
 	// try to login
 	void onUpdateLogin(const std::string& username, const std::string& password) {
-		std::pair<std::string, int> resp = login(username, password);
-		if(resp.second == 200)
-			emit this->sigMakeLogin();
-		else
-			emit this->sigFaultyLogin(resp.first.c_str());
+		login(username, password);
 	}
 
 	void onLogout() {
@@ -228,22 +231,11 @@ public:
 		return {recvResponse(), getStatus()};
 	}
 	
-	std::pair<std::string, int> login(const std::string& _username, const std::string& _password) {
-		try {
-			makeRequests(HTTPRequest::HTTP_POST, "/login", accountJson(_username, _password));
-		}
-		catch (const std::exception& e) {
-			return {"Could not connect to servers", 0};
-		}
+	void login(const std::string& _username, const std::string& _password) {
 		this->account.username = _username;
 		this->account.password = _password;
-		std::string message = recvResponse();
-		qDebug() << "response message: " << message;
-		int status = getStatus();
-		if(status == 200) {
-			connectSock(this->account.username.c_str());
-		}
-		qDebug() << "websocket made: ";
+		connectSock(this->account.username.c_str());
+		qDebug() << "websocket connection attempt: ";
 		return {message, status};
 	}
 	std::pair<std::string, int> createAccount(const std::string& username, const std::string& password, const std::string& dob) {
