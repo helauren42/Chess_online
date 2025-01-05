@@ -271,8 +271,14 @@ async def gameConnection(ws: WebSocket, id: str, user: str):
 					json.dumps({"type": "make click", "x": jsonData.get("x"), "y": jsonData.get("y")})
 				)
 	except Exception as e:
-		print("disconnected from game: ", e)
-
+		game_message_queues.pop(user)
+		game_ws[user] = None
+		receiver = challenger if challenged == user else challenged
+		if(game_ws[receiver] != None):
+			await game_message_queues[receiver].put(
+				json.dumps({"type": "opponent disconnection"})
+			)
+			print("disconnected from game: ", e)
 
 message_queues = {}
 

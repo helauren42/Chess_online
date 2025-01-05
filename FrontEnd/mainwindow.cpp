@@ -155,6 +155,8 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(&session, &SessionManager::sigLaunchOnlineGame, stackedWidgets->widGame, &Game::onStartGame);
     connect(&session, &SessionManager::sigLaunchOnlineGame, &session, &SessionManager::onConnectGameSock);
     connect(&session, &SessionManager::sigHandleClick, stackedWidgets->widGame, &Game::onHandleClick);
+    connect(&session, &SessionManager::sigOpponentDisconnection, stackedWidgets->widGame, &Game::onOpponentDisconnection);
+    connect(stackedWidgets->widGame, &Game::sigRedirMenu, this, &MainWindow::onOpenMenu);
 	// connect(stackedWidgets->widGame, &Game::sigClickedBoard, stackedWidgets->widGame, &Game::onClickBoard);
 	}
 

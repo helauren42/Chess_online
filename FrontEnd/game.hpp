@@ -47,12 +47,22 @@ public:
 
 signals:
 	void sigClickedBoard();
+    void sigRedirMenu();
 
 public slots:
 	void onStartGame();
     void onHandleClick(const Pos& clicked_square) {
 		qDebug() << "on handle click";
         this->handleClick(clicked_square);
+    }
+
+    void onOpponentDisconnection() {
+        qDebug("on opponent disconnection");
+        QMessageBox *msgBox = new QMessageBox(this);
+        msgBox->setWindowTitle("Opponent disconnection");
+        msgBox->setText(session.game_info.opponent.c_str() + QString(" has disconnected from the game"));
+        msgBox->exec();
+        emit sigRedirMenu();
     }
 
 private:

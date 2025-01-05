@@ -57,6 +57,7 @@ signals:
 	void	sigInvite();
 	void	sigLaunchOnlineGame();
     void    sigHandleClick(const Pos& clicked_square);
+    void    sigOpponentDisconnection();
 
 public slots:
 
@@ -142,6 +143,9 @@ public slots:
                 Pos clicked_square(x, y);
 				qDebug() << "emitting sig handle click";
                 emit sigHandleClick(clicked_square);
+            }
+            if(jsonObject["type"] == "opponent disconnection") {
+                emit sigOpponentDisconnection();
             }
         }
 		catch (...) {
