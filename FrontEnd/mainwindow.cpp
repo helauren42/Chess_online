@@ -57,7 +57,9 @@ void MainWindow::onLaunchGame() {
 	this->setWindowTitle("Game");
     session.game_info.makeHotseat();
     stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
-	qDebug() << "launching game widget";
+    QPushButton* button = this->stackedWidgets->widGame->findChild<QPushButton*>("Restart");
+    button->setVisible(true);
+    qDebug() << "launching game widget";
 }
 
 void MainWindow::onLaunchOnlineGame() {
@@ -66,7 +68,9 @@ void MainWindow::onLaunchOnlineGame() {
 	this->setWindowTitle(QString("Vs ") + session.game_info.opponent.c_str());
 	stackedWidgets->setCurrentWidget(stackedWidgets->widGame);
 
-	qDebug() << "pre launching session game widget";
+    QPushButton* button = this->stackedWidgets->widGame->findChild<QPushButton*>("Restart");
+    button->hide();
+    qDebug() << "pre launching session game widget";
 }
 
 void MainWindow::onInviteAccept() {

@@ -83,6 +83,7 @@ public slots:
         }
         session.game_info.reset();
         emit sigRedirMenu();
+		qDebug() << "post sig redir menu";
     }
 
     void on_MenuButton_clicked();

@@ -20,6 +20,7 @@ class Ui_Game
 {
 public:
     QPushButton *MenuButton;
+    QPushButton *Restart;
 
     void setupUi(QWidget *Game)
     {
@@ -29,6 +30,9 @@ public:
         MenuButton = new QPushButton(Game);
         MenuButton->setObjectName("MenuButton");
         MenuButton->setGeometry(QRect(10, 20, 89, 25));
+        Restart = new QPushButton(Game);
+        Restart->setObjectName("Restart");
+        Restart->setGeometry(QRect(10, 70, 89, 25));
 
         retranslateUi(Game);
 
@@ -39,6 +43,7 @@ public:
     {
         Game->setWindowTitle(QCoreApplication::translate("Game", "Form", nullptr));
         MenuButton->setText(QCoreApplication::translate("Game", "Menu", nullptr));
+        Restart->setText(QCoreApplication::translate("Game", "Restart", nullptr));
     } // retranslateUi
 
 };

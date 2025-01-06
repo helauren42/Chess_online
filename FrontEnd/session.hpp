@@ -221,9 +221,12 @@ public slots:
 	}
 
     void closeOnlineGame() {
+		qDebug() << "closing online game socket";
         if(socket_game) {
             socket_game->close();
+			socket_game = nullptr;
         }
+		qDebug() << "closed";
     }
 
 public:
@@ -297,7 +300,7 @@ public:
 private:
 
 	void connectGameSock() {
-		if(!socket_game) {
+        if(socket_game) {
             delete socket_game;
             socket_game = nullptr;
         }
@@ -323,7 +326,7 @@ private:
 	}
 
     void connectSock(QString username, QString password) {
-		if(!socket) {
+        if(socket) {
 			delete socket;
 			socket = nullptr;
 		}

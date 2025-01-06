@@ -329,7 +329,7 @@ async def WebsocketConnection(ws: WebSocket, user: str, password: str):
 				if challenged_user in connections and challenged_user != user:
 					print(f"I {challenged_user} have been challenged by {jsonData.get('challenger')}")
 					# Add the challenge message to the challenged user's queue
-					color = "white" if random.choice([True, False]) else "black"
+					color = "white" if random.randint(0, 1) else "black"
 					await message_queues[challenged_user].put(
 						json.dumps({"type": "challenge", "from": user, "color": color})
 					)

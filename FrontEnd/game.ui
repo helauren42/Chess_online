@@ -26,6 +26,19 @@
     <string>Menu</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="Restart">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>89</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Restart</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -94,7 +94,7 @@ struct GameInfo {
 		challenger = "";
 		challenged = "";
 		opponent = "";
-		color = false;
+        color = false;
 	}
 	void set(const GAMEMODE &_mode, const std::string& _challenger = "", const std::string& _challenged = "", const std::string& _opponent = "", const bool& _color = false) {
 		mode = _mode;
