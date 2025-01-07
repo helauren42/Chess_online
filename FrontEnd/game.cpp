@@ -111,18 +111,27 @@ void Game::emptySquares() {
 }
 
 void Game::onStartGame() {
-    // board->init();
-    qDebug() << "here1";
     MakeChessBoard();
-    qDebug() << "here2";
     MakePieces();
-    qDebug() << "here3";
 }
 
 void Game::setHotseatBoard() {
-    if(!this->hotseat_board)
+    qDebug() << "set hotseat board";
+    if(!this->hotseat_board) {
+        qDebug() << "new board:";
         this->hotseat_board = std::make_unique<Board>();
+    }
     this->board = this->hotseat_board.get();
+}
+
+void Game::on_Restart_clicked()
+{
+    qDebug() << "On restart clicked";
+    this->hotseat_board.release();
+    this->hotseat_board = nullptr;
+    this->hotseat_board = std::make_unique<Board>();
+    this->board = this->hotseat_board.get();
+    this->onStartGame();
 }
 
 void Game::setOnlineBoard() {
@@ -170,4 +179,3 @@ void Game::on_MenuButton_clicked()
 
     msgBox->exec();
 }
-

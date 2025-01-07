@@ -93,6 +93,9 @@ public slots:
     void setHotseatBoard();
     void setOnlineBoard();
 
+private slots:
+    void on_Restart_clicked();
+
 private:
 	Ui::Game *ui;
 	int _height;
