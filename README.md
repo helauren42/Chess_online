@@ -1,4 +1,5 @@
 # Chess_online
 
-Just started this project, planning to make it playable remotely and against AI, with menu bar to select playing mode and login account to play online
-Currently the game is playable offline without any extra features
+To do: make AI players
+
+online games are working, simply create your account, sign in and invite available players, if the invited player accepts the invitation, the game launches.
