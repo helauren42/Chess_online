@@ -88,6 +88,11 @@ public slots:
 
     void on_MenuButton_clicked();
 
+	void emptySquares();
+
+    void setHotseatBoard();
+    void setOnlineBoard();
+
 private:
 	Ui::Game *ui;
 	int _height;
@@ -98,7 +103,10 @@ private:
 
 	bool is_finished;
 
-	std::unique_ptr<Board> board;
+    std::unique_ptr<Board> hotseat_board = nullptr;
+    std::unique_ptr<Board> online_board = nullptr;
+    Board* board = nullptr;
+    // std::unique_ptr<Board> ai_board = nullptr;
 
 	QPixmap lightSquare;
 	QPixmap darkSquare;
@@ -124,7 +132,6 @@ private:
 	void MakePieces();
 	void computeDim();
 	void resizeEvent(QResizeEvent* event) override;
-	void emptySquares();
 	unsigned int count_pieces() const;
 
 	Pos getClickedSquare(const int clicked_x, const int clicked_y) {

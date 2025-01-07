@@ -25,11 +25,11 @@ std::unique_ptr<Pieces> Board::initPiece(const short &x, const short &y)
 
 void Board::init()
 {
-	Out::stdOut("Initializing board!!!");
-	for (short y = 0; y < 8; y++)
-		for (short x = 0; x < 8; x++)
-			if (y <= 1 || y >= 6)
-				active_pieces.push_back(initPiece(x, y));
+    Out::stdOut("Initializing board!!!");
+    for (short y = 0; y < 8; y++)
+        for (short x = 0; x < 8; x++)
+            if (y <= 1 || y >= 6)
+                active_pieces.push_back(initPiece(x, y));
 };
 
 /* ---------------------------------------------------------------------- Setters and getters --------------------------------------------------------------------------- */

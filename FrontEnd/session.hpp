@@ -42,9 +42,9 @@ private:
 	URI uri;
 	HTTPClientSession session;
 	HTTPRequest request;
-	HTTPResponse response;
+    HTTPResponse response;
 	QWebSocket *socket = nullptr;
-	QWebSocket *socket_game = nullptr;
+    QWebSocket *socket_game = nullptr;
 
 signals:
 
@@ -125,12 +125,12 @@ public slots:
 		sendMessage(jsonString);
 	}
 
-	void gameConnected() {
-		qDebug() << "Connected to game port";
-	}
+    void gameConnected() {
+        qDebug() << "Connected to game port";
+    }
 
     void gameMessageReceived(const QString& message) {
-		try {
+        try {
             QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
 
             QJsonObject jsonObject = doc.object();
@@ -139,31 +139,30 @@ public slots:
                 QString yc = jsonObject["y"].toString();
                 int x = xc.toInt();
                 int y = yc.toInt();
-				qDebug() << "x: " << x;
-				qDebug() << "y: " << y;
+                qDebug() << "x: " << x;
+                qDebug() << "y: " << y;
                 Pos clicked_square(x, y);
-				qDebug() << "emitting sig handle click";
+                qDebug() << "emitting sig handle click";
                 emit sigHandleClick(clicked_square);
             }
             if(jsonObject["type"] == "opponent disconnection") {
                 emit sigOpponentDisconnection();
             }
         }
-		catch (...) {
-			qDebug() << "message received not json format";
-		}
-		qDebug() << "Received message from game port:" << message;
-	}
+        catch (...) {
+            qDebug() << "message received not json format";
+        }
+        qDebug() << "Received message from game port:" << message;
+    }
 
-	void gameDisconnected() const {
-		qDebug() << "Disconnected from game port";
-		socket->close();
-	}
+    void gameDisconnected() const {
+        qDebug() << "Disconnected from game port";
+    }
 
-	void onConnectGameSock() {
-		qDebug() << "On connected game socket";
-		connectGameSock();
-	}
+    void onConnectGameSock() {
+        qDebug() << "On connected game socket";
+        connectGameSock();
+    }
 
 // widgets
 
@@ -221,12 +220,12 @@ public slots:
 	}
 
     void closeOnlineGame() {
-		qDebug() << "closing online game socket";
+        qDebug() << "closing online game socket";
         if(socket_game) {
             socket_game->close();
-			socket_game = nullptr;
+            socket_game = nullptr;
         }
-		qDebug() << "closed";
+        qDebug() << "closed";
     }
 
 public:
@@ -299,31 +298,31 @@ public:
 
 private:
 
-	void connectGameSock() {
+    void connectGameSock() {
         if(socket_game) {
             delete socket_game;
             socket_game = nullptr;
         }
         socket_game = new QWebSocket();
-		auto gameId = this->game_info.challenger + "-" + this->game_info.challenged;
-		connect(socket_game, &QWebSocket::connected, this, &SessionManager::gameConnected);
-		connect(socket_game, &QWebSocket::textMessageReceived, this, &SessionManager::gameMessageReceived);
-		connect(socket_game, &QWebSocket::disconnected, this, &SessionManager::gameDisconnected);
+        auto gameId = this->game_info.challenger + "-" + this->game_info.challenged;
+        connect(socket_game, &QWebSocket::connected, this, &SessionManager::gameConnected);
+        connect(socket_game, &QWebSocket::textMessageReceived, this, &SessionManager::gameMessageReceived);
+        connect(socket_game, &QWebSocket::disconnected, this, &SessionManager::gameDisconnected);
         QUrl qurl = QUrl(QString("ws://localhost:8000/ws/game/") + QString(gameId.c_str()) + QString("/") + QString(this->account.username.c_str()));
 
         socket_game->open(qurl);
 
-		QEventLoop loop;
-		connect(socket_game, &QWebSocket::connected, &loop, [&loop]() {
-			qDebug() << "Connected game socket!";
-			loop.quit();
-		});
-		connect(socket_game, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
-			qDebug() << "Game socket error:" << error;
-			loop.quit();
-		});
-		loop.exec();
-	}
+        QEventLoop loop;
+        connect(socket_game, &QWebSocket::connected, &loop, [&loop]() {
+            qDebug() << "Connected game socket!";
+            loop.quit();
+        });
+        connect(socket_game, &QWebSocket::errorOccurred, &loop, [&loop](QAbstractSocket::SocketError error) {
+            qDebug() << "Game socket error:" << error;
+            loop.quit();
+        });
+        loop.exec();
+    }
 
     void connectSock(QString username, QString password) {
         if(socket) {

@@ -111,19 +111,31 @@ void Game::emptySquares() {
 }
 
 void Game::onStartGame() {
-	board->init();
-	qDebug() << "here1";
-	MakeChessBoard();
-	qDebug() << "here2";
-	MakePieces();
-	qDebug() << "here3";
+    // board->init();
+    qDebug() << "here1";
+    MakeChessBoard();
+    qDebug() << "here2";
+    MakePieces();
+    qDebug() << "here3";
+}
+
+void Game::setHotseatBoard() {
+    if(!this->hotseat_board)
+        this->hotseat_board = std::make_unique<Board>();
+    this->board = this->hotseat_board.get();
+}
+
+void Game::setOnlineBoard() {
+    if(this->online_board)
+        this->online_board.release();
+    this->online_board = std::make_unique<Board>();
+    this->board = this->online_board.get();
 }
 
 Game::Game(QWidget *parent)
 	: QWidget(parent)
 	, ui(new Ui::Game)
 {
-	board = std::make_unique<Board>();
 	ui->setupUi(this);
 
 	this->_height = this->height();
