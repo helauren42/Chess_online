@@ -17,7 +17,6 @@ public:
     ~Menu();
 
 signals:
-    void getOnlinePlayers();
     void sigLauchGame();
     void sigLogOut();
     void sigSendChallenge(const QString& challenger, const QString& challenged);

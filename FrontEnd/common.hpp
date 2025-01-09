@@ -37,47 +37,47 @@ struct t_dim {
 	~t_dim() {}
 };
 
-/**
- * @brief parses json formatted string into a map with key and value of strings, json string must be a valid dictionnary of strings of strings or behaviour is undefined
- * @param json the json formatted string as const reference
- */
-inline std::map<std::string, std::string> jsonToMap(const std::string& json) noexcept {
-	std::map<std::string, std::string> ret;
-	size_t pos = 0;
-	while (true)
-	{
-		std::string key;
-		std::string value;
-		if(pos >= json.size())
-			break;
+// /**
+//  * @brief parses json formatted string into a map with key and value of strings, json string must be a valid dictionnary of strings of strings or behaviour is undefined
+//  * @param json the json formatted string as const reference
+//  */
+// inline std::map<std::string, std::string> jsonToMap(const std::string& json) noexcept {
+// 	std::map<std::string, std::string> ret;
+// 	size_t pos = 0;
+// 	while (true)
+// 	{
+// 		std::string key;
+// 		std::string value;
+// 		if(pos >= json.size())
+// 			break;
 
-		size_t key_start = json.find_first_of("\"", pos);
-		if(key_start == std::string::npos) {
-			break;
-		}
+// 		size_t key_start = json.find_first_of("\"", pos);
+// 		if(key_start == std::string::npos) {
+// 			break;
+// 		}
 
-		size_t key_end = json.find_first_of("\"", key_start +1);
-		if(key_end == std::string::npos) {
-			break;
-		}
+// 		size_t key_end = json.find_first_of("\"", key_start +1);
+// 		if(key_end == std::string::npos) {
+// 			break;
+// 		}
 
-		size_t value_start = json.find_first_of("\"", key_end +1);
-		if(value_start == std::string::npos) {
-			break;
-		}
+// 		size_t value_start = json.find_first_of("\"", key_end +1);
+// 		if(value_start == std::string::npos) {
+// 			break;
+// 		}
 
-		size_t value_end = json.find_first_of("\"", value_start +1);
-		if(value_end == std::string::npos) {
-			break;
-		}
+// 		size_t value_end = json.find_first_of("\"", value_start +1);
+// 		if(value_end == std::string::npos) {
+// 			break;
+// 		}
 
-		key = json.substr(key_start +1, key_end - key_start -1);
-		value = json.substr(value_start +1, value_end - value_start -1);
-		ret[key] = value;
-		pos = json.find_first_of(",", value_end);
-	}
-	return ret;
-}
+// 		key = json.substr(key_start +1, key_end - key_start -1);
+// 		value = json.substr(value_start +1, value_end - value_start -1);
+// 		ret[key] = value;
+// 		pos = json.find_first_of(",", value_end);
+// 	}
+// 	return ret;
+// }
 
 struct GameInfo {
 	GAMEMODE mode;

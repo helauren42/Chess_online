@@ -49,7 +49,6 @@ private:
 signals:
 
 	void    sigPlayerConnection();
-	void    sigGetOnlinePlayers();
 	void    sigUpdateOnlinePlayers(const QString& text);
 	void    sigSignupState(QString msg);
 	void	sigMakeLogin();
@@ -74,11 +73,6 @@ public slots:
 	void onMessageReceived(QString message) {
         qDebug() << "received message: " << message;
 
-        if(message == "update connections") {
-			this->sigGetOnlinePlayers();
-			return;
-		}
-
 		try {
 			nlohmann::json jsonObject = nlohmann::json::parse(message.toStdString());
 			if(jsonObject["type"] == "challenge") {
@@ -100,6 +94,17 @@ public slots:
 				}
 				else
                     emit this->sigFaultyLogin(status.c_str());
+			}
+			if(jsonObject["type"] == "update online players") {
+                std::map<int, std::string> players;
+                std::string text;
+                for (auto& item : jsonObject["online_players"].items()) {
+                    std::string player = item.value();
+                    if(this->account.username != player) {
+                        text += player + "\n";
+                    }
+                }
+                emit this->sigUpdateOnlinePlayers(text.c_str());
 			}
 		}
 		catch (...) {
@@ -175,27 +180,27 @@ public slots:
 		logout();
 	}
 
-	void onGetOnlinePlayers() {
-		std::pair<std::map<std::string, std::string>, int> resp = fetchOnlinePlayers();
-		if(resp.second != 200) {
-			qDebug() << "could not fetch session players";
-			return;
-		}
-		auto players = resp.first;
-		QString text;
-		qDebug() << "on get session players text1: " << text;
-		for (auto it = players.begin(); it != players.end(); it++) {
-			auto player = it->second.c_str();
-			qDebug() << "this->account.username: " << this->account.username;
-			qDebug() << "player: " << player;
-			if(player != this->account.username) {
-				text += player;
-				text += "\n";
-			}
-		}
-		qDebug() << "on get session players text2: " << text;
-		emit sigUpdateOnlinePlayers(text);
-	}
+	// void onGetOnlinePlayers() {
+	// 	std::pair<std::map<std::string, std::string>, int> resp = fetchOnlinePlayers();
+	// 	if(resp.second != 200) {
+	// 		qDebug() << "could not fetch session players";
+	// 		return;
+	// 	}
+	// 	auto players = resp.first;
+	// 	QString text;
+	// 	qDebug() << "on get session players text1: " << text;
+	// 	for (auto it = players.begin(); it != players.end(); it++) {
+	// 		auto player = it->second.c_str();
+	// 		qDebug() << "this->account.username: " << this->account.username;
+	// 		qDebug() << "player: " << player;
+	// 		if(player != this->account.username) {
+	// 			text += player;
+	// 			text += "\n";
+	// 		}
+	// 	}
+	// 	qDebug() << "on get session players text2: " << text;
+	// 	emit sigUpdateOnlinePlayers(text);
+	// }
 
 	void onCreateAccount(const std::string& username, const std::string& password, const std::string& dob) {
 		qDebug() << "on create account";
@@ -240,10 +245,13 @@ public:
 	}
 	std::map<std::string, std::string> players;
 
-	std::pair<std::string, int> logout() {
-		qDebug() << "sending log out request";
-		makeRequests(HTTPRequest::HTTP_POST, "/logout", accountJson(this->account.username, this->account.password));
-		return {recvResponse(), getStatus()};
+	void logout() {
+		if(socket_game) {
+			socket_game->close();
+			socket_game = nullptr;
+		}
+		socket->close();
+		socket = nullptr;
 	}
 	
 	void login(const std::string& _username, const std::string& _password) {
@@ -255,18 +263,6 @@ public:
 	std::pair<std::string, int> createAccount(const std::string& username, const std::string& password, const std::string& dob) {
 		makeRequests(HTTPRequest::HTTP_POST, "/signup", accountJson(username, password, dob));
 		return {recvResponse(), getStatus()};
-	}
-
-	std::pair<std::map<std::string, std::string>, int> fetchOnlinePlayers() {
-		makeRequests(HTTPRequest::HTTP_GET, "/online_players");
-		auto json = recvResponse();
-		qDebug() << "JSON ONLINE PLAYERS FETCH:" << json.c_str();
-		players = jsonToMap(json);
-		qDebug() << "playersss: ";
-		for(auto it = players.begin(); it != players.end(); it++) {
-			qDebug() << it->second;
-		}
-		return {players, getStatus()};
 	}
 
 	void sendMessage(QString message) {

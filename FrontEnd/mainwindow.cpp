@@ -48,7 +48,6 @@ void MainWindow::onOpenMenu() {
 	session.game_info.reset();
 	stackedWidgets->setCurrentWidget(stackedWidgets->widMenu);
 	this->setWindowTitle("Menu");
-	emit stackedWidgets->widMenu->getOnlinePlayers(); // session object then sends signal with players to updateOnlinePlayers
 	qDebug() << "on open menu";
 }
 
@@ -145,8 +144,6 @@ MainWindow::MainWindow(QWidget *parent)
 	// Menu
 	connect(stackedWidgets->widMenu, &Menu::sigLogOut, &session, &SessionManager::onLogout);
 	connect(stackedWidgets->widMenu, &Menu::sigLogOut, this, &MainWindow::onSigLogin);
-	connect(stackedWidgets->widMenu, &Menu::getOnlinePlayers, &session, &SessionManager::onGetOnlinePlayers);
-	connect(&session, &SessionManager::sigGetOnlinePlayers, &session, &SessionManager::onGetOnlinePlayers);
 
 	// SessionManager
 	connect(&session, &SessionManager::sigUpdateOnlinePlayers, stackedWidgets->widMenu, &Menu::onUpdateOnlinePlayers);
