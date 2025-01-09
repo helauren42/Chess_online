@@ -2,7 +2,9 @@
 test.*
 *.txt
 
-Qt/build/*
-!Qt/build/a.out
+Qt/*
+!Qt/build/Desktop_Qt_6_8_1-Release/a.out
 
 *.idx
+
+FrontEnd/build/*
