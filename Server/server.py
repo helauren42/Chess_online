@@ -7,6 +7,10 @@ from fastapi.responses import JSONResponse
 from asyncio import Queue
 import asyncio
 import random
+import uvicorn
+
+HOST = "127.0.0.1"
+PORT = 8000
 
 app = fastapi.FastAPI()
 
@@ -351,3 +355,11 @@ async def WebsocketConnection(ws: WebSocket, user: str, password: str):
 		connections.pop(user, None)
 		message_queues.pop(user, None)
 		send_task.cancel()
+
+async def start_server():
+    config = uvicorn.Config("server:app", host="0.0.0.0", port=8000)
+    server = uvicorn.Server(config)
+    await server.serve()
+
+if __name__ == "__main__":
+    asyncio.run(start_server())
