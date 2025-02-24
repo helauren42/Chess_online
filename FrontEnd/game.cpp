@@ -151,9 +151,12 @@ Game::Game(QWidget *parent)
 	this->_width = this->width();
 	computeDim();
 
-	lightSquare = QPixmap("../../../IMG/USE/square_brown_light.png");
-	darkSquare = QPixmap("../../../IMG/USE/square_brown_dark.png");
-	redSquare = QPixmap("../../../IMG/USE/square_red.png");
+	// lightSquare = QPixmap("../../../IMG/USE/square_brown_light.png");
+	// darkSquare = QPixmap("../../../IMG/USE/square_brown_dark.png");
+	// redSquare = QPixmap("../../../IMG/USE/square_red.png");
+	lightSquare = QPixmap("./IMG/USE/square_brown_light.png");
+	darkSquare = QPixmap("./IMG/USE/square_brown_dark.png");
+	redSquare = QPixmap("./IMG/USE/square_red.png");
 }
 
 Game::~Game()
