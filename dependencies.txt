@@ -12,5 +12,6 @@ Python:
     Uvicorn
     FastApi
 
+qmake6 --version
 QMake version 3.1
-Using Qt version 6.8.1 in /usr/lib/x86_64-linux-gnu
+Using Qt version 6.8.1 in /home/helauren/Qt/6.8.1/gcc_64/lib

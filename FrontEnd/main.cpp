@@ -14,8 +14,10 @@ int main(int argc, char *argv[])
 {
     QDir dir = dir.current();
     qDebug() << dir.absolutePath();
-	QFile file("../../../FrontEnd/styles.css");
-	Logger::setLoggerFile("../../../FrontEnd/log.txt", true);
+	// QFile file("../../../FrontEnd/styles.css");
+	// Logger::setLoggerFile("../../../FrontEnd/log.txt", true);
+	QFile file("styles.css");
+	Logger::setLoggerFile("log.txt", true);
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		qDebug() << "Failed to open stylesheet file";
 		return -1;
