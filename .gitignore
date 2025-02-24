@@ -1,9 +1,9 @@
 *.o
 test.*
-*.txt
 *.pyc
 *.idx
 
+ideas.txt
 Qt/*
 Qt/build/Desktop_Qt_6_8_1-Release/*
 

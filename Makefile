@@ -16,7 +16,7 @@ $(NAME): $(OBJS)
 	$(MAKE) clean
 
 ./obj/%.o: ./SRCS/%.cpp
-	mkdir -p ./obj 
+	mkdir -p ./obj
 	$(CC) $(CFLAGS) -g3 -c $< -o $@
 
 clean:
