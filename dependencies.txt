@@ -15,3 +15,4 @@ Python:
 QMake version 3.1
 Using Qt version 5.15.3 in /usr/lib/x86_64-linux-gnu
 
+*.txt.swp
