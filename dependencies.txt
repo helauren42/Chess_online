@@ -1,0 +1,13 @@
+C++:
+    Qt:
+        install qt5-qtbase-devel
+        install qt5-qtcharts-devel
+        install qt5-qttools-devel
+        install qt5-qtmultimedia-devel
+        install qt5-qtwebsockets-devel
+    Poco:
+        install poco-devel
+
+Python:
+    Uvicorn
+    FastApi
